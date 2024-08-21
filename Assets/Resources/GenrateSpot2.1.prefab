@@ -13775,7 +13775,6 @@ MonoBehaviour:
   loadingParticles: {fileID: 8281461608907033207}
   SmoothCubeRenderer: {fileID: 6583324395842575480}
   Prompt: 
-  dataSync: {fileID: 4075572116202520391}
   URLIDText: {fileID: 5830417323259422961}
   PromtText: {fileID: 8581211758703584627}
   LitseningText: {fileID: 6058062164784666023}

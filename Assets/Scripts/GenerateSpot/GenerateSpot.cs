@@ -38,7 +38,7 @@ public class GenerateSpot : MonoBehaviour
     public Renderer SmoothCubeRenderer; 
     public string Prompt;
 
-    public DataSync dataSync; 
+    // public DataSync dataSync; 
     
     public TMP_Text URLIDText;
     
@@ -111,7 +111,7 @@ public class GenerateSpot : MonoBehaviour
     
     void Start()
     {
-        dataSync = GetComponent<DataSync>(); 
+        // dataSync = GetComponent<DataSync>(); 
         manager = FindObjectOfType<RealityEditorManager>();
         modelDownloader = FindObjectOfType<ModelDownloader>();
         _realtimeTransform = GetComponent<RealtimeTransform>();
@@ -431,11 +431,11 @@ _grabbable.enabled = true;
     // Update is called once per frame
     void Update()
     {
-        if (_realtimeView.isOwnedLocallySelf)
-        {
-            dataSync.SetURLID(URLID); 
-            dataSync.Setprompt(Prompt);
-        }
+        // if (_realtimeView.isOwnedLocallySelf)
+        // {
+        //     dataSync.SetURLID(URLID); 
+        //     dataSync.Setprompt(Prompt);
+        // }
 
 
 

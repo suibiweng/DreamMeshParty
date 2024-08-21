@@ -4278,7 +4278,6 @@ MonoBehaviour:
   loadingParticles: {fileID: 0}
   SmoothCubeRenderer: {fileID: 0}
   Prompt: 
-  dataSync: {fileID: 0}
   URLIDText: {fileID: 696682105605600011}
   PromtText: {fileID: 1167092362498039368}
   LitseningText: {fileID: 6148612480976159198}
@@ -4318,8 +4317,10 @@ MonoBehaviour:
   PreviewWindow: {fileID: 2963778507989951749}
   Player: {fileID: 0}
   sculptMode: {fileID: 0}
+  PositionisLock: {fileID: 0}
   SculptingModeOn: 0
   DataSyncTestNumber: 
+  grabFreeTransformer: {fileID: 0}
   Text_Scanning_Btn: {fileID: 5928899881653964488}
   Text_Instruction: {fileID: 5928899881653964542}
   checkInterval: 5
@@ -4486,11 +4487,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RT: {fileID: 8400000, guid: 3eaeb10b757ba4443bd7d0f5ec6267c2, type: 2}
   indicator: {fileID: 0}
+  manager: {fileID: 0}
   osc: {fileID: 0}
   imgCount: 0
   instruction: 
   campoints: {fileID: 0}
   recordingInterval: 0
+  screenCam: {fileID: 0}
+  screenPos: {x: 0, y: 0, z: 0}
 --- !u!114 &6889092148364235388
 MonoBehaviour:
   m_ObjectHideFlags: 0
