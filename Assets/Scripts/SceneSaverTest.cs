@@ -29,7 +29,8 @@ public class SceneSaverTest : MonoBehaviour
    
    void Update()
    {
-       if(OVRInput.GetUp(OVRInput.RawButton.LThumbstick)){
+       if(OVRInput.GetUp(OVRInput.RawButton.LThumbstick))
+       {
            source.PlayOneShot(savingSound);
            Debug.Log("Start Button Has Been Pressed. Saving Scene...");
            SaveGenerateSpotsToPlayerPrefs();

@@ -8,7 +8,7 @@ public class DebugTMP : MonoBehaviour
     void Update()
     {
         //OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
-        if (OVRInput.GetUp(OVRInput.RawButton.Start))
+        if (OVRInput.GetUp(OVRInput.RawButton.LThumbstick)) 
         {
             msgString = ""; 
             Debug.Log("Reset The Log"); 

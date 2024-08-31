@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/BuildingBlocks.unity
     guid: 7980947c9e0342e4fa12447d0c91a656
+  - enabled: 0
+    path: Assets/Scenes/TestAnchor.unity
+    guid: e817ebae08429214e8c0b9cea98119aa
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7dafe5f8db58eca40b1d44174dc3d078, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ad7b311f2f55bc45b379fc5b93a9d20, type: 2}

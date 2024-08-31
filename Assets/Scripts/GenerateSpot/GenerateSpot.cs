@@ -8,15 +8,17 @@ using RealityEditor;
 using UnityEngine.UI;
 using SculptingPro;
 using DimBoxes;
-using Normal.Realtime;
 using Oculus.Interaction;
-
+using Fusion;
+using Meta.XR.MultiplayerBlocks.Fusion;
+using Unity.VisualScripting;
 
 
 public class GenerateSpot : MonoBehaviour
 {
-
+    public bool TestConfirmGeneration; 
     public bool isAcopy = false;
+    private NetworkRunner _runner;
 
     public int id;
     public string downloadURL = "http://34.106.250.143/upload/";
@@ -27,7 +29,7 @@ public class GenerateSpot : MonoBehaviour
     //Manager
     public RealityEditorManager manager;
     VoiceToPrompt voiceToPrompt;
-
+    
     // Transform Control
 
     public bool isselsected = false;
@@ -38,6 +40,7 @@ public class GenerateSpot : MonoBehaviour
     public Renderer SmoothCubeRenderer; 
     public string Prompt;
 
+    private string oldPrompt; 
     // public DataSync dataSync; 
     
     public TMP_Text URLIDText;
@@ -80,9 +83,6 @@ public class GenerateSpot : MonoBehaviour
     public Grabbable _grabbable;
     
     public GenerateType SpotType;
-
-    public RealtimeTransform _realtimeTransform;
-    public RealtimeView _realtimeView;
     
     public Shader VertexColor,UnlitShader;
 
@@ -100,36 +100,40 @@ public class GenerateSpot : MonoBehaviour
     public Toggle sculptMode,PositionisLock;
 
     public bool SculptingModeOn=false;
-
-    public string DataSyncTestNumber; 
-
-    public GrabFreeTransformer grabFreeTransformer;
-
+    
+    //Networking
+    // public string DataSyncTestNumber; 
+    // public RealtimeTransform _realtimeTransform;
+    // public RealtimeView _realtimeView;
+    private NetworkObject _networkObject;
+    private PhotonDataSync _photonDataSync;
+    private GenerateSpotRPC _generateSpotRPC; 
   
 
     
     
     void Start()
     {
-        // dataSync = GetComponent<DataSync>(); 
         manager = FindObjectOfType<RealityEditorManager>();
         modelDownloader = FindObjectOfType<ModelDownloader>();
-        _realtimeTransform = GetComponent<RealtimeTransform>();
-        _realtimeView = GetComponent<RealtimeView>();
+        _runner = FindObjectOfType<NetworkRunner>();
         _grabbable = GetComponent<Grabbable>();
-
-        grabFreeTransformer=GetComponent<GrabFreeTransformer>();
         downloadURL=manager.ServerURL;
-
-        // Player=Camera.main.transform;
         Player = manager.PlayerCamera; 
-        
         SpotType = GenerateType.Add;
-        
         loadingIcon.SetActive(false);
         loadingParticles.Stop();
-      //  initAdd();
         
+        //NETWORKING
+        _networkObject = GetComponent<NetworkObject>();
+        _photonDataSync = GetComponent<PhotonDataSync>();
+        _generateSpotRPC = GetComponent<GenerateSpotRPC>(); 
+        // _realtimeTransform = GetComponent<RealtimeTransform>();
+        // _realtimeView = GetComponent<RealtimeView>();
+        // dataSync = GetComponent<DataSync>();
+
+      //  initAdd();
+      
         // URLID=TimestampGenerator.GetTimestamp();
 
        // StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
@@ -147,7 +151,7 @@ public class GenerateSpot : MonoBehaviour
         loadingIcon.SetActive(false);
         
         // SpotType = GenerateType.Add;
-        initAdd();
+        // initAdd();
         
         // if (selectMenu != null) selectMenu.SetActive(true);
         //  ControlPanels();
@@ -155,9 +159,6 @@ public class GenerateSpot : MonoBehaviour
         if (isAcopy)
         {
             selectMenu.SetActive(false);
-
-            _realtimeTransform.enabled = false;
-            _realtimeView.enabled = false;
 
         }
     }
@@ -183,7 +184,7 @@ public class GenerateSpot : MonoBehaviour
 
            // grabFreeTransformer.enabled=false;
 
-_grabbable.enabled = false;
+// _grabbable.enabled = false;
             //
         }else{
 
@@ -267,6 +268,7 @@ _grabbable.enabled = true;
     public void initAdd()
     {
         StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
+        loadingParticles.Play();
         isMaterialChanging = false;
         VoicePanel.SetActive(true);
     }
@@ -312,17 +314,24 @@ _grabbable.enabled = true;
     
     public void OnSelect()
     {
-
+        if (!manager.GenCubesDic.ContainsKey(URLID))
+        {
+            manager.GenCubesDic.Add(URLID,this.GameObject()); //This should be adding it to other peoples dictionaries once the URLID is synced
+        }
+        
         manager.updateSelected(id, URLID);
+        if (_networkObject.HasStateAuthority == false)
+        {
+            _networkObject.RequestStateAuthority();
+            _networkObject.AssignInputAuthority(_runner.LocalPlayer);
+        }        
+        
         isselsected = true;
         if (SpotType != GenerateType.None)
         {
             if (TargetObject.transform.childCount != 0) OpenEditMenu();
 
         }
-
-  
-
     }
     
     public void Grab(OVRInput.Controller grabHand)
@@ -338,7 +347,9 @@ _grabbable.enabled = true;
 
     public void Release()
     {
-        Debug.Log("should be releasing the cube");
+        // Debug.Log("The grabbable script.enabled is: " + GetComponent<Grabbable>().enabled);
+
+        // Debug.Log("should be releasing the cube");
 
         // URLIDText.text = "should be releasing the cube";
         // Outlinebox.line_renderer=false;
@@ -431,22 +442,32 @@ _grabbable.enabled = true;
     // Update is called once per frame
     void Update()
     {
+        if (TestConfirmGeneration)
+        {
+            ConfirmGeneration();
+            _generateSpotRPC.CallConfirmGenerationRPC();
+            TestConfirmGeneration = false; 
+        }
+        
+        if (Prompt != oldPrompt)
+        {
+            _photonDataSync.UpdatePrompt(Prompt);
+        }
+        oldPrompt = Prompt; 
+        
         // if (_realtimeView.isOwnedLocallySelf)
         // {
         //     dataSync.SetURLID(URLID); 
         //     dataSync.Setprompt(Prompt);
         // }
-
-
-
- toLockthePosition();
+        
+       // toLockthePosition();
 
         
         // if (manager == null)
         // {
         //     FindObjectOfType<RealityEditorManager2>();  //this shouldnt be necessary
         // }
-
         
         URLIDText.text = URLID; //commented this out while trying to figure out data syncing
         
@@ -599,9 +620,9 @@ _grabbable.enabled = true;
 
 
 
-    public void ConfirmGeneration()
+    public void ConfirmGeneration() 
     {
-
+        
         if (isMaterialChanging)
         {
             Debug.Log("Running ModifyModelinstruction inside confirm generation");
@@ -948,7 +969,14 @@ _grabbable.enabled = true;
 
     public void deletespot()
     {
-        Realtime.Destroy(gameObject); //destroys the game object on the network, this is called from the UI button
+        
+        if (_runner == null || !_runner.IsRunning)
+        {
+            Debug.LogError("NetworkRunner is not running. Cannot destroy network object.");
+            return;
+        }
+        _runner.Despawn(GetComponent<NetworkObject>());
+        Destroy(gameObject);
     }
 
 }
