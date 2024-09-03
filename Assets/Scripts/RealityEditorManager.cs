@@ -28,7 +28,7 @@ public class RealityEditorManager : MonoBehaviour
    // public List<GameObject> GenCubes;
    
     public string selectedIDUrl;
-    int IDs=0;
+    public int IDs = 0;
     TextMeshPro debugText;
 
     public Transform Cursor;

@@ -317,6 +317,8 @@ _grabbable.enabled = true;
         if (!manager.GenCubesDic.ContainsKey(URLID))
         {
             manager.GenCubesDic.Add(URLID,this.GameObject()); //This should be adding it to other peoples dictionaries once the URLID is synced
+            manager.IDs++; 
+            manager.selectedIDUrl = URLID;
         }
         
         manager.updateSelected(id, URLID);
