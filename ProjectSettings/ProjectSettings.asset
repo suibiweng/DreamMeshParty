@@ -743,7 +743,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     Android: AMPLIFY_SHADER_EDITOR;NORMCORE;FUSION_WEAVER;FUSION2
-    Standalone: AMPLIFY_SHADER_EDITOR;NORMCORE
+    Standalone: AMPLIFY_SHADER_EDITOR;NORMCORE;FUSION_WEAVER;FUSION2
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

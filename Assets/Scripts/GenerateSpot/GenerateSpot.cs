@@ -550,7 +550,7 @@ _grabbable.enabled = true;
         }
 
 
-         BoundingBoxColorAlhpaDinstance();
+        //  BoundingBoxColorAlhpaDinstance();
          
 
 
@@ -639,7 +639,7 @@ _grabbable.enabled = true;
             Debug.Log("Finished Running generate model inside confirm generation");
 
         }
-        OpenEditMenu();
+       // OpenEditMenu();
 
     }
 
@@ -680,6 +680,7 @@ _grabbable.enabled = true;
         manager.promtGenerateModel(id, Prompt, URLID);
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
 
         // PreViewQuad.SetActive(true);
         // loadingIcon.SetActive(true);
