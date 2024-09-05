@@ -12820,7 +12820,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6620131981476349703
 Transform:
   m_ObjectHideFlags: 0
@@ -38647,6 +38647,7 @@ GameObject:
   - component: {fileID: 1758490957445973733}
   - component: {fileID: 4919582694335887519}
   - component: {fileID: 1736501633580719105}
+  - component: {fileID: 5911590749148839168}
   m_Layer: 0
   m_Name: EditMenu
   m_TagString: Untagged
@@ -38743,6 +38744,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &5911590749148839168
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8315216409033979450}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8333938934828821514
 GameObject:
   m_ObjectHideFlags: 0

@@ -270,7 +270,7 @@ _grabbable.enabled = true;
         StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
         loadingParticles.Play();
         isMaterialChanging = false;
-        VoicePanel.SetActive(true);
+        // VoicePanel.SetActive(true);
     }
 
     void initReconstruction()
@@ -281,7 +281,7 @@ _grabbable.enabled = true;
 
     void OpenEditMenu()
     {
-        EditMenu.SetActive(true);
+       // EditMenu.SetActive(true);
     }
 
     void CloseEditMenu()
@@ -331,7 +331,7 @@ _grabbable.enabled = true;
         isselsected = true;
         if (SpotType != GenerateType.None)
         {
-            if (TargetObject.transform.childCount != 0) OpenEditMenu();
+          //  if (TargetObject.transform.childCount != 0) OpenEditMenu();
 
         }
     }
@@ -359,8 +359,17 @@ _grabbable.enabled = true;
     }
     public void Copy()
     {
-        GameObject ACopy = Instantiate(this.gameObject);
-        ACopy.GetComponent<GenerateSpot>().isAcopy = true;
+        // GameObject ACopy = Instantiate(this.gameObject);
+        GameObject ACopy = manager.SpawnNetworkObject(transform.position, transform.rotation, gameObject);
+        ACopy.GetComponent<GenerateSpot>().id=manager.IDs;
+        string NewUrlID = (Int32.Parse(URLID) + 1).ToString(); 
+        ACopy.GetComponent<GenerateSpot>().URLID = NewUrlID;
+        Debug.Log("The new Duplicated Cube's URLID is: " + NewUrlID);
+        ACopy.GetComponent<PhotonDataSync>().UpdateURLID(NewUrlID);  //setting the network urlid once right after we make the spot.
+        Debug.Log("Setting the network urlid to be: " + NewUrlID);
+        manager.GenCubesDic.Add(NewUrlID, ACopy); //think about this: Are we adding the cube to the other players dictionaries? 
+        manager.IDs++;
+        // ACopy.GetComponent<GenerateSpot>().isAcopy = true;
 
     }
 
@@ -415,13 +424,13 @@ _grabbable.enabled = true;
         {
 
             //AimStart.GetComponent<MeshRenderer>().enabled=false;
-            VoicePanel.SetActive(true);
+      //      VoicePanel.SetActive(true);
         }
         else
         {
 
             RecordData.campoints.Seton(true);
-            VoicePanel.SetActive(false);
+      //    VoicePanel.SetActive(false);
             //AimStart.GetComponent<MeshRenderer>().enabled=true;
 
 
