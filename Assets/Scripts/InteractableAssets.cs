@@ -4,12 +4,28 @@ using UnityEngine;
 using RealityEditor;    
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using AmplifyShaderEditor;
+
+
+
+class InteractableDreamMesh{
+    public string prompt;
+    public int iswearable; //0 not a wearable object 1:head ,2:body ,3:hand ,4:foot, 5:low body
+    public bool interactable;
+    public Vector2 output_position;
+    public int output_style; //0: particle ,1: Sound,   2: Light 
+    public int input_style; // 0:trigger 1:switch
+    public int trigger_style;//0:no trigger  , 1:contunue ,2:one shot
+
+}
 
 public class InteractableAssets : MonoBehaviour
 {
     public Camera targetCamera;
     public RealityEditorManager manager;
     public GenerateSpot generateSpot;
+
+    InteractableDreamMesh interactableDreamMesh;
 
     public Toggle interactableToggle;
     // Start is called before the first frame update
@@ -101,12 +117,9 @@ public class InteractableAssets : MonoBehaviour
                 {
                     // If the file exists, read and parse the JSON
                     string json = request.downloadHandler.text;
-                    // MyJsonData jsonData = JsonUtility.FromJson<MyJsonData>(json);
+                  InteractableDreamMesh jsonData = JsonUtility.FromJson<InteractableDreamMesh>(json);
 
-                    // // Now you can access jsonData fields
-                    // Debug.Log("Key1: " + jsonData.key1);
-                    // Debug.Log("Key2: " + jsonData.key2);
-                    // Debug.Log("Key3: " + jsonData.key3);
+                    interactableDreamMesh= jsonData;
 
                     // Stop checking after successful reading
                     StopCheckingForJson();
