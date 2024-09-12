@@ -123,6 +123,7 @@ public class GenerateSpot : MonoBehaviour
         SpotType = GenerateType.Add;
         loadingIcon.SetActive(false);
         loadingParticles.Stop();
+        grabInteractable=GetComponent<GrabInteractable>();
         
         //NETWORKING
         _networkObject = GetComponent<NetworkObject>();
@@ -178,12 +179,16 @@ public class GenerateSpot : MonoBehaviour
         }
 
     }
-    public void toLockthePosition()
+
+    public GrabInteractable grabInteractable;
+
+    public void toLockthePosition(bool toLock)
     {
-        if(PositionisLock.isOn){
+        if(toLock){
+
+            grabInteractable.Disable();
 
            // grabFreeTransformer.enabled=false;
-
 // _grabbable.enabled = false;
             //
         }else{
@@ -191,7 +196,7 @@ public class GenerateSpot : MonoBehaviour
             
           //  grabFreeTransformer.enabled=true;
 
-_grabbable.enabled = true;
+            grabInteractable.Enable();
             //
 
 
@@ -293,6 +298,8 @@ _grabbable.enabled = true;
     public void Erasing(){
         
     }
+
+        public bool isGrabing =false;
     
     private void HandlePointerEventRaised(PointerEvent evt)
     {
@@ -300,6 +307,8 @@ _grabbable.enabled = true;
         {
             case PointerEventType.Select:
                 OnSelect();
+
+                isGrabing=true;
                 
                 break;
             case PointerEventType.Unselect:
@@ -307,9 +316,13 @@ _grabbable.enabled = true;
             // PreviewWindow.gameObject.SetActive(false);
              Release();
 
+                 isGrabing=false;
+
                 break;
         }
     }
+
+
 
     
     public void OnSelect()
@@ -681,7 +694,7 @@ _grabbable.enabled = true;
 
 
 
-
+    public string DremmeshPrompt;
 
 
     public void GenrateModel()
@@ -690,6 +703,8 @@ _grabbable.enabled = true;
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
+
+        DremmeshPrompt=Prompt;
 
         // PreViewQuad.SetActive(true);
         // loadingIcon.SetActive(true);
@@ -943,6 +958,8 @@ _grabbable.enabled = true;
     public Texture2D erasingTexture;
     [ColorUsage(true, true)]
     public Color Bright,Dark;
+
+    public bool GenerationisComplete=false;
     private IEnumerator DownloadImageCoroutine(string imageUrl, Material material)
     {
         using (UnityWebRequest webRequest = UnityWebRequestTexture.GetTexture(imageUrl))
@@ -973,6 +990,7 @@ _grabbable.enabled = true;
                 Debug.Log("Image applied to new material successfully.");
                 loadingIcon.SetActive(false);
                 loadingParticles.Stop();
+                GenerationisComplete=true;
 
                 DownloadPanel.SetActive(true);
             }

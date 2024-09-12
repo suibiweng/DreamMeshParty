@@ -6,9 +6,11 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using AmplifyShaderEditor;
 
+using Oculus.Interaction;
 
 
-class InteractableDreamMesh{
+
+public class InteractableDreamMesh{
     public string prompt;
     public int iswearable; //0 not a wearable object 1:head ,2:body ,3:hand ,4:foot, 5:low body
     public bool interactable;
@@ -25,11 +27,13 @@ public class InteractableAssets : MonoBehaviour
     public RealityEditorManager manager;
     public GenerateSpot generateSpot;
 
-    InteractableDreamMesh interactableDreamMesh;
+    public InteractableDreamMesh interactableDreamMesh;
 
     public Toggle interactableToggle;
     // Start is called before the first frame update
 
+
+    public outputComponent outputspot;
     public GameObject interactiveCamera;
      public RenderTexture renderTexture; // Assign the render texture in the Inspector
     public string uploadUrl = "http://localhost:5000/upload"; // Change this to your server URL
@@ -42,30 +46,75 @@ public class InteractableAssets : MonoBehaviour
 
 
         uploadUrl = manager.ServerURL+":5000/upload/"; 
+        checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
 
      //   StartCoroutine(UploadTexture());
     }
 
  private Coroutine checkCoroutine;
-    public void SetInteracteable(){
-        interactiveCamera.SetActive(true);      
+    public void SetInteractable(){
 
-
-         StartCoroutine(UploadSnapShotTexture());
+        //interactiveCamera.SetActive(true);      
+        //  StartCoroutine(UploadSnapShotTexture());
 
          OscMessage msg = new OscMessage{
             address="/SetInteractive"
          };
 
          msg.values.Add(generateSpot.URLID);
-
+         msg.values.Add(generateSpot.DremmeshPrompt);
          manager.osc.Send(msg);
 
+
+
+
          // looking for json File;
+        // checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
 
-         checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
 
 
+    }
+
+    void Update() {
+
+
+        generateSpot.toLockthePosition(!interactableToggle.isOn);
+
+        if(interactableDreamMesh!=null && generateSpot.isGrabing){
+            if(interactableDreamMesh.input_style==0){
+                if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)){
+                
+                
+                 //output.BroadcastMessage("triggerOutPut");
+
+                 outputspot.triggerOutPut();
+                
+                }
+        
+            }
+
+              if(interactableDreamMesh.input_style==1){
+
+
+                  if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)){
+
+
+                    outputspot.triggerOutPut();
+                
+                
+                    //output.BroadcastMessage("triggerOutPut");
+                
+                }
+
+              }
+
+
+
+
+        }
+
+
+        
     }
 
 
