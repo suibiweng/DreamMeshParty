@@ -4,7 +4,7 @@ using UnityEngine;
 using RealityEditor;    
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using AmplifyShaderEditor;
+
 
 using Oculus.Interaction;
 
@@ -36,7 +36,7 @@ public class InteractableAssets : MonoBehaviour
     public outputComponent outputspot;
     public GameObject interactiveCamera;
      public RenderTexture renderTexture; // Assign the render texture in the Inspector
-    public string uploadUrl = "http://localhost:5000/upload"; // Change this to your server URL
+    public string uploadUrl = "http://localhost:5000/"; // Change this to your server URL
 
     void Start()
     {
@@ -45,8 +45,8 @@ public class InteractableAssets : MonoBehaviour
         generateSpot=gameObject.GetComponent<GenerateSpot>();
 
 
-        uploadUrl = manager.ServerURL+":5000/upload/"; 
-        checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
+    
+        checkCoroutine = StartCoroutine(CheckForJsonOnServer( generateSpot.downloadURL+generateSpot.URLID+"_interactable.json",3f));
 
      //   StartCoroutine(UploadTexture());
     }
@@ -69,7 +69,7 @@ public class InteractableAssets : MonoBehaviour
 
 
          // looking for json File;
-        // checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
+       checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
 
 
 
@@ -80,9 +80,9 @@ public class InteractableAssets : MonoBehaviour
 
         generateSpot.toLockthePosition(!interactableToggle.isOn);
 
-        if(interactableDreamMesh!=null && generateSpot.isGrabing){
+        if(interactableDreamMesh!=null ){
             if(interactableDreamMesh.input_style==0){
-                if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)){
+                if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger )  ||  OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) ){
                 
                 
                  //output.BroadcastMessage("triggerOutPut");
@@ -96,7 +96,7 @@ public class InteractableAssets : MonoBehaviour
               if(interactableDreamMesh.input_style==1){
 
 
-                  if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)){
+                  if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) ||  OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) ){
 
 
                     outputspot.triggerOutPut();
