@@ -1357,7 +1357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 68facf34-7e81-43b9-ba89-7bded3308623
+  instanceId: 6c0b8e4e-dce6-4127-a7d4-b5e9c6783ad0
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -2165,7 +2165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 887e5797-bda5-4e26-ba36-ab8166244b61
+  instanceId: ded3162b-0675-4f75-a6e4-dc3a43c67767
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -13090,7 +13090,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1128358321513893699
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13831,6 +13831,7 @@ GameObject:
   - component: {fileID: 7739038162603271921}
   - component: {fileID: 7481847473661822111}
   - component: {fileID: 6192821148784459004}
+  - component: {fileID: 74486197067409030}
   m_Layer: 0
   m_Name: GenrateSpotPhoton
   m_TagString: GenerateSpot
@@ -14272,6 +14273,7 @@ MonoBehaviour:
   - {fileID: 56377501874731431}
   - {fileID: 7739038162603271921}
   - {fileID: 7481847473661822111}
+  - {fileID: 74486197067409030}
 --- !u!114 &56377501874731431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14330,10 +14332,24 @@ MonoBehaviour:
   manager: {fileID: 0}
   generateSpot: {fileID: 0}
   interactableToggle: {fileID: 1712808685263485367}
+  triggerSync: {fileID: 0}
   outputspot: {fileID: 6426207975900063567}
   interactiveCamera: {fileID: 8662807067590852494}
   renderTexture: {fileID: 8400000, guid: 45f23028384a61149be92bc657ba3e67, type: 2}
   uploadUrl: http://localhost:5000/upload
+--- !u!114 &74486197067409030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191651285109885349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8729e40f6ca1f974c949a007db4f9801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outputComponent: {fileID: 6426207975900063567}
 --- !u!1 &3253298116833696021
 GameObject:
   m_ObjectHideFlags: 0
@@ -42453,7 +42469,6 @@ GameObject:
   - component: {fileID: 8638807147784461005}
   - component: {fileID: 6426207975900063567}
   - component: {fileID: 2768010111297248949}
-  - component: {fileID: 1447069856212935042}
   m_Layer: 0
   m_Name: Output
   m_TagString: Untagged
@@ -42620,7 +42635,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0
@@ -42683,7 +42698,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 8
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -42801,7 +42816,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -47282,8 +47297,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
+  m_Intensity: 20.89
+  m_Range: 0.24427459
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -47324,7 +47339,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -47418,7 +47433,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 1.071
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -47519,29 +47534,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &1447069856212935042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8903846752435286004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a1bc992571301d4a9602ac95ef4c71a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interactorFilters: []
-  _maxInteractors: -1
-  _maxSelectingInteractors: -1
-  _data: {fileID: 0}
-  _pointableElement: {fileID: 0}
-  _rigidbody: {fileID: 0}
-  _grabSource: {fileID: 0}
-  _useClosestPointAsGrabSource: 0
-  _releaseDistance: 0
-  _resetGrabOnGrabsUpdated: 1
-  _physicsGrabbable: {fileID: 0}
 --- !u!1 &8971125030826726341
 GameObject:
   m_ObjectHideFlags: 0

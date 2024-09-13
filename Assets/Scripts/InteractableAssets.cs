@@ -32,6 +32,8 @@ public class InteractableAssets : MonoBehaviour
     public Toggle interactableToggle;
     // Start is called before the first frame update
 
+    public TriggerSync triggerSync;
+
 
     public outputComponent outputspot;
     public GameObject interactiveCamera;
@@ -43,6 +45,7 @@ public class InteractableAssets : MonoBehaviour
         
         manager = FindObjectOfType<RealityEditorManager>();
         generateSpot=gameObject.GetComponent<GenerateSpot>();
+        triggerSync=gameObject.GetComponent<TriggerSync>();
 
 
     
@@ -86,8 +89,11 @@ public class InteractableAssets : MonoBehaviour
                 
                 
                  //output.BroadcastMessage("triggerOutPut");
-
-                 outputspot.triggerOutPut();
+                if(generateSpot.isGrabing){
+                    outputspot.triggerOutPut();
+                    triggerSync.CallTriggerRPC();
+                }
+                 
                 
                 }
         
@@ -99,7 +105,14 @@ public class InteractableAssets : MonoBehaviour
                   if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) ||  OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) ){
 
 
-                    outputspot.triggerOutPut();
+            if(generateSpot.isGrabing){
+                outputspot.triggerOutPut();
+                triggerSync.CallTriggerRPC();
+
+
+
+            }
+                 
                 
                 
                     //output.BroadcastMessage("triggerOutPut");

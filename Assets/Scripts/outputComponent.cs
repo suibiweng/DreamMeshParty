@@ -52,7 +52,7 @@ public class outputComponent : MonoBehaviour
             if(interactableAssets.interactableDreamMesh.trigger_style==1){
                 //contious
                 //output type and Behaviour
-                if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) && interactableAssets.generateSpot.isselsected)
+                if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) )
                 {
                     if (interactableAssets.interactableDreamMesh.output_style == 0)
                     {
@@ -123,7 +123,7 @@ public class outputComponent : MonoBehaviour
 
         }else if(interactableAssets.interactableDreamMesh.input_style==1){ // is switch
             //output type and Behaviour
-            if ( OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) && interactableAssets.generateSpot.isselsected )
+            if ( OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger)  )
             {
                 if (interactableAssets.interactableDreamMesh.output_style == 0)
                 {
