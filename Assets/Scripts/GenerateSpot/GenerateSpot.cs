@@ -300,6 +300,8 @@ public class GenerateSpot : MonoBehaviour
     }
 
         public bool isGrabing =false;
+
+
     
     private void HandlePointerEventRaised(PointerEvent evt)
     {
@@ -310,6 +312,12 @@ public class GenerateSpot : MonoBehaviour
 
                 isGrabing=true;
                 Debug.Log("Grabing"+URLID);
+
+
+
+                 
+
+                
                 
                 break;
             case PointerEventType.Unselect:

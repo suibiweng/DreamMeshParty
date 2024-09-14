@@ -31913,7 +31913,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 544014884}
   uploadPort: 8080
   downloadPort: 8000
-  ServerURL: http://10.0.0.123
+  ServerURL: http://192.168.0.139
   SceneSaverTest: {fileID: 1378611036}
   selectedIDUrl: 
   IDs: 0
@@ -31962,7 +31962,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inPort: 1337
-  outIP: 10.0.0.123
+  outIP: 192.168.0.139
   outPort: 6161
 --- !u!1 &1378964797
 GameObject:
@@ -49846,10 +49846,6 @@ PrefabInstance:
     - target: {fileID: 5677664495437138859, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
       propertyPath: SortKey
       value: 669667655
-      objectReference: {fileID: 0}
-    - target: {fileID: 5677664495437138859, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
-      propertyPath: NetworkedBehaviours.Array.size
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
       propertyPath: m_LocalPosition.x

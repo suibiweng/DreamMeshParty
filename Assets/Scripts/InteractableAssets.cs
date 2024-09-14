@@ -40,12 +40,21 @@ public class InteractableAssets : MonoBehaviour
      public RenderTexture renderTexture; // Assign the render texture in the Inspector
     public string uploadUrl = "http://localhost:5000/"; // Change this to your server URL
 
+    public Transform Left,Right;
+
+
     void Start()
     {
+       
         
         manager = FindObjectOfType<RealityEditorManager>();
         generateSpot=gameObject.GetComponent<GenerateSpot>();
         triggerSync=gameObject.GetComponent<TriggerSync>();
+
+        Left=manager.LeftHand;
+        Right=manager.RightHand;
+
+
 
 
     
@@ -53,6 +62,18 @@ public class InteractableAssets : MonoBehaviour
 
      //   StartCoroutine(UploadTexture());
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
  private Coroutine checkCoroutine;
     public void SetInteractable(){
@@ -78,10 +99,49 @@ public class InteractableAssets : MonoBehaviour
 
     }
 
+
+    private void AlignWithController(Transform TargetTransform)
+    {
+        // Get the controller's forward direction
+        Vector3 controllerForward = TargetTransform.transform.forward;
+
+        // // Align the object's forward direction with the controller's forward direction
+        
+         outputspot.transform.forward = controllerForward;
+
+        // // (Optional) Keep object position relative to the controller
+        // transform.position = grabber.transform.position + grabber.transform.forward * someDistance;
+    }
+
+
+
+
+
+
+
     void Update() {
 
 
         generateSpot.toLockthePosition(!interactableToggle.isOn);
+
+        if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger ) ){
+
+                AlignWithController(Left);
+
+        }
+        if(OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)){
+
+             AlignWithController(Right);
+
+        }
+
+
+
+
+
+
+
+
 
         if(interactableDreamMesh!=null ){
             if(interactableDreamMesh.input_style==0){
