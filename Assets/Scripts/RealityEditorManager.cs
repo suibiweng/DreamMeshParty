@@ -131,20 +131,6 @@ public class RealityEditorManager : MonoBehaviour
 
     }
 
-
-    private void createSpotNoNetwork(Vector3 pos)
-    {
-        GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity); 
-        // gcube.GetComponent<GenerateSpot>().id=IDs;
-        // string urlid=TimestampGenerator.GetTimestamp(); 
-        // gcube.GetComponent<GenerateSpot>().URLID=urlid;
-        // Debug.Log("The new Cube's URLID is: " + urlid);
-        // gcube.GetComponent<DataSync2>().SetURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
-        // Debug.Log("Setting the network urlid to be: " + urlid);
-        // GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
-        // selectedIDUrl=urlid;  
-        // IDs++;
-    }
     
     private void createSpot(Vector3 pos)
     {
@@ -163,15 +149,16 @@ public class RealityEditorManager : MonoBehaviour
     public GameObject createSavedSpot(Vector3 pos, Quaternion rot, Vector3 scale, string urlid) // same as create spot function but includes scaling and rotating
     {
         Debug.Log("Creating Saved spot at " + pos);
-        // GameObject gcube = Realtime.Instantiate("GenrateSpot2.1", pos, rot);
-        GameObject gcube = Instantiate(GenerateSpotPrefab, pos, rot);
+        GameObject gcube = SpawnNetworkObject(pos, rot, GenerateSpotPrefab); 
         gcube.transform.localScale = scale;
         gcube.GetComponent<GenerateSpot>().id=IDs;
         gcube.GetComponent<GenerateSpot>().URLID=urlid;
-        // gcube.GetComponent<DataSync2>().SetURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
-        GenCubesDic.Add(urlid,gcube);
+        gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
+        if (!GenCubesDic.ContainsKey(urlid))
+        {
+            GenCubesDic.Add(urlid,gcube);
+        }
         selectedIDUrl=urlid;
-        Debug.Log("Setting the new spots SelectedIDUrl to be: " + selectedIDUrl);
         IDs++;
         return gcube; 
 

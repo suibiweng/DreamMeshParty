@@ -10,6 +10,7 @@ TagManager:
   - CropBox
   - ErasineLine
   - USBCamera
+  - Hat
   layers:
   - Default
   - TransparentFX

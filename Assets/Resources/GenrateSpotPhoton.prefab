@@ -15356,12 +15356,16 @@ MonoBehaviour:
   sculptMode: {fileID: 6246277565321123470}
   PositionisLock: {fileID: 1689086631448507668}
   SculptingModeOn: 0
+  grabInteractable: {fileID: 0}
+  isGrabing: 0
+  DremmeshPrompt: 
   Text_Scanning_Btn: {fileID: 7891990884005874616}
   Text_Instruction: {fileID: 7891990884005874616}
   checkInterval: 5
   erasingTexture: {fileID: 0}
   Bright: {r: 1, g: 1, b: 1, a: 0}
   Dark: {r: 0, g: 0, b: 0, a: 0}
+  GenerationisComplete: 0
 --- !u!65 &2813041726186599570
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15630,7 +15634,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3191651285109885349}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80928bd7079a3924c9e503fd9185e756, type: 3}
   m_Name: 
@@ -15639,7 +15643,7 @@ MonoBehaviour:
   manager: {fileID: 0}
   generateSpot: {fileID: 0}
   interactableToggle: {fileID: 1712808685263485367}
-  output: {fileID: 0}
+  outputspot: {fileID: 0}
   interactiveCamera: {fileID: 8662807067590852494}
   renderTexture: {fileID: 8400000, guid: 45f23028384a61149be92bc657ba3e67, type: 2}
   uploadUrl: http://localhost:5000/upload
