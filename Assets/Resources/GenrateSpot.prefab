@@ -4318,12 +4318,16 @@ MonoBehaviour:
   sculptMode: {fileID: 0}
   PositionisLock: {fileID: 0}
   SculptingModeOn: 0
+  grabInteractable: {fileID: 0}
+  isGrabing: 0
+  DremmeshPrompt: 
   Text_Scanning_Btn: {fileID: 5928899881653964488}
   Text_Instruction: {fileID: 5928899881653964542}
   checkInterval: 5
   erasingTexture: {fileID: 0}
   Bright: {r: 111.43049, g: 111.43049, b: 111.43049, a: 1}
   Dark: {r: 0, g: 0, b: 0, a: 0}
+  GenerationisComplete: 0
 --- !u!65 &6148612481019881565
 BoxCollider:
   m_ObjectHideFlags: 0

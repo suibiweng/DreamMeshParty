@@ -300,6 +300,8 @@ public class GenerateSpot : MonoBehaviour
     }
 
         public bool isGrabing =false;
+
+
     
     private void HandlePointerEventRaised(PointerEvent evt)
     {
@@ -309,13 +311,20 @@ public class GenerateSpot : MonoBehaviour
                 OnSelect();
 
                 isGrabing=true;
+                Debug.Log("Grabing"+URLID);
+
+
+
+                 
+
+                
                 
                 break;
             case PointerEventType.Unselect:
 
             // PreviewWindow.gameObject.SetActive(false);
-             Release();
-
+                Release();
+                 Debug.Log("Not Grabing"+URLID);
                  isGrabing=false;
 
                 break;

@@ -4,7 +4,6 @@ using UnityEngine;
 using RealityEditor;    
 using UnityEngine.Networking;
 using UnityEngine.UI;
-// using AmplifyShaderEditor;
 
 using Oculus.Interaction;
 
@@ -32,24 +31,48 @@ public class InteractableAssets : MonoBehaviour
     public Toggle interactableToggle;
     // Start is called before the first frame update
 
+    public TriggerSync triggerSync;
+
 
     public outputComponent outputspot;
     public GameObject interactiveCamera;
      public RenderTexture renderTexture; // Assign the render texture in the Inspector
-    public string uploadUrl = "http://localhost:5000/upload"; // Change this to your server URL
+    public string uploadUrl = "http://localhost:5000/"; // Change this to your server URL
+
+    public Transform Left,Right;
+
 
     void Start()
     {
+       
         
         manager = FindObjectOfType<RealityEditorManager>();
         generateSpot=gameObject.GetComponent<GenerateSpot>();
+        triggerSync=gameObject.GetComponent<TriggerSync>();
+
+        Left=manager.LeftHand;
+        Right=manager.RightHand;
 
 
-        uploadUrl = manager.ServerURL+":5000/upload/"; 
-        checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
+
+
+    
+        checkCoroutine = StartCoroutine(CheckForJsonOnServer( generateSpot.downloadURL+generateSpot.URLID+"_interactable.json",3f));
 
      //   StartCoroutine(UploadTexture());
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
  private Coroutine checkCoroutine;
     public void SetInteractable(){
@@ -69,25 +92,67 @@ public class InteractableAssets : MonoBehaviour
 
 
          // looking for json File;
-        // checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
+       checkCoroutine = StartCoroutine(CheckForJsonOnServer( uploadUrl+generateSpot.URLID+"_interactable.json",3f));
 
 
 
     }
+
+
+    private void AlignWithController(Transform TargetTransform)
+    {
+        // Get the controller's forward direction
+        Vector3 controllerForward = TargetTransform.transform.forward;
+
+        // // Align the object's forward direction with the controller's forward direction
+        
+         outputspot.transform.forward = controllerForward;
+
+        // // (Optional) Keep object position relative to the controller
+        // transform.position = grabber.transform.position + grabber.transform.forward * someDistance;
+    }
+
+
+
+
+
+
 
     void Update() {
 
 
         generateSpot.toLockthePosition(!interactableToggle.isOn);
 
-        if(interactableDreamMesh!=null && generateSpot.isGrabing){
+        if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger ) ){
+
+                AlignWithController(Left);
+
+        }
+        if(OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)){
+
+             AlignWithController(Right);
+
+        }
+
+
+
+
+
+
+
+
+
+        if(interactableDreamMesh!=null ){
             if(interactableDreamMesh.input_style==0){
-                if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)){
+                if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger )  ||  OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) ){
                 
                 
                  //output.BroadcastMessage("triggerOutPut");
-
-                 outputspot.triggerOutPut();
+                if(generateSpot.isGrabing){
+                    outputspot.triggerOutPut();
+                    triggerSync.CallTriggerRPC();
+                }
+                 
                 
                 }
         
@@ -96,10 +161,17 @@ public class InteractableAssets : MonoBehaviour
               if(interactableDreamMesh.input_style==1){
 
 
-                  if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)){
+                  if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) ||  OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) ){
 
 
-                    outputspot.triggerOutPut();
+            if(generateSpot.isGrabing){
+                outputspot.triggerOutPut();
+                triggerSync.CallTriggerRPC();
+
+
+
+            }
+                 
                 
                 
                     //output.BroadcastMessage("triggerOutPut");
