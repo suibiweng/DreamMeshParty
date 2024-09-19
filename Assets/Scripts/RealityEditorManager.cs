@@ -38,8 +38,8 @@ public class RealityEditorManager : MonoBehaviour
     private int colorcubeMover; 
     void Start()
     {
-        
-        osc=FindObjectOfType<OSC>();
+
+        osc = FindObjectOfType<OSC>();
         _runner = FindObjectOfType<NetworkRunner>(); 
         ServerURL+=":"+downloadPort+"/";
         //GenCubes= new List<GameObject>();
