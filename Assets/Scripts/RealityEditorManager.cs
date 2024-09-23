@@ -97,24 +97,14 @@ public class RealityEditorManager : MonoBehaviour
             
         }
         if(Input.GetKeyDown(KeyCode.S)){
-            SceneSaverTest.SaveGenerateSpotsToPlayerPrefs();
+            SceneSaverTest.SaveSceneToServer();
         }
         if(Input.GetKeyDown(KeyCode.L)){
-            SceneSaverTest.LoadGenerateSpotsFromPlayerPrefs();
+            SceneSaverTest.LoadSceneFromServer();
         }
     }
 
     public void createReconstructionSpot(Vector3 pos,Vector3 scale){
-
-
-        // Realtime.InstantiateOptions options = new Realtime.InstantiateOptions
-        // {
-        //     ownedByClient = true,
-        //     preventOwnershipTakeover = false,
-        //     // destroyWhenOwnerOrLastClientLeaves = true,
-        //     useInstance = null // or specify the Realtime instance if necessary
-        // };
-        // GameObject gcube = Realtime.Instantiate("GenrateSpot2.1", pos, Quaternion.identity, options); //this might be obsolete trying new options feature
         
         GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity);
         gcube.GetComponent<GenerateSpot>().id=IDs;

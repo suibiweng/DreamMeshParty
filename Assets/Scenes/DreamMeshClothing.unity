@@ -33034,6 +33034,7 @@ MonoBehaviour:
   savingSound: {fileID: 8300000, guid: 98e759dfda69aa7468d95f5a2c88e366, type: 3}
   loadingSound: {fileID: 8300000, guid: 523f822c1c7b699489c49fea2353c2de, type: 3}
   RealityEditorManager: {fileID: 1378611038}
+  TestLoadSceneName: SavedScene__0.4644809.json
   ScenesDropDown: {fileID: 1434967427}
 --- !u!82 &1378611037
 AudioSource:
@@ -33150,7 +33151,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 544014884}
   uploadPort: 8080
   downloadPort: 8000
-  ServerURL: http://192.168.0.139
+  ServerURL: http://192.168.137.1
   SceneSaverTest: {fileID: 1378611036}
   selectedIDUrl: 
   IDs: 0
@@ -33199,7 +33200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inPort: 1337
-  outIP: 192.168.0.139
+  outIP: 192.168.137.1
   outPort: 6161
 --- !u!1 &1378964797
 GameObject:
@@ -34148,7 +34149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6620131981476349703, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.021
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6620131981476349703, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       propertyPath: m_LocalPosition.y
@@ -34156,7 +34157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6620131981476349703, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.40328825
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6620131981476349703, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       propertyPath: m_LocalRotation.w

@@ -16,10 +16,10 @@ public class SceneSaverTest : MonoBehaviour
    public AudioClip savingSound, loadingSound;
    public RealityEditorManager RealityEditorManager; 
    private string uploadURL;
-   private string savedSceneFolderPath;
+   public string TestLoadSceneName;
 
-   public TMP_Dropdown ScenesDropDown; 
-
+   public TMP_Dropdown ScenesDropDown;
+   public TMP_Text ScenePromptTMP; 
    [System.Serializable]
    public class GenerateSpotData
    {
@@ -36,12 +36,17 @@ public class SceneSaverTest : MonoBehaviour
        public string sceneName; 
        public List<GenerateSpotData> generateSpotDataList;
    }
+   
+   [System.Serializable]
+   public class StringArrayWrapper
+   {
+       public List<string> fileNames;
+   }
 
 
    private void Start()
    {
        uploadURL = RealityEditorManager.ServerURL+":8000";
-       savedSceneFolderPath = Path.Combine(Application.dataPath, "../SavedScene");
        PopulateDropdown();
    }
 
@@ -52,17 +57,19 @@ public class SceneSaverTest : MonoBehaviour
        {
            source.PlayOneShot(savingSound);
            Debug.Log("Start Button Has Been Pressed. Saving Scene...");
-           SaveGenerateSpotsToPlayerPrefs();
+           SaveSceneToServer();
        }
        if(OVRInput.GetUp(OVRInput.RawButton.RThumbstick)){
            source.PlayOneShot(loadingSound);
            Debug.Log("Load Button Has Been Pressed. Loading Scene...");
-           LoadGenerateSpotsFromPlayerPrefs();
+           LoadSceneFromServer();
+       }
+       if(Input.GetKeyDown(KeyCode.D)){
+           PopulateDropdown();
        }
    }
-
-
-   public void SaveGenerateSpotsToPlayerPrefs()
+   
+   public void SaveSceneToServer()
    {
        // Find all objects of type GenerateSpot
        GameObject[] generateSpots = GameObject.FindGameObjectsWithTag("GenerateSpot");
@@ -82,10 +89,8 @@ public class SceneSaverTest : MonoBehaviour
        // Serialize data to JSON
        SavedSceneData allData = new SavedSceneData();
        allData.generateSpotDataList = generateSpotDataList;
-       allData.sceneName = "SavedScene: " + Random.value; 
+       allData.sceneName = ScenePromptTMP.text; 
        string json = JsonUtility.ToJson(allData);
-
-
        // Save to PlayerPrefs
        Debug.Log("Saving the JsonString: " + json);
        
@@ -94,25 +99,17 @@ public class SceneSaverTest : MonoBehaviour
        PlayerPrefs.Save();
    }
 
-
-   public void LoadGenerateSpotsFromPlayerPrefs()
+   public void LoadSceneFromServer()
    {
-       if (PlayerPrefs.HasKey("GenerateSpotData"))
+       // Request to load the selected scene from the server
+       if (TestLoadSceneName.Length == 0)
        {
-           string json = PlayerPrefs.GetString("GenerateSpotData");
-
-           // Deserialize the JSON string back to the object 
-           SavedSceneData allData = JsonUtility.FromJson<SavedSceneData>(json);
-           Debug.Log("Loading Scene: " + allData.sceneName);
-
-           Debug.Log("Loading scene with " + allData.generateSpotDataList.Count + " Cubes");
-           foreach (var data in allData.generateSpotDataList)
-           {
-               GameObject newObject = RealityEditorManager.createSavedSpot(data.position, data.rotation, data.scale, data.urlid);
-               Debug.Log("loading urlid: " + data.urlid);
-               // newObject.GetComponent<GenerateSpot2>().URLID = data.URLID;
-               newObject.GetComponent<GenerateSpot>().initAdd();
-           }
+           string selectedSceneName = ScenesDropDown.options[ScenesDropDown.value].text;
+           StartCoroutine(DownloadSceneData(selectedSceneName));
+       }
+       else
+       {
+           StartCoroutine(DownloadSceneData(TestLoadSceneName));
        }
    }
    
@@ -141,40 +138,84 @@ public class SceneSaverTest : MonoBehaviour
        {
            Debug.LogError("Error uploading JSON: " + www.error);
        }
+   }
+   IEnumerator DownloadSceneData(string fileName)
+   {
+       Debug.Log("Trying to load a specific scene:" + fileName);
+       UnityWebRequest www = UnityWebRequest.Get($"{uploadURL}/download?filename={fileName}");
+       yield return www.SendWebRequest();
 
+       if (www.result == UnityWebRequest.Result.Success)
+       {
+           string json = www.downloadHandler.text;
+           SavedSceneData allData = JsonUtility.FromJson<SavedSceneData>(json);
+           Debug.Log("Loading Scene: " + allData.sceneName);
+           Debug.Log("Loading scene with " + allData.generateSpotDataList.Count + " Cubes");
+
+           foreach (var data in allData.generateSpotDataList)
+           {
+               GameObject newObject = RealityEditorManager.createSavedSpot(data.position, data.rotation, data.scale, data.urlid);
+               Debug.Log("loading urlid: " + data.urlid);
+               newObject.GetComponent<GenerateSpot>().initAdd();
+           }
+       }
+       else
+       {
+           Debug.LogError("Error downloading scene data: " + www.error);
+       }
    }
    
    void PopulateDropdown()
    {
+       Debug.Log("Should be populating the dropdown");
        // Clear existing options
-       ScenesDropDown.ClearOptions();
+       // ScenesDropDown.ClearOptions();
 
-       // Check if the folder exists
-       if (!Directory.Exists(savedSceneFolderPath))
-       {
-           Debug.LogError("SavedScene folder does not exist.");
-           return;
-       }
-
-       // Get all JSON files in the folder
-       string[] files = Directory.GetFiles(savedSceneFolderPath, "*.json");
-
-       // Extract scene names from filenames
-       List<string> sceneNames = new List<string>();
-       foreach (string file in files)
-       {
-           // Extract the filename without extension
-           string fileName = Path.GetFileNameWithoutExtension(file);
-
-           // Add the extracted scene name to the list
-           sceneNames.Add(fileName);
-       }
-
-       // Add the scene names to the dropdown
-       ScenesDropDown.AddOptions(sceneNames);
+       // Start coroutine to get filenames from the server
+       StartCoroutine(FetchSceneFileNames());
    }
    
+   public List<string> ParseJsonArray(string jsonArray)
+   {
+       // Modify the JSON string to match the format expected by the wrapper class
+       string wrappedJson = "{\"fileNames\":" + jsonArray + "}";
+
+       // Deserialize using the wrapper class
+       StringArrayWrapper wrapper = JsonUtility.FromJson<StringArrayWrapper>(wrappedJson);
+       return wrapper.fileNames;
+   }
    
+   IEnumerator FetchSceneFileNames()
+   {
+       Debug.Log("dropdown asking for all the scene names");
+       UnityWebRequest www = UnityWebRequest.Get($"{uploadURL}/list-files");
+       yield return www.SendWebRequest();
+        
+       if (www.result == UnityWebRequest.Result.Success)
+       {
+           Debug.Log("dropdown Successful Request");
+
+           // Assume the server returns a JSON array of filenames
+           string jsonResponse = www.downloadHandler.text;
+           Debug.Log("DROPDOWN GOT A RESPONSE OF ALL THE SCENES: " + jsonResponse);
+           List<string> fileNames = ParseJsonArray(jsonResponse); 
+           Debug.Log("DROPDOWN broke the json into individual names" + fileNames);
+
+           // Populate the dropdown with the filenames
+           foreach (var name in fileNames)
+           {
+               Debug.Log("Adding Dropdown Value" + name);
+               ScenesDropDown.options.Add(new TMP_Dropdown.OptionData(name, null));
+           }
+           
+           ScenesDropDown.RefreshShownValue();
+           Debug.Log("Dropdown populated with scene filenames." + fileNames); 
+       }
+       else
+       {
+           Debug.LogError("Error fetching filenames: " + www.error);
+       }
+   }
    
 }
 
