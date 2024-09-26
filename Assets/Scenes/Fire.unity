@@ -2741,7 +2741,7 @@ GameObject:
   - component: {fileID: 281372682}
   - component: {fileID: 281372686}
   m_Layer: 8
-  m_Name: Cube
+  m_Name: fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5543,7 +5543,7 @@ GameObject:
   - component: {fileID: 452222828}
   - component: {fileID: 452222827}
   m_Layer: 0
-  m_Name: '[BuildingBlock] Cube'
+  m_Name: '[BuildingBlock] extinguisher'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19194,7 +19194,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2443063571071057729}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eea630fc2c73ba3418bc64205f79326f, type: 3}
   m_Name: 
