@@ -1,18 +1,145 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections;
+using Newtonsoft.Json;
 
-public class PhysicGenrateSpot : MonoBehaviour
+public class CombinedPhysicsScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public string jsonUrl = "http://localhost:8000/physicsProperties.json";  // URL to fetch the JSON file
+
+    public float planetGravity = 9.81f;  // Default gravity (Earth's gravity)
+    public float planetAtmosphereDrag = 0.0f;  // Default atmosphere drag
+    public float massOnEarth = 1.0f;  // Mass of the object on Earth
+
+    private Rigidbody objectRigidbody;
+    private Collider objectCollider;
+
+    // Class to map the JSON data
+    [System.Serializable]
+    public class PhysicsProperties
     {
-        
+        public float mass;
+        public float bounciness;
+        public float dynamicFriction;
+        public float staticFriction;
+        public string frictionCombine;
+        public string bounceCombine;
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        objectRigidbody = GetComponent<Rigidbody>();
+        objectCollider = GetComponent<Collider>();
+
+        // Start fetching the JSON data
+        StartCoroutine(FetchJsonData());
+    }
+
+    // Fetch the JSON from the local server
+    IEnumerator FetchJsonData()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(jsonUrl);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            // Parse the JSON response
+            string json = request.downloadHandler.text;
+            PhysicsProperties properties = JsonConvert.DeserializeObject<PhysicsProperties>(json);
+
+            // Apply the physics properties from JSON
+            ApplyProperties(properties);
+
+            // Set planet-specific gravity and atmosphere drag after applying general properties
+            SetPlanetProperties(planetGravity, planetAtmosphereDrag);
+        }
+        else
+        {
+            Debug.LogError("Error fetching JSON: " + request.error);
+        }
+    }
+
+    // Apply the properties to Rigidbody and Collider
+    void ApplyProperties(PhysicsProperties properties)
+    {
+        if (objectRigidbody != null)
+        {
+            // Set the mass of the Rigidbody based on the JSON data
+            objectRigidbody.mass = properties.mass;
+        }
+
+        if (objectCollider != null)
+        {
+            // Create a new PhysicMaterial and apply friction and bounciness properties
+            PhysicMaterial material = new PhysicMaterial
+            {
+                bounciness = properties.bounciness,
+                dynamicFriction = properties.dynamicFriction,
+                staticFriction = properties.staticFriction
+            };
+
+            // Set the friction and bounce combine modes
+            material.frictionCombine = GetCombineMode(properties.frictionCombine);
+            material.bounceCombine = GetCombineMode(properties.bounceCombine);
+
+            // Assign the material to the Collider
+            objectCollider.material = material;
+        }
+    }
+
+    // Helper function to convert string to PhysicMaterialCombine enum
+    PhysicMaterialCombine GetCombineMode(string combineMode)
+    {
+        switch (combineMode)
+        {
+            case "Average":
+                return PhysicMaterialCombine.Average;
+            case "Minimum":
+                return PhysicMaterialCombine.Minimum;
+            case "Multiply":
+                return PhysicMaterialCombine.Multiply;
+            case "Maximum":
+                return PhysicMaterialCombine.Maximum;
+            default:
+                return PhysicMaterialCombine.Average;  // Default to Average if not recognized
+        }
+    }
+
+    // Function to set the planet gravity and atmosphere drag
+    public void SetPlanetProperties(float newPlanetGravity, float newPlanetAtmosphereDrag)
+    {
+        planetGravity = newPlanetGravity;
+        planetAtmosphereDrag = newPlanetAtmosphereDrag;
+        AdjustPlanetPhysics();  // Apply the new values to the Rigidbody
+    }
+
+    // Apply the planet's gravity and drag to the Rigidbody
+    void AdjustPlanetPhysics()
+    {
+        if (objectRigidbody != null)
+        {
+            // Adjust the mass of the object based on planet's gravity relative to Earth's
+            objectRigidbody.mass = massOnEarth * (planetGravity / 9.81f);
+
+            // Set drag to simulate atmosphere resistance
+            objectRigidbody.drag = planetAtmosphereDrag;
+
+            // Disable Unity's default gravity (to use custom gravity)
+            objectRigidbody.useGravity = false;
+        }
+        else
+        {
+            Debug.LogError("No Rigidbody component found on this object.");
+        }
+    }
+
+    void FixedUpdate()
+    {
+        // Apply custom gravity in FixedUpdate
+        if (objectRigidbody != null)
+        {
+            // Apply custom gravity force (F = m * g)
+            objectRigidbody.AddForce(Vector3.down * objectRigidbody.mass * planetGravity);
+        }
     }
 }

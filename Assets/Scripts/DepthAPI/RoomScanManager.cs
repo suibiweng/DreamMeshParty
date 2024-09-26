@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using RealityEditor;
+using UnityEngine.Networking;
 
 public class RoomScanManager : MonoBehaviour
 {
@@ -29,6 +30,16 @@ public class RoomScanManager : MonoBehaviour
     public bool recording;
 
 
+    public class FutnitureData
+{
+    public string name;
+    
+    public Vector3 position;
+    public Vector3 scale;
+    public Vector3 rotationEulerAngles;
+}
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +54,7 @@ public class RoomScanManager : MonoBehaviour
     manager=FindAnyObjectByType<RealityEditorManager>();
     
         //Search room mesh
-
+        StartCoroutine(GettheBoxes());
     }
 
  
@@ -62,6 +73,10 @@ public class RoomScanManager : MonoBehaviour
 
 
 
+    
+
+
+
      
 
 
@@ -72,6 +87,15 @@ public class RoomScanManager : MonoBehaviour
 
 
            Roommesh.SetActive(false);
+
+
+    }
+
+      IEnumerator GettheBoxes(){
+        yield return new WaitForSeconds(10);
+
+            getallCropBoxes();
+           
 
 
     }
@@ -93,25 +117,61 @@ public class RoomScanManager : MonoBehaviour
 
     }
 
-    public void getallCropBoxes(){
+public List<FutnitureData> cropBoxes = new List<FutnitureData>();
 
-        foreach (GameObject g in GameObject.FindGameObjectsWithTag("CropBox")){
+    public void getallCropBoxes()
+    {
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("CropBox"))
+        {
+            FutnitureData data = new FutnitureData
+            {
+                name = g.transform.parent.name,
+              // Parent is set to the object's own name
+                position = g.transform.position,
+                scale = g.transform.localScale,
+                rotationEulerAngles = g.transform.rotation.eulerAngles
+            };
 
-            Debug.Log(g.name + g.transform.position+g.transform.localScale+g.transform.rotation.eulerAngles);
-            Cropboxes.Add(g);
-
-
-            manager.createReconstructionSpot(g.transform.position, g.transform.localScale);
-            //need a OSC send to Server to crop mesh
-
-        
-
+            cropBoxes.Add(data);
         }
 
+        string json = JsonUtility.ToJson(new { cropBoxes = this.cropBoxes }, true);
 
-
-
+        // Send the JSON data to the server
+        StartCoroutine(SendJsonToServer(json));
     }
+
+
+
+
+        private IEnumerator SendJsonToServer(string jsonData)
+    {
+        string url = "http://localhost:5000/receiveRoom";  // Replace with your local server URL and endpoint
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+
+        // Create a byte array from the JSON string
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        // Set the request content type to application/json
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        // Send the request and wait for the response
+        yield return request.SendWebRequest();
+
+        // Check for errors in the request
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("Error sending JSON to server: " + request.error);
+        }
+        else
+        {
+            Debug.Log("Successfully sent JSON to server");
+            Debug.Log("Response: " + request.downloadHandler.text);
+        }
+    }
+
 
 
 
