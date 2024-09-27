@@ -1326,7 +1326,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6881427634733429353
 Transform:
   m_ObjectHideFlags: 0
@@ -13832,6 +13832,7 @@ GameObject:
   - component: {fileID: 7481847473661822111}
   - component: {fileID: 6192821148784459004}
   - component: {fileID: 74486197067409030}
+  - component: {fileID: 176731231799175087}
   m_Layer: 0
   m_Name: GenrateSpotPhoton
   m_TagString: GenerateSpot
@@ -14323,7 +14324,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3191651285109885349}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80928bd7079a3924c9e503fd9185e756, type: 3}
   m_Name: 
@@ -14352,6 +14353,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outputComponent: {fileID: 6426207975900063567}
+--- !u!114 &176731231799175087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191651285109885349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 662edc867a09b9946bc6311c7b51d04d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  solarSystem: {fileID: 0}
+  generateSpot: {fileID: 0}
+  jsonUrl: http://localhost:8000/physicsProperties.json
+  planetGravity: 9.81
+  planetAtmosphereDrag: 0
+  massOnEarth: 1
+  debugobject: 0
+  setPhysic: 0
 --- !u!1 &3253298116833696021
 GameObject:
   m_ObjectHideFlags: 0

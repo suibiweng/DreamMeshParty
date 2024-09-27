@@ -2,9 +2,16 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json;
+using RealityEditor;
 
 public class CombinedPhysicsScript : MonoBehaviour
 {
+
+    public SolarSystemSimulation solarSystem;
+
+
+
+    public GenerateSpot generateSpot;
     public string jsonUrl = "http://localhost:8000/physicsProperties.json";  // URL to fetch the JSON file
 
     public float planetGravity = 9.81f;  // Default gravity (Earth's gravity)
@@ -13,6 +20,10 @@ public class CombinedPhysicsScript : MonoBehaviour
 
     private Rigidbody objectRigidbody;
     private Collider objectCollider;
+    public bool debugobject=false;
+
+
+    public bool setPhysic=false;
 
     // Class to map the JSON data
     [System.Serializable]
@@ -28,11 +39,40 @@ public class CombinedPhysicsScript : MonoBehaviour
 
     void Start()
     {
+
+        //solarSystem=GetComponent<SolarSystemSimulation>();
+      
         objectRigidbody = GetComponent<Rigidbody>();
         objectCollider = GetComponent<Collider>();
+      
+
+
+       if(debugobject){
+
+     massOnEarth=objectRigidbody.mass;
+        setPhysic=true;
+
+
+       }else{
+
+
+        generateSpot=GetComponent<GenerateSpot>();
+        jsonUrl=generateSpot.downloadURL+generateSpot.URLID+"_physicsProperties.json";
+        StartCoroutine(FetchJsonData());
+
+       }
+  
+
+
+
+
+
+
+       
+        solarSystem=FindObjectOfType<SolarSystemSimulation>();
 
         // Start fetching the JSON data
-        StartCoroutine(FetchJsonData());
+     //   StartCoroutine(FetchJsonData());
     }
 
     // Fetch the JSON from the local server
@@ -51,7 +91,7 @@ public class CombinedPhysicsScript : MonoBehaviour
             ApplyProperties(properties);
 
             // Set planet-specific gravity and atmosphere drag after applying general properties
-            SetPlanetProperties(planetGravity, planetAtmosphereDrag);
+           // SetPlanetProperties(planetGravity, planetAtmosphereDrag);
         }
         else
         {
@@ -66,6 +106,7 @@ public class CombinedPhysicsScript : MonoBehaviour
         {
             // Set the mass of the Rigidbody based on the JSON data
             objectRigidbody.mass = properties.mass;
+            massOnEarth=objectRigidbody.mass;
         }
 
         if (objectCollider != null)
@@ -111,6 +152,7 @@ public class CombinedPhysicsScript : MonoBehaviour
         planetGravity = newPlanetGravity;
         planetAtmosphereDrag = newPlanetAtmosphereDrag;
         AdjustPlanetPhysics();  // Apply the new values to the Rigidbody
+
     }
 
     // Apply the planet's gravity and drag to the Rigidbody
@@ -135,11 +177,38 @@ public class CombinedPhysicsScript : MonoBehaviour
 
     void FixedUpdate()
     {
+
+        if(solarSystem==null) return;
+        
+        // if(generateSpot.GenerationisComplete){
+            
+        //     objectRigidbody.isKinematic=false;
+            
+
+        // } 
+    
+        if(debugobject){
+            SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
+
+        }else{
+
+
+           // if(generateSpot.GenerationisComplete){
+            //objectRigidbody.isKinematic=false;
+            //AdjustPlanetPhysics();
+        // } 
+
+
+
+
+        }
         // Apply custom gravity in FixedUpdate
-        if (objectRigidbody != null)
+        if (objectRigidbody != null && setPhysic)
         {
             // Apply custom gravity force (F = m * g)
             objectRigidbody.AddForce(Vector3.down * objectRigidbody.mass * planetGravity);
         }
+
+
     }
 }

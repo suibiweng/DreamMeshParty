@@ -32,6 +32,12 @@ public class SolarSystemSimulation : MonoBehaviour
     public Rigidbody objectRigidbody;
     public float massOnEarth = 1.0f;
 
+
+
+    public  float  planetGravity = 9.81f;
+     public float  planetAtmosphereDrag = 1.0f;
+
+
     void Start()
     {
         // SetPlanetaryParameters(selectedBody);
@@ -43,8 +49,6 @@ public class SolarSystemSimulation : MonoBehaviour
 
 
         
-      float       planetGravity = 9.81f;
-      float       planetAtmosphereDrag = 1.0f;
 
 
         switch (body)
@@ -121,6 +125,11 @@ public class SolarSystemSimulation : MonoBehaviour
                 planetGravity = 0.28f;
                 planetAtmosphereDrag = 0.0f;
                 break;
+            default:
+                planetGravity = 9.81f;
+                planetAtmosphereDrag = 1.0f;
+
+            break; 
         }
     }
 
