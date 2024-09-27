@@ -15,6 +15,8 @@ public class PlantsMenu : MonoBehaviour
 
     public Toggle [] Planettoggles;
 
+    public GravitySync gravitySync;
+
 
     
     
@@ -22,7 +24,8 @@ public class PlantsMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        gravitySync=GetComponent<GravitySync>();    
+         setToggle(0);
 
 
     
@@ -47,6 +50,8 @@ public class PlantsMenu : MonoBehaviour
 
     }
 
+    public  int selectIndex;
+
 
      public void setUPPlanetary(){
 
@@ -56,11 +61,29 @@ public class PlantsMenu : MonoBehaviour
 
     }
 
+    public void setToggle(int si){
+
+         for(int i=0;i<Planettoggles.Length;i++)Planettoggles[i].isOn=false;
+        Planettoggles[si].isOn=true;
+
+
+
+    }
+
 
     int getPlanet(){
 
         for(int i=0;i<Planettoggles.Length;i++)
-            if(Planettoggles[i].isOn)return i;
+            if(Planettoggles[i].isOn){
+                
+                selectIndex=i;
+
+                gravitySync.UpdateSelect(selectIndex) ;
+                return i;
+
+
+
+            }
 
         return 0;
 

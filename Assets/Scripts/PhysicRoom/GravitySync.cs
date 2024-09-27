@@ -14,6 +14,11 @@ public class GravitySync : NetworkBehaviour
     
     [Networked, OnChangedRender(nameof(OnAirChanged))]
     public float _airDrag { get; set; }
+
+
+
+    [Networked, OnChangedRender(nameof(OnSelectChanged))]
+    public int _select { get; set; }
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +53,18 @@ public class GravitySync : NetworkBehaviour
         // _generateSpot.URLID = NetworkedUrlID; 
         solarSystemSimulation.planetAtmosphereDrag=_airDrag;
     }
+
+
+    void OnSelectChanged(){
+
+        PlantsMenu menu = GetComponent<PlantsMenu>();
+
+        menu.setToggle(_select);
+
+
+    }
+
+
     public void UpdateGravity(float g)
     {
         if (HasStateAuthority)
@@ -64,6 +81,18 @@ public class GravitySync : NetworkBehaviour
         if (HasStateAuthority)
         {
             _airDrag=a;
+            // Change the string value here, which will then be synchronized across all clients
+            // NetworkedPrompt = newUrlID;
+        }
+    }
+
+
+
+        public void UpdateSelect(int s)
+    {
+        if (HasStateAuthority)
+        {
+            _select=s;
             // Change the string value here, which will then be synchronized across all clients
             // NetworkedPrompt = newUrlID;
         }
