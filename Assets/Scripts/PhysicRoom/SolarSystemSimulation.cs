@@ -27,9 +27,11 @@ using UnityEngine;
 public class SolarSystemSimulation : MonoBehaviour
 {
 
+    public  GravitySync gravitySync;
+
     public CelestialBody selectedBody;
 
-    public Rigidbody objectRigidbody;
+    // public Rigidbody objectRigidbody;
     public float massOnEarth = 1.0f;
 
 
@@ -40,6 +42,7 @@ public class SolarSystemSimulation : MonoBehaviour
 
     void Start()
     {
+        gravitySync=GetComponent<GravitySync>();    
         // SetPlanetaryParameters(selectedBody);
         // AdjustPlanetPhysics();
     }
@@ -131,6 +134,11 @@ public class SolarSystemSimulation : MonoBehaviour
 
             break; 
         }
+
+        gravitySync.UpdateAir(planetAtmosphereDrag);
+        gravitySync.UpdateGravity(planetGravity);
+
+
     }
 
     // void AdjustPlanetPhysics()
