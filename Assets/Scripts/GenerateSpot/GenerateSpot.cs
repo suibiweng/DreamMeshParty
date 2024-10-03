@@ -647,6 +647,20 @@ public class GenerateSpot : MonoBehaviour
 
 
 
+    public void ConfirmGeneration(string Prompt){
+
+
+
+
+
+
+
+
+
+    }
+
+
+
     public void ConfirmGeneration() 
     {
         
@@ -714,6 +728,26 @@ public class GenerateSpot : MonoBehaviour
         Prompt = "";
 
     }
+
+
+
+    public void GenrateModelPrompt(string prompt)
+    {
+        manager.promtGenerateModel(id, prompt, URLID);
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+
+        DremmeshPrompt=Prompt;
+
+        _generateSpotRPC.CallConfirmGenerationRPC();
+
+        // PreViewQuad.SetActive(true);
+        // loadingIcon.SetActive(true);
+        Prompt = "";
+
+    }
+
 
     void ModifyModelinstruction()
     {
