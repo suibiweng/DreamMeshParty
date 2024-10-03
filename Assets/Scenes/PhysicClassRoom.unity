@@ -1170,16 +1170,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105465563}
-  m_LocalRotation: {x: -0, y: -0.99998915, z: -0, w: -0.0046712756}
-  m_LocalPosition: {x: 0, y: 0, z: 0.295}
-  m_LocalScale: {x: 0.08265406, y: 0.08265408, z: 0.082654074}
+  m_LocalRotation: {x: -0, y: 0.99998915, z: -0, w: -0.0046713054}
+  m_LocalPosition: {x: 0, y: 0, z: 76.32614}
+  m_LocalScale: {x: -17.706146, y: 17.706152, z: 17.706148}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6620131981938533543}
+  m_Father: {fileID: 835544360}
   m_LocalEulerAnglesHint: {x: 0, y: -180.535, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.298, y: 2.96}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &108990245
@@ -3455,6 +3455,8 @@ MonoBehaviour:
   - {fileID: 401264926}
   - {fileID: 1450229345}
   - {fileID: 798038241}
+  gravitySync: {fileID: 8838043785361499775}
+  selectIndex: 0
 --- !u!114 &257658149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3473,6 +3475,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 8838043785361499774}
+  - {fileID: 8838043785361499775}
 --- !u!1 &261655557
 GameObject:
   m_ObjectHideFlags: 0
@@ -9930,6 +9933,8 @@ RectTransform:
   - {fileID: 401264925}
   - {fileID: 1450229344}
   - {fileID: 798038240}
+  - {fileID: 859989950}
+  - {fileID: 105465566}
   m_Father: {fileID: 6103743011201993427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10587,16 +10592,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 859989947}
-  m_LocalRotation: {x: -0, y: -0.99998915, z: -0, w: -0.0046712756}
-  m_LocalPosition: {x: 0, y: 0, z: 0.295}
-  m_LocalScale: {x: 0.08265406, y: 0.08265408, z: 0.082654074}
+  m_LocalRotation: {x: -0, y: 0.99998915, z: -0, w: -0.0046713054}
+  m_LocalPosition: {x: 0, y: 0, z: 76.32614}
+  m_LocalScale: {x: -17.706146, y: 17.706152, z: 17.706148}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6620131981938533543}
+  m_Father: {fileID: 835544360}
   m_LocalEulerAnglesHint: {x: 0, y: -180.535, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.298, y: 3.216}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &863567193
@@ -11692,7 +11697,7 @@ Transform:
   m_GameObject: {fileID: 931601510}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.056, z: 0}
+  m_LocalPosition: {x: 0, y: 0.056, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24502,6 +24507,7 @@ GameObject:
   - component: {fileID: 8838043785361499774}
   - component: {fileID: 257658149}
   - component: {fileID: 8838043785361499773}
+  - component: {fileID: 8838043785361499775}
   m_Layer: 0
   m_Name: PhysicSettingMenu
   m_TagString: Untagged
@@ -25373,8 +25379,6 @@ Transform:
   m_Children:
   - {fileID: 6103743011201993427}
   - {fileID: 66669811075163532}
-  - {fileID: 859989950}
-  - {fileID: 105465566}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 135.858, z: 0}
 --- !u!23 &6869772073548674317
@@ -26038,7 +26042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e69ad02027f1fba4c961efb3c96ba155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravitySync: {fileID: 0}
+  gravitySync: {fileID: 8838043785361499775}
   selectedBody: 1
   massOnEarth: 1
   planetGravity: 9.81
@@ -26059,6 +26063,22 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
+--- !u!114 &8838043785361499775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191651285922949637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e63d6c5053b9654187b264415a824c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  solarSystemSimulation: {fileID: 0}
+  __gravity: 0
+  __airDrag: 0
+  __select: 0
 --- !u!33 &8848141891940977619
 MeshFilter:
   m_ObjectHideFlags: 0
