@@ -1,12 +1,14 @@
 using UnityEngine;
 
-public class ParticleLife : MonoBehaviour
+public class FireParticleLife : MonoBehaviour
 {
     public int maxLife = 5;               // Maximum life of the particle system
     private int currentLife;              // Current life of the particle system    
     public ParticleSystem particle1;
     public ParticleSystem particle2;
     public ParticleSystem particle3;
+
+    
 
     void Start()
     {

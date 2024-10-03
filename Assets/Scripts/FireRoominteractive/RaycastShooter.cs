@@ -25,7 +25,7 @@ public class RaycastShooter : MonoBehaviour
             if (Physics.Raycast(ray, out hit, rayDistance, targetLayerMask))
             {
                 // Check if the hit object has the ParticleLife component
-                ParticleLife particleLife = hit.collider.GetComponent<ParticleLife>();
+                FireParticleLife particleLife = hit.collider.GetComponent<FireParticleLife>();
 
                 if (particleLife != null)
                 {
@@ -37,9 +37,9 @@ public class RaycastShooter : MonoBehaviour
     }
 
     // Optional: visualize the ray in the Unity editor
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, -transform.right * rayDistance);
-    }
+    // void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawRay(transform.position, -transform.right * rayDistance);
+    // }
 }

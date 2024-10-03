@@ -4,7 +4,16 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using RealityEditor;
 using UnityEngine.Networking;
+    public class FutnitureData
+{
+    public string name;
+    
+    public Vector3 position;
+    public Vector3 scale;
+    public Vector3 rotationEulerAngles;
 
+    public string URID;
+}
 public class RoomScanManager : MonoBehaviour
 {
 
@@ -30,14 +39,7 @@ public class RoomScanManager : MonoBehaviour
     public bool recording;
 
 
-    public class FutnitureData
-{
-    public string name;
-    
-    public Vector3 position;
-    public Vector3 scale;
-    public Vector3 rotationEulerAngles;
-}
+
 
 
     // Start is called before the first frame update

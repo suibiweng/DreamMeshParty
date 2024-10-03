@@ -129,18 +129,7 @@ public class GenerateSpot : MonoBehaviour
         _networkObject = GetComponent<NetworkObject>();
         _photonDataSync = GetComponent<PhotonDataSync>();
         _generateSpotRPC = GetComponent<GenerateSpotRPC>(); 
-        // _realtimeTransform = GetComponent<RealtimeTransform>();
-        // _realtimeView = GetComponent<RealtimeView>();
-        // dataSync = GetComponent<DataSync>();
-
-      //  initAdd();
       
-        // URLID=TimestampGenerator.GetTimestamp();
-
-       // StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
-    
-        // StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_Instruction.zip"));
-
 
         RecordData = GetComponent<recordData>();
         
@@ -156,6 +145,11 @@ public class GenerateSpot : MonoBehaviour
         
         // if (selectMenu != null) selectMenu.SetActive(true);
         //  ControlPanels();
+
+        if(manager.isFireScene){
+
+            VoicePanel.SetActive(false);
+        }
 
         if (isAcopy)
         {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PressureSteam : MonoBehaviour
 {
+    public Exsync exsync;
     public GameObject targetObject; // The GameObject to activate/deactivate
     
     void Update()
@@ -23,22 +24,25 @@ public class PressureSteam : MonoBehaviour
     }
 
     // Method to activate the GameObject
-    void ActivateObject()
+   public void ActivateObject()
     {
         if (targetObject != null && !targetObject.activeSelf)
         {
             targetObject.SetActive(true); // Activate the GameObject
             Debug.Log("GameObject activated.");
+
+            exsync.CallallSetEx();
         }
     }
 
     // Method to deactivate the GameObject
-    void DeactivateObject()
+  public  void DeactivateObject()
     {
         if (targetObject != null && targetObject.activeSelf)
         {
             targetObject.SetActive(false); // Deactivate the GameObject
             Debug.Log("GameObject deactivated.");
+             exsync.CallallSetOffEx();
         }
     }
 }

@@ -13,6 +13,7 @@ using Unity.VisualScripting;
 
 public class RealityEditorManager : MonoBehaviour
 {
+    public bool isFireScene;
     public GameObject GenerateSpotPrefab;
     private NetworkRunner _runner;
     private Realtime _realtime;
@@ -82,6 +83,8 @@ public class RealityEditorManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if(isFireScene) return;
         
         //OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
         if(OVRInput.GetUp(OVRInput.RawButton.A)){
@@ -122,7 +125,7 @@ public class RealityEditorManager : MonoBehaviour
     }
 
     
-    private void createSpot(Vector3 pos)
+    public void createSpot(Vector3 pos)
     {
         // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
         GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab); 
@@ -136,6 +139,33 @@ public class RealityEditorManager : MonoBehaviour
         selectedIDUrl=urlid;  
         IDs++;
     }
+
+
+
+    
+    public GameObject createFireSpot(Vector3 pos)
+    {
+        // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
+        GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab); 
+        gcube.GetComponent<GenerateSpot>().id=IDs;
+        string urlid=TimestampGenerator.GetTimestamp(); 
+        gcube.GetComponent<GenerateSpot>().URLID=urlid;
+        Debug.Log("The new Cube's URLID is: " + urlid);
+        gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
+        Debug.Log("Setting the network urlid to be: " + urlid);
+        GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
+        selectedIDUrl=urlid;  
+        IDs++;
+
+        return gcube;
+    }
+
+
+
+
+
+
+
     public GameObject createSavedSpot(Vector3 pos, Quaternion rot, Vector3 scale, string urlid) // same as create spot function but includes scaling and rotating
     {
         Debug.Log("Creating Saved spot at " + pos);
