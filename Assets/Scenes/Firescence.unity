@@ -979,6 +979,14 @@ PrefabInstance:
       propertyPath: SortKey
       value: 1319572695
       objectReference: {fileID: 0}
+    - target: {fileID: 5677664495437138859, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
+      propertyPath: NetworkedBehaviours.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5677664495437138859, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
+      propertyPath: NetworkedBehaviours.Array.data[2]
+      value: 
+      objectReference: {fileID: 108990248}
     - target: {fileID: 5972945856088344826, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1117,6 +1125,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 947441566}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3191651285109885349, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 108990248}
     - targetCorrespondingSourceObject: {fileID: 2782697105034745681, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -1126,6 +1137,23 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6103743010167073139, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
   m_PrefabInstance: {fileID: 108990245}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &108990247 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3191651285109885349, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
+  m_PrefabInstance: {fileID: 108990245}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &108990248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108990247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14cc0ba142cc32547a38a039abdbb42a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &111031686
 GameObject:
   m_ObjectHideFlags: 0
@@ -10877,6 +10905,30 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: FiresceneManager, Assembly-CSharp
         m_MethodName: getallCropBoxes
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 108990248}
+        m_TargetAssemblyTypeName: MenuSync, Assembly-CSharp
+        m_MethodName: TurnOFFRPC
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 108990247}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
