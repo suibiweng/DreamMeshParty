@@ -24,7 +24,7 @@ public class FiresceneManager : MonoBehaviour
     {
         manager = GetComponent<RealityEditorManager> ();    
         osc=GetComponent<OSC>();
-        osc.SetAddressHandler("",SetFire);
+        osc.SetAddressHandler("/setFire",SetFire);
         
     }
     public List<FutnitureData> cropBoxes = new List<FutnitureData>();
