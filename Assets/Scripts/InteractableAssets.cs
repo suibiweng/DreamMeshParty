@@ -42,6 +42,9 @@ public class InteractableAssets : MonoBehaviour
     public Transform Left,Right;
 
 
+    public string audioUrl = "https://your-audio-url.com/audio.wav"; 
+
+
     void Start()
     {
        
@@ -52,6 +55,9 @@ public class InteractableAssets : MonoBehaviour
 
         Left=manager.LeftHand;
         Right=manager.RightHand;
+
+
+        audioUrl=generateSpot.downloadURL+generateSpot.URLID+"_sfx.wav";
 
 
 

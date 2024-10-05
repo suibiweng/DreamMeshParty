@@ -28,9 +28,7 @@ public class outputComponent : MonoBehaviour
     void Start()
     {
 
-        //light=GetComponent<Light>();
-        //particleSystem=GetComponent<ParticleSystem>();
-        //Sound=GetComponent<AudioSource>();
+
                
     }
 
@@ -58,6 +56,7 @@ public class outputComponent : MonoBehaviour
                     {
                         //sound
                         ToggleSoundState();
+
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 2)
                     {
@@ -141,6 +140,36 @@ public class outputComponent : MonoBehaviour
              
     }
 
+
+
+bool audioLoaded =false;
+
+        IEnumerator StreamAudioFromUrl(string audioUrl)
+    {
+        bool audioLoadedSuccessfully = false;
+
+        while (!audioLoadedSuccessfully) // Keep looping until audio is loaded
+        {
+            using (var www = new WWW(audioUrl))
+            {
+                yield return www;
+
+                if (string.IsNullOrEmpty(www.error))
+                {
+                    Sound.clip = www.GetAudioClip(false, true, AudioType.WAV);
+                    audioLoaded = true;
+                    audioLoadedSuccessfully = true; // Exit loop when audio is successfully loaded
+                    Debug.Log("Audio loaded and ready to play.");
+                }
+                else
+                {
+                    Debug.LogError("Error loading audio: " + www.error);
+                    yield return new WaitForSeconds(5); // Wait for 5 seconds before retrying
+                }
+            }
+        }
+    }
+
     // Method to toggle the gun on or off
     void TogglegunState()
     {
@@ -176,6 +205,10 @@ public class outputComponent : MonoBehaviour
     // Method to toggle the Sound on or off
     void ToggleSoundState()
     {
+        if(!audioLoaded)
+        StartCoroutine(StreamAudioFromUrl(interactableAssets.audioUrl));
+
+
         if (Sound != null)
         {
             if (isGunPlaying)
@@ -189,21 +222,41 @@ public class outputComponent : MonoBehaviour
         }
     }
 
-    // Method to start the Sound
-    void PlaySound()
+    // Play the audio if it is loaded
+    public void PlaySound()
     {
-        Sound.Play();
-        isSoundPlaying = true;
-        Debug.Log("Sound started.");
+        if (audioLoaded && Sound.clip != null)
+        {
+            if (Sound.isPlaying)
+            {
+                Sound.Stop(); // Stop if it's already playing (optional)
+            }
+            Sound.Play(); // Play the audio clip
+            Debug.Log("Playing sound.");
+        }
+        else
+        {
+            Debug.Log("Audio is not loaded yet.");
+        }
     }
 
-    // Method to stop the Sound
-    void StopSound()
+    // Stop the audio if it's playing
+    public void StopSound()
     {
-        Sound.Stop();
-        isSoundPlaying = false;
-        Debug.Log("Sound stopped.");
+        if (Sound.isPlaying)
+        {
+            Sound.Stop(); // Stop the audio clip
+            Debug.Log("Sound stopped.");
+        }
+        else
+        {
+            Debug.Log("No sound is currently playing.");
+        }
     }
+
+
+
+
 
     // Method to toggle the light on or off
     void ToggleLightState()
