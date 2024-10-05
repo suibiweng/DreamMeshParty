@@ -19132,7 +19132,7 @@ MonoBehaviour:
   _maxGrabPoints: -1
   _rigidbody: {fileID: 3471819366124012386}
   _kinematicWhileSelected: 1
-  _throwWhenUnselected: 0
+  _throwWhenUnselected: 1
 --- !u!114 &8838043784834827740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43938,7 +43938,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 12
+    maxNumParticles: 4
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0

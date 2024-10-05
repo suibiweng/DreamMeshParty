@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 58f41a00b8794cc479336bf675383b06
   - enabled: 1
+    path: Assets/Scenes/PhysicClassRoomCOLoad.unity
+    guid: b2b88fc33dfe1c04692b88178709f597
+  - enabled: 0
     path: Assets/Scenes/PhysicClassRoom.unity
     guid: c75e3a7baa518534f9ab15a8d4c91385
   - enabled: 1

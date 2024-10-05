@@ -14,9 +14,7 @@ public class GravitySync : NetworkBehaviour
     
     [Networked, OnChangedRender(nameof(OnAirChanged))]
     public float _airDrag { get; set; }
-
-
-
+    
     [Networked, OnChangedRender(nameof(OnSelectChanged))]
     public int _select { get; set; }
     // Start is called before the first frame update
@@ -25,30 +23,19 @@ public class GravitySync : NetworkBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-
-
-
-        
-    }
-
 
 
     void OnGravityChanged()
     {
-            solarSystemSimulation = GetComponent<SolarSystemSimulation>();
+        solarSystemSimulation = GetComponent<SolarSystemSimulation>();
 
         // Debug.Log("Networked urlid changed to: " + NetworkedUrlID);
         // _generateSpot.URLID = NetworkedUrlID; 
-        solarSystemSimulation.planetGravity=_gravity;
+        solarSystemSimulation.planetGravity = _gravity;
     }
     void OnAirChanged()
     {
         solarSystemSimulation = GetComponent<SolarSystemSimulation>();
-
         // Debug.Log("Networked urlid changed to: " + NetworkedUrlID);
         // _generateSpot.URLID = NetworkedUrlID; 
         solarSystemSimulation.planetAtmosphereDrag=_airDrag;
