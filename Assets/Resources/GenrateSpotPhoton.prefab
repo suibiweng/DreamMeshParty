@@ -18975,7 +18975,7 @@ MonoBehaviour:
   TestConfirmGeneration: 0
   isAcopy: 0
   id: 0
-  downloadURL: http://192.168.0.139:8000/
+  downloadURL: http://192.168.1.139:8000/
   URLID: 
   manager: {fileID: 0}
   isselsected: 0
@@ -19349,6 +19349,7 @@ MonoBehaviour:
   planetGravity: 9.81
   planetAtmosphereDrag: 0
   massOnEarth: 1
+  objectRigidbody: {fileID: 3471819366124012386}
   debugobject: 0
   setPhysic: 0
 --- !u!114 &4951649523192139036
