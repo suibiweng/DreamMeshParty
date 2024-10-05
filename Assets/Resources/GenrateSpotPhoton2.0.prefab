@@ -18245,6 +18245,7 @@ MonoBehaviour:
   uploadUrl: http://localhost:5000/upload
   Left: {fileID: 0}
   Right: {fileID: 0}
+  audioUrl: https://your-audio-url.com/audio.wav
 --- !u!114 &1991008500582217530
 MonoBehaviour:
   m_ObjectHideFlags: 0
