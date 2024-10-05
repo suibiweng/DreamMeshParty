@@ -16597,7 +16597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: b0f74e49-fe3a-4217-a4bd-e6daad02c099
+  instanceId: 79602278-0f90-49bc-a731-d209597274f1
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -18239,7 +18239,7 @@ MonoBehaviour:
   generateSpot: {fileID: 0}
   interactableToggle: {fileID: 1213858052076155752}
   triggerSync: {fileID: 1991008500582217530}
-  outputspot: {fileID: 0}
+  outputspot: {fileID: 2271005432504665777}
   interactiveCamera: {fileID: 491804472380163682}
   renderTexture: {fileID: 8400000, guid: 45f23028384a61149be92bc657ba3e67, type: 2}
   uploadUrl: http://localhost:5000/upload
@@ -61350,7 +61350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 677230f6-a730-4e2e-bbbc-73fa678ff7e2
+  instanceId: 0b448c7c-7318-4b38-923e-a8324679a910
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
