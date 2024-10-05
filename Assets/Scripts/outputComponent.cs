@@ -9,17 +9,18 @@ public class outputComponent : MonoBehaviour
     public InteractableAssets interactableAssets;
 
     
-    public Light light;
-    public ParticleSystem particleSystem;
+    public ParticleSystem light;
+    public ParticleSystem gun;
     public AudioSource Sound;
 
     // public InteractableDreamMesh interactableDreamMesh;
 
-    private bool isParticleSystemPlaying = false;
+    private bool isGunPlaying = false;
     private bool isSoundPlaying = false;
-    
+    private bool isLightPlaying = false;
+
+
     public float lightOnDuration = 1f; // How long the light stays on, in seconds
-    private bool isLightOn = false; // Track if the light is currently on
 
 
 
@@ -27,17 +28,10 @@ public class outputComponent : MonoBehaviour
     void Start()
     {
 
-        light=GetComponent<Light>();
-        particleSystem=GetComponent<ParticleSystem>();
-        Sound=GetComponent<AudioSource>();
-
-
-
-
-
-
-
-        
+        //light=GetComponent<Light>();
+        //particleSystem=GetComponent<ParticleSystem>();
+        //Sound=GetComponent<AudioSource>();
+               
     }
 
     // Update is called once per frame
@@ -56,8 +50,8 @@ public class outputComponent : MonoBehaviour
                 {
                     if (interactableAssets.interactableDreamMesh.output_style == 0)
                     {
-                        //particle
-                        ToggleParticleSystemState();
+                        //gun
+                        TogglegunState();
 
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 1)
@@ -75,8 +69,8 @@ public class outputComponent : MonoBehaviour
                 {
                     if (interactableAssets.interactableDreamMesh.output_style == 0)
                     {
-                        //particle
-                        ToggleParticleSystemState();
+                        //gun
+                        TogglegunState();
 
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 1)
@@ -98,8 +92,8 @@ public class outputComponent : MonoBehaviour
                 //output type and Behaviour
                 if (interactableAssets.interactableDreamMesh.output_style == 0)
                 {
-                    //particle
-                    StartCoroutine(PlayParticleForOneSecond());
+                    //gun
+                    StartCoroutine(PlayGunForOneSecond());
                 }
                 if (interactableAssets.interactableDreamMesh.output_style == 1)
                 {
@@ -109,10 +103,11 @@ public class outputComponent : MonoBehaviour
                 if (interactableAssets.interactableDreamMesh.output_style == 2)
                 {
                     //light
-                    if (!isLightOn)
+                    if (!isLightPlaying)
                     {
                         StartCoroutine(ToggleLightForDuration());
                     }
+                    
                 }
 
 
@@ -127,8 +122,8 @@ public class outputComponent : MonoBehaviour
             {
                 if (interactableAssets.interactableDreamMesh.output_style == 0)
                 {
-                    //particle
-                    ToggleParticleSystemState();
+                    //gun
+                    TogglegunState();
 
                 }
                 if (interactableAssets.interactableDreamMesh.output_style == 1)
@@ -146,36 +141,36 @@ public class outputComponent : MonoBehaviour
              
     }
 
-    // Method to toggle the particle system on or off
-    void ToggleParticleSystemState()
+    // Method to toggle the gun on or off
+    void TogglegunState()
     {
-        if (particleSystem != null)
+        if (gun != null)
         {
-            if (isParticleSystemPlaying)
+            if (isGunPlaying)
             {
-                StopParticleSystem();
+                Stopgun();
             }
             else
             {
-                PlayParticleSystem();
+                Playgun();
             }
         }
     }
 
-    // Method to start the particle system
-    void PlayParticleSystem()
+    // Method to start the gun
+    void Playgun()
     {
-        particleSystem.Play();
-        isParticleSystemPlaying = true;
-        Debug.Log("Particle system started.");
+        gun.Play();
+        isGunPlaying = true;
+        Debug.Log("gun started.");
     }
 
-    // Method to stop the particle system
-    void StopParticleSystem()
+    // Method to stop the gun
+    void Stopgun()
     {
-        particleSystem.Stop();
-        isParticleSystemPlaying = false;
-        Debug.Log("Particle system stopped.");
+        gun.Stop();
+        isGunPlaying = false;
+        Debug.Log("gun stopped.");
     }
 
     // Method to toggle the Sound on or off
@@ -183,7 +178,7 @@ public class outputComponent : MonoBehaviour
     {
         if (Sound != null)
         {
-            if (isParticleSystemPlaying)
+            if (isGunPlaying)
             {
                 StopSound();
             }
@@ -210,11 +205,12 @@ public class outputComponent : MonoBehaviour
         Debug.Log("Sound stopped.");
     }
 
+    // Method to toggle the light on or off
     void ToggleLightState()
     {
         if (light != null)
         {
-            if (isLightOn)
+            if (isLightPlaying)
             {
                 TurnOffLight();
             }
@@ -224,18 +220,18 @@ public class outputComponent : MonoBehaviour
             }
         }
     }
-    IEnumerator PlayParticleForOneSecond()
+    IEnumerator PlayGunForOneSecond()
     {
-        // Start the particle system
-        if (particleSystem != null)
+        // Start the gun
+        if (gun != null)
         {
-            particleSystem.Play(); // Start particle system
+            gun.Play(); // Start gun
 
             // Wait for 1 second
             yield return new WaitForSeconds(1f);
 
-            // Stop the particle system after 1 second
-            particleSystem.Stop();
+            // Stop the gun after 1 second
+            gun.Stop();
         }
     }
     IEnumerator PlaySoundForOneSecond()
@@ -268,22 +264,16 @@ public class outputComponent : MonoBehaviour
     // Method to turn on the light
     void TurnOnLight()
     {
-        if (light != null)
-        {
-            light.enabled = true;
-            isLightOn = true;
-            Debug.Log("Light turned on.");
-        }
+        light.Play();
+        isLightPlaying = true;
+        Debug.Log("light started.");
     }
 
     // Method to turn off the light
     void TurnOffLight()
     {
-        if (light != null)
-        {
-            light.enabled = false;
-            isLightOn = false;
-            Debug.Log("Light turned off.");
-        }
+        light.Stop();
+        isLightPlaying = false;
+        Debug.Log("light stopped.");
     }
 }

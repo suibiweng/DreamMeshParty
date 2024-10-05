@@ -3202,7 +3202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &351516074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11775,14 +11775,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFireScene: 0
-  GenerateSpotPrefab: {fileID: 3191651285109885349, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+  GenerateSpotPrefab: {fileID: 3767765152069255675, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
   isOnline: 0
   LeftHand: {fileID: 544014882}
   RightHand: {fileID: 544014881}
   PlayerCamera: {fileID: 544014884}
   uploadPort: 8080
   downloadPort: 8000
-  ServerURL: http://192.168.0.32
+  ServerURL: http://192.168.1.139
   SceneSaverTest: {fileID: 1378611036}
   selectedIDUrl: 
   IDs: 0
@@ -11831,7 +11831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inPort: 1337
-  outIP: 192.168.0.32
+  outIP: 192.168.1.139
   outPort: 6161
 --- !u!1 &1379906730
 GameObject:
