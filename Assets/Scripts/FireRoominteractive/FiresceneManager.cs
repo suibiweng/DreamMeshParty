@@ -42,7 +42,7 @@ public class FiresceneManager : MonoBehaviour
     {
         manager = GetComponent<RealityEditorManager> ();    
         osc=GetComponent<OSC>();
-        osc.SetAddressHandler("/setFire",SetFire);
+        // osc.SetAddressHandler("/setFire",SetFire);
         
     }
     public List<FutnitureData> cropBoxes = new List<FutnitureData>();
@@ -63,6 +63,14 @@ public class FiresceneManager : MonoBehaviour
     public void StartTheFireScene(){
 
         StartCoroutine(FetchRoomJson());
+
+
+
+        setFire();
+
+
+
+
 
 
     }
@@ -97,13 +105,14 @@ public class FiresceneManager : MonoBehaviour
         }
     }
 
-
+    RoomData roomData ;
 
         // Function to process the JSON data
     void ProcessRoomJson(string json)
     {
+        roomData= JsonUtility.FromJson<RoomData>(json);
         // Example: You can parse the JSON and use it in your Unity application
-        RoomData roomData = JsonUtility.FromJson<RoomData>(json);
+        
         foreach (var obj in roomData.flammableObjects)
         {
             Debug.Log($"Flammable object URID: {obj.URID}");
@@ -196,7 +205,34 @@ public class FiresceneManager : MonoBehaviour
         
     }
 
-    public void SetFire(OscMessage oscMessage){
+    int currentFire=0;
+
+    
+
+    public void setFire(){
+
+
+
+        if(currentFire<roomData.flammableObjects.Length ){
+
+
+
+
+        
+
+         findTheSpotinthelist(roomData.flammableObjects[currentFire].URID).setFire();
+        }
+
+        else{
+
+
+            //finish
+
+        }
+
+    }
+
+    public void SetFireFromOSC(OscMessage oscMessage){
 
         if(isServer)
         findTheSpotinthelist(oscMessage.values[0].ToString()).setFire();
@@ -208,13 +244,18 @@ public class FiresceneManager : MonoBehaviour
     public void putOutFire(string urid){
 
 
+
+        currentFire++;
+        setFire();
+
+/*
         OscMessage oscMessage=new OscMessage();
         oscMessage.address="/PutOutFire";
         oscMessage.values.Add(urid);
         
         if(isServer)
         osc.Send(oscMessage);
-
+*/
 
 
     }
