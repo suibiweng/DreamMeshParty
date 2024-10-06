@@ -612,7 +612,7 @@ public class GenerateSpot : MonoBehaviour
 
         }
 
-        Text_Instruction.text = RecordData.instruction;
+        //Text_Instruction.text = RecordData.instruction;
 
 
 

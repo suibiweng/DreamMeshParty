@@ -5,6 +5,24 @@ using RealityEditor;
 
 using UnityEngine.Networking;
 
+[System.Serializable]
+public class CropBoxContainer
+{
+    public List<FutnitureData> cropBoxes;
+}
+
+// Define a class structure matching the JSON file format
+[System.Serializable]
+public class RoomData
+{
+    public FlammableObject[] flammableObjects;
+}
+
+[System.Serializable]
+public class FlammableObject
+{
+    public string URID;
+}
 
 
 
@@ -15,7 +33,7 @@ public class FiresceneManager : MonoBehaviour
     
      public RealityEditorManager manager;
     public OSC osc;
-
+    private string url = "http://192.168.1.139:8000/Room.json";
 
 
     public FireSpot [] fireSpots;
@@ -29,7 +47,72 @@ public class FiresceneManager : MonoBehaviour
     }
     public List<FutnitureData> cropBoxes = new List<FutnitureData>();
 
-    public void getallCropBoxes()
+
+
+    public void ServerStart(){
+
+        StartCoroutine(getallCropBoxes());
+
+
+
+
+
+    }
+
+
+    public void StartTheFireScene(){
+
+        StartCoroutine(FetchRoomJson());
+
+
+    }
+
+
+
+
+
+    IEnumerator FetchRoomJson()
+    {
+        // Create a UnityWebRequest to get the file from the server
+        UnityWebRequest request = UnityWebRequest.Get(url);
+
+        // Send the request and wait for the response
+        yield return request.SendWebRequest();
+
+        // Check if there was an error
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError($"Error fetching file: {request.error}");
+        }
+        else
+        {
+            // Get the downloaded JSON as a string
+            string jsonData = request.downloadHandler.text;
+
+            // Log the received JSON data
+            Debug.Log($"Received JSON: {jsonData}");
+
+            // Optionally, process the JSON data further if necessary
+            ProcessRoomJson(jsonData);
+        }
+    }
+
+
+
+        // Function to process the JSON data
+    void ProcessRoomJson(string json)
+    {
+        // Example: You can parse the JSON and use it in your Unity application
+        RoomData roomData = JsonUtility.FromJson<RoomData>(json);
+        foreach (var obj in roomData.flammableObjects)
+        {
+            Debug.Log($"Flammable object URID: {obj.URID}");
+        }
+    }
+
+
+
+    IEnumerator getallCropBoxes()
     {
         isServer=true;
         foreach (GameObject g in GameObject.FindGameObjectsWithTag("CropBox"))
@@ -45,17 +128,24 @@ public class FiresceneManager : MonoBehaviour
 
             };
 
-            cropBoxes.Add(data);
+            
+            yield return new WaitForSeconds(1);
 
             GameObject gc= manager.createFireSpot(g.transform.position);
             data.URID=gc.GetComponent<GenerateSpot>().URLID;
+            cropBoxes.Add(data);
         }
 
 
 
-        fireSpots=FindObjectsOfType<FireSpot>();           
+        fireSpots=FindObjectsOfType<FireSpot>();  
+        CropBoxContainer container = new CropBoxContainer { cropBoxes = this.cropBoxes };         
 
-        string json = JsonUtility.ToJson(new { cropBoxes = this.cropBoxes }, true);
+        string json = JsonUtility.ToJson(container, true);
+
+
+
+        print("here is:"+json);
 
         // Send the JSON data to the server
         StartCoroutine(SendJsonToServer(json));
@@ -66,7 +156,7 @@ public class FiresceneManager : MonoBehaviour
 
         private IEnumerator SendJsonToServer(string jsonData)
     {
-        string url = "http://localhost:5000/receiveRoom";  // Replace with your local server URL and endpoint
+        string url = "http://192.168.1.139:5000/receiveRoom";  // Replace with your local server URL and endpoint
         UnityWebRequest request = new UnityWebRequest(url, "POST");
 
         // Create a byte array from the JSON string
@@ -96,6 +186,13 @@ public class FiresceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Z)){
+
+
+            ServerStart();
+        }
+
+
         
     }
 

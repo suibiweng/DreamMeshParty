@@ -18810,6 +18810,7 @@ GameObject:
   - component: {fileID: 74486197067409030}
   - component: {fileID: 176731231799175087}
   - component: {fileID: 4951649523192139036}
+  - component: {fileID: -7546681190652815305}
   m_Layer: 0
   m_Name: GenrateSpotPhoton
   m_TagString: GenerateSpot
@@ -19252,6 +19253,7 @@ MonoBehaviour:
   - {fileID: 7739038162603271921}
   - {fileID: 7481847473661822111}
   - {fileID: 74486197067409030}
+  - {fileID: -7546681190652815305}
 --- !u!114 &56377501874731431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19365,10 +19367,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOnFire: 0
-  fireSync: {fileID: 0}
+  fireSync: {fileID: -7546681190652815305}
   firelfe: 5
   fireParticleLife: {fileID: 4222790191876512365}
   firesceneManager: {fileID: 0}
+--- !u!114 &-7546681190652815305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191651285109885349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ac86efc87e4884d9e97c32adce1457, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireSpot: {fileID: 4951649523192139036}
+  __fireLife: 0
 --- !u!1 &3253298116833696021
 GameObject:
   m_ObjectHideFlags: 0

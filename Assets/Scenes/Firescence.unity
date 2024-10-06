@@ -4043,7 +4043,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351516073}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 112}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4052,8 +4052,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 503}
-  m_SizeDelta: {x: 1015.49994, y: 485.5}
+  m_AnchoredPosition: {x: -91.099, y: 0}
+  m_SizeDelta: {x: 370.0869, y: 485.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &364599382
 GameObject:
@@ -5050,7 +5050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &452222827
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7402,11 +7402,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitCom
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_IsKinematic
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitTensor
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2295565087823392863, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: SortKey
@@ -7423,6 +7431,10 @@ PrefabInstance:
     - target: {fileID: 3923780960862516806, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_Name
       value: '[BuildingBlock] Firexquinsher (2)'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3923780960862516806, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3942892024297675403, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_Enabled
@@ -7475,6 +7487,22 @@ PrefabInstance:
     - target: {fileID: 8168863829784014516, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: instanceId
       value: 3f847a43-29aa-4576-b633-2a439cd0f381
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.XAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.YAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ZAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ConstraintsAreRelative
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8796517115395605914, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: instanceId
@@ -8640,11 +8668,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitCom
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_IsKinematic
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitTensor
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2295565087823392863, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: SortKey
@@ -8661,6 +8697,10 @@ PrefabInstance:
     - target: {fileID: 3923780960862516806, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_Name
       value: '[BuildingBlock] Firexquinsher (1)'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3923780960862516806, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3942892024297675403, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_Enabled
@@ -8713,6 +8753,22 @@ PrefabInstance:
     - target: {fileID: 8168863829784014516, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: instanceId
       value: e0cf5664-53eb-4a1e-9574-4a9b35f8ae12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.XAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.YAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ZAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ConstraintsAreRelative
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8796517115395605914, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: instanceId
@@ -10900,7 +10956,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1378611043}
         m_TargetAssemblyTypeName: FiresceneManager, Assembly-CSharp
-        m_MethodName: getallCropBoxes
+        m_MethodName: ServerStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12010,6 +12066,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1144491780
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 609593515707577405, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_Name
+      value: WALL
+      objectReference: {fileID: 0}
+    - target: {fileID: 609593515707577405, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6127704945397536468, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
 --- !u!1 &1146190257
 GameObject:
   m_ObjectHideFlags: 0
@@ -13428,11 +13545,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitCom
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_IsKinematic
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitTensor
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2295565087823392863, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: SortKey
@@ -13449,6 +13574,10 @@ PrefabInstance:
     - target: {fileID: 3923780960862516806, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_Name
       value: '[BuildingBlock] Firexquinsher (3)'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3923780960862516806, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3942892024297675403, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_Enabled
@@ -13501,6 +13630,22 @@ PrefabInstance:
     - target: {fileID: 8168863829784014516, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: instanceId
       value: e523dbbd-b3b9-4f38-b920-e5a310b5754c
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.XAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.YAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ZAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ConstraintsAreRelative
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8796517115395605914, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: instanceId
@@ -14489,7 +14634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1368058147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14781,7 +14926,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 544014884}
   uploadPort: 8080
   downloadPort: 8000
-  ServerURL: http://192.168.0.32
+  ServerURL: http://192.168.1.139
   SceneSaverTest: {fileID: 1378611036}
   selectedIDUrl: 
   IDs: 0
@@ -14830,7 +14975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inPort: 1337
-  outIP: 192.168.0.32
+  outIP: 192.168.1.139
   outPort: 6161
 --- !u!114 &1378611043
 MonoBehaviour:
@@ -14845,8 +14990,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isServer: 0
-  manager: {fileID: 0}
-  osc: {fileID: 0}
+  manager: {fileID: 1378611038}
+  osc: {fileID: 1378611042}
   fireSpots: []
 --- !u!1 &1379906730
 GameObject:
@@ -16894,7 +17039,7 @@ MonoBehaviour:
   PrefabsToSpawn:
   - Labels: 8293
     Prefabs:
-    - {fileID: 609593515707577405, guid: b68fb76c9e51ebe4ea520a4b05389604, type: 3}
+    - {fileID: 7468884526941945799, guid: afcd0b3a23bf8d04eb9baa57a0c390b5, type: 3}
     PrefabSelection: 0
     MatchAspectRatio: 0
     CalculateFacingDirection: 0
@@ -18036,7 +18181,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 0}
+  m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1776942031
 MonoBehaviour:
@@ -20512,11 +20657,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1824827258223664, guid: 61bb62591466c3649bdf4905822d72f6, type: 3}
   m_PrefabInstance: {fileID: 1965568181}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &2009018208 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198985416474409296, guid: 61bb62591466c3649bdf4905822d72f6, type: 3}
-  m_PrefabInstance: {fileID: 1965568181}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2009018209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20529,7 +20669,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 819ecb75240a1f84ca73298f4f7e4457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystem: {fileID: 2009018208}
 --- !u!4 &2015049011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4484591312116288, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
@@ -22579,11 +22718,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitCom
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_IsKinematic
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 869966439438356821, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: m_ImplicitTensor
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2295565087823392863, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: SortKey
@@ -22647,6 +22794,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6512019859624211622, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.XAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.YAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ZAxis.ConstrainAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610651551367265862, guid: 95acfb43a98aabb44a7cd19ad773f9e6, type: 3}
+      propertyPath: _scaleConstraints.ConstraintsAreRelative
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -22786,11 +22949,12 @@ SceneRoots:
   - {fileID: 558802332}
   - {fileID: 1671247826}
   - {fileID: 1357391652}
-  - {fileID: 108990245}
   - {fileID: 931601511}
   - {fileID: 1236188499}
   - {fileID: 452222832}
+  - {fileID: 108990245}
   - {fileID: 6940833890068363992}
   - {fileID: 815573800}
   - {fileID: 637800671}
   - {fileID: 1301100294}
+  - {fileID: 1144491780}
