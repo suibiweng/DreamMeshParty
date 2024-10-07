@@ -3285,6 +3285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba8bd84cde51384296c4eac50cc7a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressureSteam: {fileID: 0}
 --- !u!114 &327330311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7673,6 +7674,71 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1191005605}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &679408279
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3191651285109885349, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_Name
+      value: GenrateSpotPhoton (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3191651285109885349, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5677664495437138859, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: SortKey
+      value: 2034098507
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.40328825
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6620131981476349703, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
 --- !u!1 &680490624
 GameObject:
   m_ObjectHideFlags: 0
@@ -10615,6 +10681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba8bd84cde51384296c4eac50cc7a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressureSteam: {fileID: 0}
 --- !u!114 &938307790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15054,7 +15121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c59e034d4de00774cbec2e6dff4af9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFireScene: 1
+  isFireScene: 0
   GenerateSpotPrefab: {fileID: 3191651285109885349, guid: 98bd647aa06b03b4fa1bfa72b357c2d9, type: 3}
   isOnline: 0
   LeftHand: {fileID: 544014882}
@@ -15062,7 +15129,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 544014884}
   uploadPort: 8080
   downloadPort: 8000
-  ServerURL: http://192.168.1.139
+  ServerURL: http://10.0.0.123
   SceneSaverTest: {fileID: 1378611036}
   selectedIDUrl: 
   IDs: 0
@@ -15111,7 +15178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inPort: 1337
-  outIP: 192.168.1.139
+  outIP: 10.0.0.123
   outPort: 6161
 --- !u!114 &1378611043
 MonoBehaviour:
@@ -18015,6 +18082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba8bd84cde51384296c4eac50cc7a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressureSteam: {fileID: 0}
 --- !u!114 &1729886210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23136,6 +23204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba8bd84cde51384296c4eac50cc7a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressureSteam: {fileID: 1900474111}
 --- !u!4 &8062859899108608839
 Transform:
   m_ObjectHideFlags: 0
@@ -23229,3 +23298,4 @@ SceneRoots:
   - {fileID: 637800671}
   - {fileID: 1301100294}
   - {fileID: 1144491780}
+  - {fileID: 679408279}

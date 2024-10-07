@@ -14,6 +14,8 @@ using Unity.VisualScripting;
 public class RealityEditorManager : MonoBehaviour
 {
     public bool isFireScene;
+
+    public bool isPhysics;
     public GameObject GenerateSpotPrefab;
     private NetworkRunner _runner;
     private Realtime _realtime;

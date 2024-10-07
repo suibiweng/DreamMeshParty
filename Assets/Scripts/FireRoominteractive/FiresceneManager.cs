@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RealityEditor;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;  
 
 using UnityEngine.Networking;
 
@@ -25,6 +27,13 @@ public class FlammableObject
 }
 
 
+[System.Serializable]
+public class FlammableItemsData
+{
+    public List<string> flammableItems;  // Simple list to hold the array of strings
+}
+
+
 
 public class FiresceneManager : MonoBehaviour
 {  
@@ -33,7 +42,7 @@ public class FiresceneManager : MonoBehaviour
     
      public RealityEditorManager manager;
     public OSC osc;
-    private string url = "http://192.168.1.139:8000/Room.json";
+    private string url = "http://10.0.0.123:12000/Room.json";
 
 
     public FireSpot [] fireSpots;
@@ -66,44 +75,64 @@ public class FiresceneManager : MonoBehaviour
 
 
 
-        setFire();
-
-
-
-
+      
 
 
     }
 
 
+string[] FlamableObject; 
 
 
 
     IEnumerator FetchRoomJson()
     {
-        // Create a UnityWebRequest to get the file from the server
         UnityWebRequest request = UnityWebRequest.Get(url);
-
-        // Send the request and wait for the response
         yield return request.SendWebRequest();
 
-        // Check if there was an error
         if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
         {
             Debug.LogError($"Error fetching file: {request.error}");
         }
         else
         {
-            // Get the downloaded JSON as a string
             string jsonData = request.downloadHandler.text;
-
-            // Log the received JSON data
             Debug.Log($"Received JSON: {jsonData}");
 
-            // Optionally, process the JSON data further if necessary
-            ProcessRoomJson(jsonData);
+            // Parse the JSON to extract flammableObjects (an array of strings)
+            JObject parsedData = JObject.Parse(jsonData);
+
+            // Check if the "flammableObjects" key exists and is not null
+            if (parsedData["flammableObjects"] != null)
+            {
+                JArray flammableObjectsArray = (JArray)parsedData["flammableObjects"];
+                if (flammableObjectsArray != null && flammableObjectsArray.Count > 0)
+                {
+                    // Create a string array to store the flammable object URIDs
+                    string[] uridArray = flammableObjectsArray.ToObject<string[]>();  // Convert JArray directly to string[]
+
+                    // Log each URID
+                    foreach (var urid in uridArray)
+                    {
+                        Debug.Log($"Flammable object URID: {urid}");
+                    }
+                    FlamableObject=uridArray;
+
+                    // Call your setFire function after processing the items
+                    setFire();
+                }
+                else
+                {
+                    Debug.LogError("The flammableObjects array is empty or null.");
+                }
+            }
+            else
+            {
+                Debug.LogError("flammableObjects key not found in the JSON.");
+            }
         }
     }
+
 
     RoomData roomData ;
 
@@ -113,10 +142,10 @@ public class FiresceneManager : MonoBehaviour
         roomData= JsonUtility.FromJson<RoomData>(json);
         // Example: You can parse the JSON and use it in your Unity application
         
-        foreach (var obj in roomData.flammableObjects)
-        {
-            Debug.Log($"Flammable object URID: {obj.URID}");
-        }
+        // foreach (var obj in roomData.flammableObjects)
+        // {
+        //     Debug.Log($"Flammable object URID: {obj.URID}");
+        // }
     }
 
 
@@ -165,7 +194,7 @@ public class FiresceneManager : MonoBehaviour
 
         private IEnumerator SendJsonToServer(string jsonData)
     {
-        string url = "http://192.168.1.139:5000/receiveRoom";  // Replace with your local server URL and endpoint
+        string url = "http://10.0.0.123:5000/receiveRoom";  // Replace with your local server URL and endpoint
         UnityWebRequest request = new UnityWebRequest(url, "POST");
 
         // Create a byte array from the JSON string
@@ -202,6 +231,13 @@ public class FiresceneManager : MonoBehaviour
         }
 
 
+        if(Input.GetKeyDown(KeyCode.C)){
+
+
+            StartTheFireScene();
+        }
+
+
         
     }
 
@@ -212,23 +248,21 @@ public class FiresceneManager : MonoBehaviour
     public void setFire(){
 
 
+       
 
-        if(currentFire<roomData.flammableObjects.Length ){
+        print(FlamableObject[currentFire]);
+    
 
+         findTheSpotinthelist(FlamableObject[currentFire]).setFire();
+         findTheSpotinthelist(FlamableObject[currentFire]).fireSync.CallSetFireRPC();
 
+         print("setThefire at"+FlamableObject[currentFire]);
 
 
         
+      
 
-         findTheSpotinthelist(roomData.flammableObjects[currentFire].URID).setFire();
-        }
-
-        else{
-
-
-            //finish
-
-        }
+        
 
     }
 
@@ -246,16 +280,12 @@ public class FiresceneManager : MonoBehaviour
 
 
         currentFire++;
-        setFire();
+        findTheSpotinthelist(urid).putOutFire();
+        findTheSpotinthelist(urid).fireSync.CallputFireoutRPC();
 
-/*
-        OscMessage oscMessage=new OscMessage();
-        oscMessage.address="/PutOutFire";
-        oscMessage.values.Add(urid);
-        
-        if(isServer)
-        osc.Send(oscMessage);
-*/
+
+
+        setFire();
 
 
     }
@@ -272,6 +302,7 @@ public class FiresceneManager : MonoBehaviour
 
 
         }
+        print("Can't find the object");
         return null;
 
     }

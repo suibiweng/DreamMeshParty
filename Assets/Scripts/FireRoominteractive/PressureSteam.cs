@@ -16,10 +16,12 @@ public class PressureSteam : MonoBehaviour
         if (leftHandActive || rightHandActive)
         {
             ActivateObject();
+              exsync.CallallSetEx();
         }
         else
         {
             DeactivateObject();
+              exsync.CallallSetOffEx();
         }
     }
 
@@ -31,7 +33,7 @@ public class PressureSteam : MonoBehaviour
             targetObject.SetActive(true); // Activate the GameObject
             Debug.Log("GameObject activated.");
 
-            exsync.CallallSetEx();
+          
         }
     }
 
@@ -42,7 +44,7 @@ public class PressureSteam : MonoBehaviour
         {
             targetObject.SetActive(false); // Deactivate the GameObject
             Debug.Log("GameObject deactivated.");
-             exsync.CallallSetOffEx();
+           
         }
     }
 }

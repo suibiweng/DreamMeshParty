@@ -6,10 +6,12 @@ using Fusion;
 
 public class Exsync : NetworkBehaviour
 {
+
+    public PressureSteam pressureSteam;
     // Start is called before the first frame update
     void Start()
     {
-        
+        pressureSteam=GetComponent<PressureSteam>();
     }
 
     // Update is called once per frame
@@ -25,7 +27,19 @@ public class Exsync : NetworkBehaviour
     {
         Debug.Log($"ToggleTrigger");
 
-        GetComponent<PressureSteam>().ActivateObject();
+        pressureSteam.ActivateObject();
+        //
+
+        // Additional logic to handle the RPC
+       
+    }
+
+         [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void SetOffExRPC()
+    {
+        Debug.Log($"ToggleTrigger");
+
+       pressureSteam.DeactivateObject();
         //
 
         // Additional logic to handle the RPC
@@ -42,22 +56,12 @@ public class Exsync : NetworkBehaviour
 
 
 
-        [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
-    public void SetOffExRPC()
-    {
-        Debug.Log($"ToggleTrigger");
-
-        GetComponent<PressureSteam>().DeactivateObject();
-        //
-
-        // Additional logic to handle the RPC
-       
-    }
+   
 
     public void CallallSetOffEx(){
 
         
-        SetOffExRPC();
+      //  SetOffExRPC();
 
 
     }

@@ -6177,7 +6177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6881427634733429353
 Transform:
   m_ObjectHideFlags: 0
@@ -18269,9 +18269,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLife: 5
+  currentLife: 0
   particle1: {fileID: 3332391152565159010}
   particle2: {fileID: 2712102246590537573}
   particle3: {fileID: 8746030373165992118}
+  fireSync: {fileID: -7546681190652815305}
 --- !u!1 &3132433422870688380
 GameObject:
   m_ObjectHideFlags: 0
@@ -19313,7 +19315,7 @@ MonoBehaviour:
   generateSpot: {fileID: 0}
   interactableToggle: {fileID: 1712808685263485367}
   triggerSync: {fileID: 74486197067409030}
-  outputspot: {fileID: 0}
+  outputspot: {fileID: 6426207975900063567}
   interactiveCamera: {fileID: 8662807067590852494}
   renderTexture: {fileID: 8400000, guid: 45f23028384a61149be92bc657ba3e67, type: 2}
   uploadUrl: http://localhost:5000/upload
@@ -19346,6 +19348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   solarSystem: {fileID: 0}
+  grabbable: {fileID: 0}
   generateSpot: {fileID: 0}
   jsonUrl: http://localhost:8000/physicsProperties.json
   planetGravity: 9.81
@@ -39050,7 +39053,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4397846319280765731
 RectTransform:
   m_ObjectHideFlags: 0
@@ -57147,7 +57150,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2.74
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -57200,7 +57203,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 9.56
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -57318,7 +57321,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.05
+      scalar: 3.84
       minScalar: 1
       maxCurve:
         serializedVersion: 2

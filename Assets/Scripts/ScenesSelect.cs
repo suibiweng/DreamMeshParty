@@ -7,7 +7,7 @@ public class ScenesSelect : NetworkBehaviour
 {
     // public GameObject SceneEditorPrefab;
     public GameObject Cube;
-    private RealityEditorManager REM; 
+    public RealityEditorManager REM; 
     private void Start()
     {
         if (Runner.IsServer)
@@ -28,9 +28,97 @@ public class ScenesSelect : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_ConfirmGeneration(Color newColor)
     {
+
+
+
         Debug.Log($"RPC received to ConfirmGeneration with color: {newColor}");
         Cube.GetComponent<Renderer>().material.color = newColor;
     }
+
+
+
+
+
+    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SwithchScene(int scene)
+    {
+        switch (scene)
+        {
+            case 0:
+            REM.isFireScene= false;
+            REM.isPhysics= false;
+            break;
+
+
+
+            case 1:
+            REM.isFireScene= false;
+            REM.isPhysics= true;
+            break;
+
+
+
+
+            case 2:
+            REM.isFireScene= true;
+            REM.isPhysics= false;
+            break;
+
+
+
+
+           
+        }
+
+
+
+        // Debug.Log($"RPC received to ConfirmGeneration with color: {newColor}");
+        // Cube.GetComponent<Renderer>().material.color = newColor;
+    }
+
+
+
+
+
+
+
+    public void ToPhisic(){
+
+
+
+
+
+    }
+
+
+    public void ToFire(){
+
+
+
+
+
+    }
+
+
+
+
+    
+    public void CallSceneChangeRPC(int scene)
+    {
+        // Check if the client has authority before calling the RPC
+        if (HasStateAuthority)
+        {
+            RPC_SwithchScene(scene);
+        }
+        else
+        {
+            Debug.LogError("You do not have State Authority to change the color.");
+        }
+    }
+
+
+
 
     public void CallColorChangeRPC()
     {

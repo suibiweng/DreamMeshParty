@@ -3,11 +3,14 @@ using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json;
 using RealityEditor;
+using Oculus.Interaction;
 
 public class CombinedPhysicsScript : MonoBehaviour
 {
 
     public SolarSystemSimulation solarSystem;
+
+    public Grabbable grabbable;
 
 
 
@@ -46,6 +49,7 @@ public class CombinedPhysicsScript : MonoBehaviour
       
         // objectRigidbody = GetComponent<Rigidbody>();
         objectCollider = GetComponent<Collider>();
+        grabbable= GetComponent<Grabbable>();
       
 
 
@@ -152,7 +156,9 @@ public class CombinedPhysicsScript : MonoBehaviour
             massOnEarth=objectRigidbody.mass;
             setPhysic=true;
             objectRigidbody.isKinematic=false;
+            grabbable.InjectOptionalThrowWhenUnselected(true);  
             AdjustPlanetPhysics();
+
         }
 
         // if (objectCollider != null)
@@ -227,7 +233,7 @@ public class CombinedPhysicsScript : MonoBehaviour
     void FixedUpdate()
     {
 
-        if(solarSystem==null) return;
+       if( generateSpot.manager.isPhysics==false) return;
         
         // if(generateSpot.GenerationisComplete){
             
@@ -235,19 +241,24 @@ public class CombinedPhysicsScript : MonoBehaviour
             
 
         // } 
+
+
+         SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
     
         if(debugobject){
             SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
 
         }else{
 
-  SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
+       
         if(generateSpot.GenerationisComplete){
 
 
-                setPhysic=true;
+            setPhysic=true;
             objectRigidbody.isKinematic=false;
-            AdjustPlanetPhysics();
+            grabbable.InjectOptionalThrowWhenUnselected(true);           
+            
+             AdjustPlanetPhysics();
         } 
 
 
