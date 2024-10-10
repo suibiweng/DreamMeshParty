@@ -66,8 +66,7 @@ public class CombinedPhysicsScript : MonoBehaviour
 
         
 
-        jsonUrl=generateSpot.downloadURL+generateSpot.URLID+"_physicsProperties.json";
-        checkCoroutine = StartCoroutine(CheckForJsonOnServer(jsonUrl,3f));
+
 
        }
   
@@ -84,6 +83,10 @@ public class CombinedPhysicsScript : MonoBehaviour
      //   StartCoroutine(FetchJsonData());
     }
 
+
+
+    public bool getTheData;
+
     // Fetch the JSON from the local server
     IEnumerator FetchJsonData()
     {
@@ -98,6 +101,7 @@ public class CombinedPhysicsScript : MonoBehaviour
 
             // Apply the physics properties from JSON
             ApplyProperties(properties);
+            getTheData=true;
 
             // Set planet-specific gravity and atmosphere drag after applying general properties
            // SetPlanetProperties(planetGravity, planetAtmosphereDrag);
@@ -154,7 +158,6 @@ public class CombinedPhysicsScript : MonoBehaviour
             // Set the mass of the Rigidbody based on the JSON data
             objectRigidbody.mass = properties.mass;
             massOnEarth=objectRigidbody.mass;
-            setPhysic=true;
             objectRigidbody.isKinematic=false;
             grabbable.InjectOptionalThrowWhenUnselected(true);  
             AdjustPlanetPhysics();
@@ -230,25 +233,43 @@ public class CombinedPhysicsScript : MonoBehaviour
         }
     }
 
+    void NoPhysicSetup(){
+
+        objectRigidbody.isKinematic=true;
+
+
+    }
+
+
+
     void FixedUpdate()
     {
 
-       if( generateSpot.manager.isPhysics==false) return;
-        
-        // if(generateSpot.GenerationisComplete){
-            
-        //     objectRigidbody.isKinematic=false;
-            
+    if(generateSpot.manager.isPhysics==false) {
+        NoPhysicSetup();
+        return;
 
-        // } 
+    }
+    
+    else{
 
 
          SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
     
         if(debugobject){
-            SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
 
+
+            
+          
         }else{
+
+        if(!getTheData){
+             jsonUrl=generateSpot.downloadURL+generateSpot.URLID+"_physicsProperties.json";
+            checkCoroutine = StartCoroutine(CheckForJsonOnServer(jsonUrl,3f));
+
+
+        }
+          
 
        
         if(generateSpot.GenerationisComplete){
@@ -271,6 +292,19 @@ public class CombinedPhysicsScript : MonoBehaviour
             // Apply custom gravity force (F = m * g)
             objectRigidbody.AddForce(Vector3.down * objectRigidbody.mass * planetGravity);
         }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    }
+
+
+  
 
 
     }

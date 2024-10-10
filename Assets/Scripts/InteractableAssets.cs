@@ -86,13 +86,13 @@ public class InteractableAssets : MonoBehaviour
         //interactiveCamera.SetActive(true);      
         //  StartCoroutine(UploadSnapShotTexture());
 
-         OscMessage msg = new OscMessage{
-            address="/SetInteractive"
-         };
+        //  OscMessage msg = new OscMessage{
+        //     address="/SetInteractive"
+        //  };
 
-         msg.values.Add(generateSpot.URLID);
-         msg.values.Add(generateSpot.DremmeshPrompt);
-         manager.osc.Send(msg);
+        //  msg.values.Add(generateSpot.URLID);
+        //  msg.values.Add(generateSpot.DremmeshPrompt);
+        //  manager.osc.Send(msg);
 
 
 

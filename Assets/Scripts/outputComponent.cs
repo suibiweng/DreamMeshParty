@@ -50,6 +50,7 @@ public class outputComponent : MonoBehaviour
                     {
                         //gun
                         TogglegunState();
+                        ToggleSoundState();
 
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 1)
@@ -62,6 +63,7 @@ public class outputComponent : MonoBehaviour
                     {
                         //light
                         ToggleLightState();
+                        ToggleSoundState();
                     }
                 }
                 else
@@ -70,17 +72,20 @@ public class outputComponent : MonoBehaviour
                     {
                         //gun
                         TogglegunState();
+                        ToggleSoundState();
 
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 1)
                     {
                         //sound
                         ToggleSoundState();
+                        
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 2)
                     {
                         //light
                         ToggleLightState();
+                        ToggleSoundState();
                     }
                 }
                 
@@ -123,6 +128,7 @@ public class outputComponent : MonoBehaviour
                 {
                     //gun
                     TogglegunState();
+                    ToggleSoundState();
 
                 }
                 if (interactableAssets.interactableDreamMesh.output_style == 1)
@@ -134,6 +140,7 @@ public class outputComponent : MonoBehaviour
                 {
                     //light
                     ToggleLightState();
+                    ToggleSoundState();
                 }
             }
         }

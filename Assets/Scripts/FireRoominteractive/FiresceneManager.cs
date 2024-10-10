@@ -42,7 +42,7 @@ public class FiresceneManager : MonoBehaviour
     
      public RealityEditorManager manager;
     public OSC osc;
-    private string url = "http://10.0.0.123:12000/Room.json";
+    private string url = "http://192.168.1.139:12000/Room.json";
 
 
     public FireSpot [] fireSpots;
@@ -194,7 +194,7 @@ string[] FlamableObject;
 
         private IEnumerator SendJsonToServer(string jsonData)
     {
-        string url = "http://10.0.0.123:5000/receiveRoom";  // Replace with your local server URL and endpoint
+        string url = "http://192.168.1.139:5000/receiveRoom";  // Replace with your local server URL and endpoint
         UnityWebRequest request = new UnityWebRequest(url, "POST");
 
         // Create a byte array from the JSON string

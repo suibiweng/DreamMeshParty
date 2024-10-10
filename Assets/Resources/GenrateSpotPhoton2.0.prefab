@@ -15559,7 +15559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 79602278-0f90-49bc-a731-d209597274f1
+  instanceId: 793db317-bd7a-4bc6-8b28-4b1d9a65ec39
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -16184,7 +16184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6654254838164385936
 Transform:
   m_ObjectHideFlags: 0
@@ -16218,7 +16218,7 @@ MonoBehaviour:
   interactableAssets: {fileID: 6378604827761282201}
   light: {fileID: 4553341832746434708}
   gun: {fileID: 2177250822308086399}
-  Sound: {fileID: 0}
+  Sound: {fileID: 5896478661435979678}
   lightOnDuration: 1
 --- !u!1 &3755866654021331890
 GameObject:
@@ -16675,7 +16675,7 @@ MonoBehaviour:
   TestConfirmGeneration: 0
   isAcopy: 0
   id: 0
-  downloadURL: http://192.168.0.139:8000/
+  downloadURL: http://192.168.1.139:8000/
   URLID: 
   manager: {fileID: 0}
   isselsected: 0
@@ -17045,13 +17045,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   solarSystem: {fileID: 0}
-  grabbable: {fileID: 0}
+  grabbable: {fileID: 6865415015485717727}
   generateSpot: {fileID: 0}
   jsonUrl: http://localhost:8000/physicsProperties.json
   planetGravity: 9.81
   planetAtmosphereDrag: 0
   massOnEarth: 1
-  objectRigidbody: {fileID: 0}
+  objectRigidbody: {fileID: 8846791424638022533}
   debugobject: 0
   setPhysic: 0
 --- !u!114 &1355934269708619727
@@ -29992,7 +29992,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.5
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -65986,7 +65986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 0b448c7c-7318-4b38-923e-a8324679a910
+  instanceId: 5e52bb29-910f-46eb-b097-067a2d90e666
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -67694,6 +67694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5295445177248960558}
+  - component: {fileID: 5896478661435979678}
   m_Layer: 0
   m_Name: audio
   m_TagString: Untagged
@@ -67716,6 +67717,102 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6654254838164385936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &5896478661435979678
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8969157439543583286}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &9009758592003400508
 GameObject:
   m_ObjectHideFlags: 0

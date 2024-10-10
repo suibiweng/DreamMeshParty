@@ -109,6 +109,43 @@ public class ScenesSelect : NetworkBehaviour
         // Check if the client has authority before calling the RPC
         if (HasStateAuthority)
         {
+
+
+
+            switch (scene)
+        {
+            case 0:
+            REM.isFireScene= false;
+            REM.isPhysics= false;
+            break;
+
+
+
+            case 1:
+            REM.isFireScene= false;
+            REM.isPhysics= true;
+            break;
+
+
+
+
+            case 2:
+            REM.isFireScene= true;
+            REM.isPhysics= false;
+            break;
+
+
+
+
+           
+        }
+
+
+
+
+
+
+
             RPC_SwithchScene(scene);
         }
         else
