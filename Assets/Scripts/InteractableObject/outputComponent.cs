@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Oculus.Interaction;
+using UnityEngine.Networking;
 
 public class outputComponent : MonoBehaviour
 {
@@ -151,7 +152,31 @@ public class outputComponent : MonoBehaviour
 
 bool audioLoaded =false;
 
-        IEnumerator StreamAudioFromUrl(string audioUrl)
+
+IEnumerator DownloadAndPlayAudio(string url)
+{
+    using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG)) // MPEG for MP3
+    {
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError(www.error);
+        }
+        else
+        {
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
+            Sound.clip = clip;
+            audioLoaded=true;
+            //Sound.Play();
+        }
+    }
+}
+
+
+
+
+IEnumerator StreamAudioFromUrl(string audioUrl)
     {
         bool audioLoadedSuccessfully = false;
 
@@ -213,7 +238,7 @@ bool audioLoaded =false;
     void ToggleSoundState()
     {
         if(!audioLoaded)
-        StartCoroutine(StreamAudioFromUrl(interactableAssets.audioUrl));
+        StartCoroutine(DownloadAndPlayAudio(interactableAssets.audioUrl));
 
 
         if (Sound != null)
