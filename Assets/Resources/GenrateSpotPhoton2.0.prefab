@@ -15559,7 +15559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: c26193b2-c0a0-4984-a2ed-db7a45ba94d7
+  instanceId: 98bca987-51ed-44fe-99c8-c9a5a2ac90eb
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -16178,6 +16178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6654254838164385936}
   - component: {fileID: 2271005432504665777}
+  - component: {fileID: 7252880337283398282}
   m_Layer: 0
   m_Name: output
   m_TagString: Untagged
@@ -16220,6 +16221,22 @@ MonoBehaviour:
   gun: {fileID: 2177250822308086399}
   Sound: {fileID: 5896478661435979678}
   lightOnDuration: 1
+--- !u!114 &7252880337283398282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735084059376072359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &3755866654021331890
 GameObject:
   m_ObjectHideFlags: 0
@@ -16953,6 +16970,7 @@ MonoBehaviour:
   - {fileID: 8015189774527831068}
   - {fileID: 1991008500582217530}
   - {fileID: -1234750653806247155}
+  - {fileID: 7252880337283398282}
 --- !u!114 &3598715593434686613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17019,6 +17037,7 @@ MonoBehaviour:
   Left: {fileID: 0}
   Right: {fileID: 0}
   audioUrl: https://your-audio-url.com/audio.wav
+  theGrabingController: {fileID: 0}
 --- !u!114 &1991008500582217530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17032,6 +17051,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outputComponent: {fileID: 2271005432504665777}
+  interactableAssets: {fileID: 0}
 --- !u!114 &5138956602677483770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57756,7 +57776,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1596624688968450983
 Transform:
   m_ObjectHideFlags: 0
@@ -65987,7 +66007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 559f648c-11cf-4b4c-b4bf-106a15e8e14e
+  instanceId: 3382454e-0172-4766-87f4-5d6ffa5b6e11
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 

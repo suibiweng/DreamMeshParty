@@ -8,9 +8,11 @@ public class TriggerSync : NetworkBehaviour
     // Start is called before the first frame update
     // private GenerateSpot _generateSpot;
     public outputComponent outputComponent;
+    public InteractableAssets interactableAssets;
 
     private void Start()
     {
+        interactableAssets = GetComponent<InteractableAssets>();
         // _generateSpot = GetComponent<GenerateSpot>(); 
     }
 
@@ -51,6 +53,29 @@ public class TriggerSync : NetworkBehaviour
 
 
         outputComponent.TogglegunState();
+
+
+    }
+
+  [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+
+    public void AlignwihtContorllerRPC(){
+
+
+     //  interactableAssets.AlignWithController(controller);
+
+
+
+    }
+
+
+
+
+    public void CallAlignUpRPC(){
+
+
+        AlignwihtContorllerRPC();
+
 
 
     }

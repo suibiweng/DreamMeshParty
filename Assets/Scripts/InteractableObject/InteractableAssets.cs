@@ -104,15 +104,41 @@ public class InteractableAssets : MonoBehaviour
 
     }
 
+    public Transform theGrabingController;
 
-    private void AlignWithController(Transform TargetTransform)
+
+    public void AlignWithController(Transform TargetTransform)
     {
+        theGrabingController=TargetTransform;
         // Get the controller's forward direction
         Vector3 controllerForward = TargetTransform.transform.forward;
 
         // // Align the object's forward direction with the controller's forward direction
         
          outputspot.transform.forward = controllerForward;
+
+
+
+       
+
+        // // (Optional) Keep object position relative to the controller
+        // transform.position = grabber.transform.position + grabber.transform.forward * someDistance;
+    }
+
+
+
+
+
+        public void AlignWithGrabingController()
+    {
+        
+        // Get the controller's forward direction
+        Vector3 controllerForward = theGrabingController.transform.forward;
+
+        // // Align the object's forward direction with the controller's forward direction
+        
+         outputspot.transform.forward = controllerForward;
+
 
         // // (Optional) Keep object position relative to the controller
         // transform.position = grabber.transform.position + grabber.transform.forward * someDistance;
@@ -134,11 +160,13 @@ public class InteractableAssets : MonoBehaviour
         if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger ) ){
 
                 AlignWithController(Left);
+                //triggerSync.CallAlignUpRPC(Left);
 
         }
         if(OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)){
 
              AlignWithController(Right);
+             //triggerSync.CallAlignUpRPC(Right);
 
         }
 

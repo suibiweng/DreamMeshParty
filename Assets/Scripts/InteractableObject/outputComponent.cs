@@ -213,7 +213,7 @@ public class outputComponent : MonoBehaviour
                 if (interactableAssets.interactableDreamMesh.output_style == 0)
                 {
                     //gun
-                    StartCoroutine(PlayGunForOneSecond());
+                   // StartCoroutine(PlayGunForOneSecond());
                 }
                 if (interactableAssets.interactableDreamMesh.output_style == 1)
                 {
@@ -471,7 +471,8 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
     // Method to turn on the light
     void TurnOnLight()
     {
-        light.Play();
+        light.gameObject.SetActive(true);
+        //light.Play();
         isLightPlaying = true;
         Debug.Log("light started.");
     }
@@ -479,7 +480,8 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
     // Method to turn off the light
     void TurnOffLight()
     {
-        light.Stop();
+      //  light.Stop();
+        light.gameObject.SetActive(false);
         isLightPlaying = false;
         Debug.Log("light stopped.");
     }
