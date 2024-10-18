@@ -36,8 +36,110 @@ public class outputComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
+        
+    
+    // public void ShowOutputWithoutInput(){
+
+
+    //         if(interactableAssets.interactableDreamMesh.input_style==0){ //is trigger
+    //             if(interactableAssets.interactableDreamMesh.trigger_style==1){
+    //             //contious
+    //             //output type and Behaviour
+                
+    //                 if (interactableAssets.interactableDreamMesh.output_style == 0)
+    //                 {
+    //                     //gun
+    //                     TogglegunState();
+    //                     ToggleSoundState();
+
+    //                 }
+    //                 if (interactableAssets.interactableDreamMesh.output_style == 1)
+    //                 {
+    //                     //sound
+    //                     ToggleSoundState();
+
+    //                 }
+    //                 if (interactableAssets.interactableDreamMesh.output_style == 2)
+    //                 {
+    //                     //light
+    //                     ToggleLightState();
+    //                     ToggleSoundState();
+    //                 }
+    //             }
+
+                
+            
+
+    //         if(interactableAssets.interactableDreamMesh.trigger_style==2){
+    //             //one shot
+    //             //output type and Behaviour
+    //             if (interactableAssets.interactableDreamMesh.output_style == 0)
+    //             {
+    //                 //gun
+    //                 StartCoroutine(PlayGunForOneSecond());
+    //             }
+    //             if (interactableAssets.interactableDreamMesh.output_style == 1)
+    //             {
+    //                 //sound
+    //                 StartCoroutine(PlaySoundForOneSecond());
+    //             }
+    //             if (interactableAssets.interactableDreamMesh.output_style == 2)
+    //             {
+    //                 //light
+    //                 if (!isLightPlaying)
+    //                 {
+    //                     StartCoroutine(ToggleLightForDuration());
+    //                 }
+                    
+    //             }
+
+
+    //         }
+
+
+
+
+    //     }else if(interactableAssets.interactableDreamMesh.input_style==1){ // is switch
+    //         //output type and Behaviour
+          
+    //             if (interactableAssets.interactableDreamMesh.output_style == 0)
+    //             {
+    //                 //gun
+    //                 TogglegunState();
+    //                 ToggleSoundState();
+    //                 interactableAssets.triggerSync.CallGunRPC();
+    //                 interactableAssets.triggerSync.SoundTriggerRPC();
+
+
+    //             }
+    //             if (interactableAssets.interactableDreamMesh.output_style == 1)
+    //             {
+    //                 //sound
+    //                 ToggleSoundState();
+    //                 interactableAssets.triggerSync.SoundTriggerRPC();
+    //             }
+    //             if (interactableAssets.interactableDreamMesh.output_style == 2)
+    //             {
+    //                 //light
+    //                 ToggleLightState();
+    //                 ToggleSoundState();
+    //                 interactableAssets.triggerSync.CallLightRPC();
+    //                 interactableAssets.triggerSync.SoundTriggerRPC();
+    //             }
+            
+    //     }
+
+
+
+
+
+
+    // }
+
+
+
+
 
     public void triggerOutPut(){
 
@@ -52,12 +154,16 @@ public class outputComponent : MonoBehaviour
                         //gun
                         TogglegunState();
                         ToggleSoundState();
+                        interactableAssets.triggerSync.CallGunRPC();
+                        interactableAssets.triggerSync.CallSoundRPC();
 
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 1)
                     {
                         //sound
                         ToggleSoundState();
+                    
+                        interactableAssets.triggerSync.CallSoundRPC();
 
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 2)
@@ -65,6 +171,8 @@ public class outputComponent : MonoBehaviour
                         //light
                         ToggleLightState();
                         ToggleSoundState();
+                        interactableAssets.triggerSync.CallLightRPC();
+                        interactableAssets.triggerSync.CallSoundRPC();
                     }
                 }
                 else
@@ -74,12 +182,17 @@ public class outputComponent : MonoBehaviour
                         //gun
                         TogglegunState();
                         ToggleSoundState();
+                        interactableAssets.triggerSync.CallGunRPC();
+                        interactableAssets.triggerSync.CallSoundRPC();
 
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 1)
                     {
                         //sound
                         ToggleSoundState();
+                        interactableAssets.triggerSync.CallSoundRPC();
+
+
                         
                     }
                     if (interactableAssets.interactableDreamMesh.output_style == 2)
@@ -87,6 +200,8 @@ public class outputComponent : MonoBehaviour
                         //light
                         ToggleLightState();
                         ToggleSoundState();
+                        interactableAssets.triggerSync.CallLightRPC();
+                        interactableAssets.triggerSync.CallSoundRPC();
                     }
                 }
                 
@@ -130,18 +245,24 @@ public class outputComponent : MonoBehaviour
                     //gun
                     TogglegunState();
                     ToggleSoundState();
+                    interactableAssets.triggerSync.CallGunRPC();
+                    interactableAssets.triggerSync.CallSoundRPC();
 
                 }
                 if (interactableAssets.interactableDreamMesh.output_style == 1)
                 {
                     //sound
                     ToggleSoundState();
+                    interactableAssets.triggerSync.CallSoundRPC();
                 }
                 if (interactableAssets.interactableDreamMesh.output_style == 2)
                 {
                     //light
                     ToggleLightState();
                     ToggleSoundState();
+                    interactableAssets.triggerSync.CallLightRPC();
+
+                    interactableAssets.triggerSync.CallSoundRPC();
                 }
             }
         }
@@ -155,6 +276,7 @@ bool audioLoaded =false;
 
 IEnumerator DownloadAndPlayAudio(string url)
 {
+     Debug.Log("is Dowloding the audio!!!");
     using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG)) // MPEG for MP3
     {
         yield return www.SendWebRequest();
@@ -203,7 +325,7 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
     }
 
     // Method to toggle the gun on or off
-    void TogglegunState()
+   public void TogglegunState()
     {
         if (gun != null)
         {
@@ -235,7 +357,7 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
     }
 
     // Method to toggle the Sound on or off
-    void ToggleSoundState()
+   public void ToggleSoundState()
     {
         if(!audioLoaded)
         StartCoroutine(DownloadAndPlayAudio(interactableAssets.audioUrl));
@@ -291,7 +413,7 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
 
 
     // Method to toggle the light on or off
-    void ToggleLightState()
+   public void ToggleLightState()
     {
         if (light != null)
         {

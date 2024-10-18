@@ -15559,7 +15559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 793db317-bd7a-4bc6-8b28-4b1d9a65ec39
+  instanceId: c26193b2-c0a0-4984-a2ed-db7a45ba94d7
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -17054,6 +17054,7 @@ MonoBehaviour:
   objectRigidbody: {fileID: 8846791424638022533}
   debugobject: 0
   setPhysic: 0
+  getTheData: 0
 --- !u!114 &1355934269708619727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57790,7 +57791,7 @@ ParticleSystem:
   prewarm: 1
   playOnAwake: 0
   useUnscaledTime: 0
-  autoRandomSeed: 1
+  autoRandomSeed: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -57854,7 +57855,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -57907,7 +57908,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 0
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -58608,7 +58609,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 30
+      scalar: 20
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -65986,7 +65987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 5e52bb29-910f-46eb-b097-067a2d90e666
+  instanceId: 559f648c-11cf-4b4c-b4bf-106a15e8e14e
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 

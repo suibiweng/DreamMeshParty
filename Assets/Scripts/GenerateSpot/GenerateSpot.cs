@@ -263,10 +263,12 @@ public class GenerateSpot : MonoBehaviour
         
     }
 
+    Coroutine ChecktheFile;
+
 
     public void initAdd()
     {
-        StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
+      ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
         loadingParticles.Play();
         isMaterialChanging = false;
         // VoicePanel.SetActive(true);
@@ -599,7 +601,7 @@ public class GenerateSpot : MonoBehaviour
 
             //_inpainting.jpg
 
-             StartCoroutine(CheckURLPeriodically(downloadURL + "20240325024513_inpainting.jpg"));
+          ChecktheFile=   StartCoroutine(CheckURLPeriodically(downloadURL + "20240325024513_inpainting.jpg"));
 
         }
 
@@ -691,7 +693,7 @@ public class GenerateSpot : MonoBehaviour
         loadingIcon.SetActive(true);
         Prompt = "";
         InstructGen = false;
-        StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_Instruction.zip"));
+       ChecktheFile= StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_Instruction.zip"));
         StartCoroutine(CleartheObjinTarget());
         //  UiMenu.SetActive(false);
 
@@ -759,7 +761,7 @@ public class GenerateSpot : MonoBehaviour
         Prompt = "";
         InstructGen = false;
         SpotType=GenerateType.Instruction;
-        StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_Instruction.zip"));
+        ChecktheFile=StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_Instruction.zip"));
         StartCoroutine(CleartheObjinTarget());
         //  UiMenu.SetActive(false);
 
@@ -817,7 +819,7 @@ public class GenerateSpot : MonoBehaviour
          RecordData.StartInpainting();
 
         Inpainted=false;
-         StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_inpainting.jpg"));
+      ChecktheFile=   StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_inpainting.jpg"));
 
 
 
@@ -931,10 +933,7 @@ public class GenerateSpot : MonoBehaviour
 
             }
 
-
-
-
-
+            StopCoroutine(ChecktheFile);
 
             OnURLResponse(true);
         }

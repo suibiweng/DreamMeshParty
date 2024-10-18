@@ -57,7 +57,7 @@ public class InteractableAssets : MonoBehaviour
         Right=manager.RightHand;
 
 
-        audioUrl=generateSpot.downloadURL+generateSpot.URLID+"_sfx.wav";
+
 
 
 
@@ -126,6 +126,8 @@ public class InteractableAssets : MonoBehaviour
 
     void Update() {
 
+        audioUrl=generateSpot.downloadURL+generateSpot.URLID+"_sfx.wav";
+
 
         generateSpot.toLockthePosition(!interactableToggle.isOn);
 
@@ -156,7 +158,7 @@ public class InteractableAssets : MonoBehaviour
                  //output.BroadcastMessage("triggerOutPut");
                 if(generateSpot.isGrabing){
                     outputspot.triggerOutPut();
-                    triggerSync.CallTriggerRPC();
+                   //triggerSync.CallTriggerRPC();
                 }
                  
                 
@@ -172,7 +174,7 @@ public class InteractableAssets : MonoBehaviour
 
             if(generateSpot.isGrabing){
                 outputspot.triggerOutPut();
-                triggerSync.CallTriggerRPC();
+              // triggerSync.CallTriggerRPC();
 
 
 
