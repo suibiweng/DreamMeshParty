@@ -10,7 +10,7 @@ public class outputComponent : MonoBehaviour
     public InteractableAssets interactableAssets;
 
     
-    public ParticleSystem light;
+    public GameObject lamplight;
     public ParticleSystem gun;
     public AudioSource Sound;
 
@@ -39,108 +39,7 @@ public class outputComponent : MonoBehaviour
     }
         
     
-    // public void ShowOutputWithoutInput(){
-
-
-    //         if(interactableAssets.interactableDreamMesh.input_style==0){ //is trigger
-    //             if(interactableAssets.interactableDreamMesh.trigger_style==1){
-    //             //contious
-    //             //output type and Behaviour
-                
-    //                 if (interactableAssets.interactableDreamMesh.output_style == 0)
-    //                 {
-    //                     //gun
-    //                     TogglegunState();
-    //                     ToggleSoundState();
-
-    //                 }
-    //                 if (interactableAssets.interactableDreamMesh.output_style == 1)
-    //                 {
-    //                     //sound
-    //                     ToggleSoundState();
-
-    //                 }
-    //                 if (interactableAssets.interactableDreamMesh.output_style == 2)
-    //                 {
-    //                     //light
-    //                     ToggleLightState();
-    //                     ToggleSoundState();
-    //                 }
-    //             }
-
-                
-            
-
-    //         if(interactableAssets.interactableDreamMesh.trigger_style==2){
-    //             //one shot
-    //             //output type and Behaviour
-    //             if (interactableAssets.interactableDreamMesh.output_style == 0)
-    //             {
-    //                 //gun
-    //                 StartCoroutine(PlayGunForOneSecond());
-    //             }
-    //             if (interactableAssets.interactableDreamMesh.output_style == 1)
-    //             {
-    //                 //sound
-    //                 StartCoroutine(PlaySoundForOneSecond());
-    //             }
-    //             if (interactableAssets.interactableDreamMesh.output_style == 2)
-    //             {
-    //                 //light
-    //                 if (!isLightPlaying)
-    //                 {
-    //                     StartCoroutine(ToggleLightForDuration());
-    //                 }
-                    
-    //             }
-
-
-    //         }
-
-
-
-
-    //     }else if(interactableAssets.interactableDreamMesh.input_style==1){ // is switch
-    //         //output type and Behaviour
-          
-    //             if (interactableAssets.interactableDreamMesh.output_style == 0)
-    //             {
-    //                 //gun
-    //                 TogglegunState();
-    //                 ToggleSoundState();
-    //                 interactableAssets.triggerSync.CallGunRPC();
-    //                 interactableAssets.triggerSync.SoundTriggerRPC();
-
-
-    //             }
-    //             if (interactableAssets.interactableDreamMesh.output_style == 1)
-    //             {
-    //                 //sound
-    //                 ToggleSoundState();
-    //                 interactableAssets.triggerSync.SoundTriggerRPC();
-    //             }
-    //             if (interactableAssets.interactableDreamMesh.output_style == 2)
-    //             {
-    //                 //light
-    //                 ToggleLightState();
-    //                 ToggleSoundState();
-    //                 interactableAssets.triggerSync.CallLightRPC();
-    //                 interactableAssets.triggerSync.SoundTriggerRPC();
-    //             }
-            
-    //     }
-
-
-
-
-
-
-    // }
-
-
-
-
-
+    
     public void triggerOutPut(){
 
         if(interactableAssets.interactableDreamMesh.input_style==0){ //is trigger
@@ -213,7 +112,7 @@ public class outputComponent : MonoBehaviour
                 if (interactableAssets.interactableDreamMesh.output_style == 0)
                 {
                     //gun
-                   // StartCoroutine(PlayGunForOneSecond());
+                    StartCoroutine(PlayGunForOneSecond());
                 }
                 if (interactableAssets.interactableDreamMesh.output_style == 1)
                 {
@@ -223,10 +122,10 @@ public class outputComponent : MonoBehaviour
                 if (interactableAssets.interactableDreamMesh.output_style == 2)
                 {
                     //light
-                    if (!isLightPlaying)
-                    {
-                        StartCoroutine(ToggleLightForDuration());
-                    }
+                    ToggleLightState();
+                    ToggleSoundState();
+                    interactableAssets.triggerSync.CallLightRPC();
+                    interactableAssets.triggerSync.CallSoundRPC();
                     
                 }
 
@@ -258,8 +157,8 @@ public class outputComponent : MonoBehaviour
                 if (interactableAssets.interactableDreamMesh.output_style == 2)
                 {
                     //light
-                    ToggleLightState();
-                    ToggleSoundState();
+                    //ToggleLightState();
+                    //ToggleSoundState();
                     interactableAssets.triggerSync.CallLightRPC();
 
                     interactableAssets.triggerSync.CallSoundRPC();
@@ -276,6 +175,9 @@ bool audioLoaded =false;
 
 IEnumerator DownloadAndPlayAudio(string url)
 {
+      yield return new WaitForSeconds(20f);
+
+
      Debug.Log("is Dowloding the audio!!!");
     using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG)) // MPEG for MP3
     {
@@ -415,8 +317,7 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
     // Method to toggle the light on or off
    public void ToggleLightState()
     {
-        if (light != null)
-        {
+        
             if (isLightPlaying)
             {
                 TurnOffLight();
@@ -425,7 +326,7 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
             {
                 TurnOnLight();
             }
-        }
+        
     }
     IEnumerator PlayGunForOneSecond()
     {
@@ -456,22 +357,12 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
         }
     }
 
-    IEnumerator ToggleLightForDuration()
-    {
-        // Turn on the light
-        TurnOnLight();
-
-        // Wait for the specified duration
-        yield return new WaitForSeconds(lightOnDuration);
-
-        // Turn off the light
-        TurnOffLight();
-    }
+    
 
     // Method to turn on the light
     void TurnOnLight()
     {
-        light.gameObject.SetActive(true);
+        lamplight.SetActive(true);
         //light.Play();
         isLightPlaying = true;
         Debug.Log("light started.");
@@ -480,8 +371,8 @@ IEnumerator StreamAudioFromUrl(string audioUrl)
     // Method to turn off the light
     void TurnOffLight()
     {
-      //  light.Stop();
-        light.gameObject.SetActive(false);
+        //light.Stop();
+        lamplight.SetActive(false);
         isLightPlaying = false;
         Debug.Log("light stopped.");
     }

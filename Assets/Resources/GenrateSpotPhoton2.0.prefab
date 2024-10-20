@@ -15559,7 +15559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 98bca987-51ed-44fe-99c8-c9a5a2ac90eb
+  instanceId: 13772b42-9e9b-46e3-95f8-23fd8a7d16c5
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -16178,7 +16178,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6654254838164385936}
   - component: {fileID: 2271005432504665777}
-  - component: {fileID: 7252880337283398282}
   m_Layer: 0
   m_Name: output
   m_TagString: Untagged
@@ -16217,26 +16216,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactableAssets: {fileID: 6378604827761282201}
-  light: {fileID: 4553341832746434708}
+  lamplight: {fileID: 3995221921269807201}
   gun: {fileID: 2177250822308086399}
   Sound: {fileID: 5896478661435979678}
   lightOnDuration: 1
---- !u!114 &7252880337283398282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3735084059376072359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
 --- !u!1 &3755866654021331890
 GameObject:
   m_ObjectHideFlags: 0
@@ -16970,7 +16953,6 @@ MonoBehaviour:
   - {fileID: 8015189774527831068}
   - {fileID: 1991008500582217530}
   - {fileID: -1234750653806247155}
-  - {fileID: 7252880337283398282}
 --- !u!114 &3598715593434686613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18752,7 +18734,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6405398138794072889
 Transform:
   m_ObjectHideFlags: 0
@@ -57776,7 +57758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1596624688968450983
 Transform:
   m_ObjectHideFlags: 0
@@ -57809,7 +57791,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 1
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 0
   startDelay:
@@ -66007,7 +65989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 3382454e-0172-4766-87f4-5d6ffa5b6e11
+  instanceId: dda7d3a8-1ca2-4580-aa72-c16a4c7a5730
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
