@@ -63,10 +63,8 @@ public class RealityEditorManager : MonoBehaviour
     {
         Debug.Log("Using a dictionary in The manager, The key you are looking for is: " + IDurl); 
         GenCubesDic[selectedIDUrl].GetComponent<GenerateSpot>().isselsected=false;
-        // GenCubesDic[selectedIDUrl].GetComponent<RealtimeTransform>().ClearOwnership(); 
         GenCubesDic[IDurl].GetComponent<GenerateSpot>().isselsected=true;
-        // GenCubesDic[IDurl].GetComponent<RealtimeView>().RequestOwnershipOfSelfAndChildren();
-        // GenCubesDic[IDurl].GetComponent<RealtimeTransform>().RequestOwnership();
+   
         // selectedID=id;
         selectedIDUrl=IDurl; 
     }
