@@ -23,14 +23,12 @@ public class PhotonDataSync : NetworkBehaviour
     void OnUrlIDChanged()
     {
         _generateSpot = GetComponent<GenerateSpot>();
-
         Debug.Log("Networked urlid changed to: " + NetworkedUrlID);
         _generateSpot.URLID = NetworkedUrlID; 
     }
     void OnPromptChanged()
     {
         _generateSpot = GetComponent<GenerateSpot>();
-
         Debug.Log("Networked prompt changed to: " + NetworkedPrompt);
         _generateSpot.Prompt = NetworkedPrompt; 
     }

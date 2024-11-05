@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using RealityEditor;
 using UnityEngine.Networking;
+
+
+
+[System.Serializable]
     public class FutnitureData
 {
     public string name;

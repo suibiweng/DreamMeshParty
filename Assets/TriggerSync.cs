@@ -8,9 +8,11 @@ public class TriggerSync : NetworkBehaviour
     // Start is called before the first frame update
     // private GenerateSpot _generateSpot;
     public outputComponent outputComponent;
+    public InteractableAssets interactableAssets;
 
     private void Start()
     {
+        interactableAssets = GetComponent<InteractableAssets>();
         // _generateSpot = GetComponent<GenerateSpot>(); 
     }
 
@@ -21,8 +23,109 @@ public class TriggerSync : NetworkBehaviour
         Debug.Log($"ToggleTrigger");
 
         // Additional logic to handle the RPC
-        outputComponent.triggerOutPut();
+        //outputComponent.ShowOutputWithoutInput();
     }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+
+    public void LightTriggerRPC(){
+
+
+        outputComponent.ToggleLightState();
+
+
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+
+    public void SoundTriggerRPC(){
+
+
+        outputComponent.ToggleSoundState();
+
+
+    }
+
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+
+    public void GunTriggerRPC(){
+
+
+        outputComponent.TogglegunState();
+
+
+    }
+
+  [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+
+    public void AlignwihtContorllerRPC(){
+
+
+     //  interactableAssets.AlignWithController(controller);
+
+
+
+    }
+
+
+
+
+    public void CallAlignUpRPC(){
+
+
+        AlignwihtContorllerRPC();
+
+
+
+    }
+
+
+    public void CallLightRPC()
+    {
+        // Call the RPC on all clients
+        //RPC_ConfirmGeneration();
+
+        LightTriggerRPC();
+
+        
+    }
+
+
+
+    
+    public void CallSoundRPC()
+    {
+        // Call the RPC on all clients
+        //RPC_ConfirmGeneration();
+
+        SoundTriggerRPC();
+
+        
+    }
+
+
+
+    public void CallGunRPC()
+    {
+        // Call the RPC on all clients
+        //RPC_ConfirmGeneration();
+
+        GunTriggerRPC();
+
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     // // Example of how to call an RPC
     public void CallTriggerRPC()

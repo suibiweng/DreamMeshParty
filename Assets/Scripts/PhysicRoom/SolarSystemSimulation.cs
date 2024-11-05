@@ -49,11 +49,7 @@ public class SolarSystemSimulation : MonoBehaviour
 
     public void SetPlanetaryParameters(CelestialBody body)
     {
-
-
         
-
-
         switch (body)
         {
             case CelestialBody.Sun:
@@ -137,8 +133,7 @@ public class SolarSystemSimulation : MonoBehaviour
 
         gravitySync.UpdateAir(planetAtmosphereDrag);
         gravitySync.UpdateGravity(planetGravity);
-
-
+        
     }
 
     // void AdjustPlanetPhysics()

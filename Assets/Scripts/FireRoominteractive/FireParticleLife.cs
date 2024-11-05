@@ -3,10 +3,12 @@ using UnityEngine;
 public class FireParticleLife : MonoBehaviour
 {
     public int maxLife = 5;               // Maximum life of the particle system
-    private int currentLife;              // Current life of the particle system    
+    public int currentLife;              // Current life of the particle system    
     public ParticleSystem particle1;
     public ParticleSystem particle2;
     public ParticleSystem particle3;
+
+    public FireSync fireSync;
 
     
 
@@ -14,6 +16,7 @@ public class FireParticleLife : MonoBehaviour
     {
         // Initialize current life to max life
         currentLife = maxLife;
+        fireSync.UpdateLife(currentLife);
 
         //// Get the ParticleSystem component attached to this GameObject
         //particle1 = GetComponent<ParticleSystem>();
@@ -37,7 +40,9 @@ public class FireParticleLife : MonoBehaviour
     // Method to decrease life when hit
     public void TakeDamage(int damage)
     {
+       
         currentLife -= damage;
+         fireSync.UpdateLife(currentLife);
         Debug.Log(gameObject.name + " took damage, remaining life: " + currentLife);
 
         // Check if life has reached zero

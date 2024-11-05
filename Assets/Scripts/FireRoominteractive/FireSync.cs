@@ -34,14 +34,13 @@ public class FireSync : NetworkBehaviour
 
      public void UpdateLife(int life)
     {
-        if (HasStateAuthority)
-        {
+    
 
             _fireLife=life;
 
             // Change the string value here, which will then be synchronized across all clients
             
-        }
+        
     }
 
 

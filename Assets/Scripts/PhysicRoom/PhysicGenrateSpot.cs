@@ -3,11 +3,14 @@ using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json;
 using RealityEditor;
+using Oculus.Interaction;
 
 public class CombinedPhysicsScript : MonoBehaviour
 {
 
     public SolarSystemSimulation solarSystem;
+
+    public Grabbable grabbable;
 
 
 
@@ -18,9 +21,11 @@ public class CombinedPhysicsScript : MonoBehaviour
     public float planetAtmosphereDrag = 0.0f;  // Default atmosphere drag
     public float massOnEarth = 1.0f;  // Mass of the object on Earth
 
-    private Rigidbody objectRigidbody;
+    public Rigidbody objectRigidbody;
     private Collider objectCollider;
     public bool debugobject=false;
+
+    public Coroutine checkCoroutine;
 
 
     public bool setPhysic=false;
@@ -40,16 +45,17 @@ public class CombinedPhysicsScript : MonoBehaviour
     void Start()
     {
 
-        //solarSystem=GetComponent<SolarSystemSimulation>();
+       
       
-        objectRigidbody = GetComponent<Rigidbody>();
+        // objectRigidbody = GetComponent<Rigidbody>();
         objectCollider = GetComponent<Collider>();
+        grabbable= GetComponent<Grabbable>();
       
 
 
        if(debugobject){
 
-     massOnEarth=objectRigidbody.mass;
+        massOnEarth=objectRigidbody.mass;
         setPhysic=true;
 
 
@@ -57,8 +63,10 @@ public class CombinedPhysicsScript : MonoBehaviour
 
 
         generateSpot=GetComponent<GenerateSpot>();
-        jsonUrl=generateSpot.downloadURL+generateSpot.URLID+"_physicsProperties.json";
-        StartCoroutine(FetchJsonData());
+
+        
+
+
 
        }
   
@@ -75,6 +83,10 @@ public class CombinedPhysicsScript : MonoBehaviour
      //   StartCoroutine(FetchJsonData());
     }
 
+
+
+    public bool getTheData;
+
     // Fetch the JSON from the local server
     IEnumerator FetchJsonData()
     {
@@ -89,6 +101,7 @@ public class CombinedPhysicsScript : MonoBehaviour
 
             // Apply the physics properties from JSON
             ApplyProperties(properties);
+            getTheData=true;
 
             // Set planet-specific gravity and atmosphere drag after applying general properties
            // SetPlanetProperties(planetGravity, planetAtmosphereDrag);
@@ -99,6 +112,44 @@ public class CombinedPhysicsScript : MonoBehaviour
         }
     }
 
+
+    IEnumerator CheckForJsonOnServer(string jsonURL,float checkInterval)
+    {
+        while (true)
+        {
+            using (UnityWebRequest request = UnityWebRequest.Get(jsonURL))
+            {
+                // Send the request and wait for the response
+                yield return request.SendWebRequest();
+
+                // Check if the file exists or there are any errors
+                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogWarning("JSON not found or error fetching JSON: " + request.error);
+                }
+                else
+                {
+                    // If the file exists, read and parse the JSON
+                    string json = request.downloadHandler.text;
+                    PhysicsProperties properties = JsonConvert.DeserializeObject<PhysicsProperties>(json);
+
+            // Apply the physics properties from JSON
+                    ApplyProperties(properties);
+
+                    // Stop checking after successful reading
+                    StopCoroutine(checkCoroutine);
+                    yield break;
+                }
+            }
+
+            // Wait for the specified interval before checking again
+            yield return new WaitForSeconds(checkInterval);
+        }
+    }
+
+
+
+
     // Apply the properties to Rigidbody and Collider
     void ApplyProperties(PhysicsProperties properties)
     {
@@ -107,25 +158,29 @@ public class CombinedPhysicsScript : MonoBehaviour
             // Set the mass of the Rigidbody based on the JSON data
             objectRigidbody.mass = properties.mass;
             massOnEarth=objectRigidbody.mass;
+            objectRigidbody.isKinematic=false;
+            grabbable.InjectOptionalThrowWhenUnselected(true);  
+            AdjustPlanetPhysics();
+
         }
 
-        if (objectCollider != null)
-        {
-            // Create a new PhysicMaterial and apply friction and bounciness properties
-            PhysicMaterial material = new PhysicMaterial
-            {
-                bounciness = properties.bounciness,
-                dynamicFriction = properties.dynamicFriction,
-                staticFriction = properties.staticFriction
-            };
+        // if (objectCollider != null)
+        // {
+        //     // Create a new PhysicMaterial and apply friction and bounciness properties
+        //     PhysicMaterial material = new PhysicMaterial
+        //     {
+        //         bounciness = properties.bounciness,
+        //         dynamicFriction = properties.dynamicFriction,
+        //         staticFriction = properties.staticFriction
+        //     };
 
-            // Set the friction and bounce combine modes
-            material.frictionCombine = GetCombineMode(properties.frictionCombine);
-            material.bounceCombine = GetCombineMode(properties.bounceCombine);
+        //     // Set the friction and bounce combine modes
+        //     material.frictionCombine = GetCombineMode(properties.frictionCombine);
+        //     material.bounceCombine = GetCombineMode(properties.bounceCombine);
 
-            // Assign the material to the Collider
-            objectCollider.material = material;
-        }
+        //     // Assign the material to the Collider
+        //     objectCollider.material = material;
+        // }
     }
 
     // Helper function to convert string to PhysicMaterialCombine enum
@@ -168,6 +223,9 @@ public class CombinedPhysicsScript : MonoBehaviour
 
             // Disable Unity's default gravity (to use custom gravity)
             objectRigidbody.useGravity = false;
+
+
+        
         }
         else
         {
@@ -175,28 +233,54 @@ public class CombinedPhysicsScript : MonoBehaviour
         }
     }
 
+    void NoPhysicSetup(){
+
+        objectRigidbody.isKinematic=true;
+
+
+    }
+
+
+
     void FixedUpdate()
     {
 
-        if(solarSystem==null) return;
-        
-        // if(generateSpot.GenerationisComplete){
-            
-        //     objectRigidbody.isKinematic=false;
-            
+    if(generateSpot.manager.isPhysics==false) {
+        NoPhysicSetup();
+        return;
 
-        // } 
+    }
+    
+    else{
+
+
+         SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
     
         if(debugobject){
-            SetPlanetProperties(solarSystem.planetGravity,solarSystem.planetAtmosphereDrag);
 
+
+            
+          
         }else{
 
+        if(!getTheData){
+             jsonUrl=generateSpot.downloadURL+generateSpot.URLID+"_physicsProperties.json";
+            checkCoroutine = StartCoroutine(CheckForJsonOnServer(jsonUrl,3f));
 
-           // if(generateSpot.GenerationisComplete){
-            //objectRigidbody.isKinematic=false;
-            //AdjustPlanetPhysics();
-        // } 
+
+        }
+          
+
+       
+        if(generateSpot.GenerationisComplete){
+
+
+            setPhysic=true;
+            objectRigidbody.isKinematic=false;
+            grabbable.InjectOptionalThrowWhenUnselected(true);           
+            
+             AdjustPlanetPhysics();
+        } 
 
 
 
@@ -208,6 +292,19 @@ public class CombinedPhysicsScript : MonoBehaviour
             // Apply custom gravity force (F = m * g)
             objectRigidbody.AddForce(Vector3.down * objectRigidbody.mass * planetGravity);
         }
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    }
+
+
+  
 
 
     }

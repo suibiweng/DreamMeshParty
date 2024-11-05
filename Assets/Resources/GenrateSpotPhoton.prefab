@@ -6177,7 +6177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6881427634733429353
 Transform:
   m_ObjectHideFlags: 0
@@ -18269,9 +18269,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLife: 5
+  currentLife: 0
   particle1: {fileID: 3332391152565159010}
   particle2: {fileID: 2712102246590537573}
   particle3: {fileID: 8746030373165992118}
+  fireSync: {fileID: -7546681190652815305}
 --- !u!1 &3132433422870688380
 GameObject:
   m_ObjectHideFlags: 0
@@ -18810,6 +18812,7 @@ GameObject:
   - component: {fileID: 74486197067409030}
   - component: {fileID: 176731231799175087}
   - component: {fileID: 4951649523192139036}
+  - component: {fileID: -7546681190652815305}
   m_Layer: 0
   m_Name: GenrateSpotPhoton
   m_TagString: GenerateSpot
@@ -18975,7 +18978,7 @@ MonoBehaviour:
   TestConfirmGeneration: 0
   isAcopy: 0
   id: 0
-  downloadURL: http://192.168.0.139:8000/
+  downloadURL: http://192.168.1.139:8000/
   URLID: 
   manager: {fileID: 0}
   isselsected: 0
@@ -19132,7 +19135,7 @@ MonoBehaviour:
   _maxGrabPoints: -1
   _rigidbody: {fileID: 3471819366124012386}
   _kinematicWhileSelected: 1
-  _throwWhenUnselected: 0
+  _throwWhenUnselected: 1
 --- !u!114 &8838043784834827740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19252,6 +19255,7 @@ MonoBehaviour:
   - {fileID: 7739038162603271921}
   - {fileID: 7481847473661822111}
   - {fileID: 74486197067409030}
+  - {fileID: -7546681190652815305}
 --- !u!114 &56377501874731431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19311,12 +19315,13 @@ MonoBehaviour:
   generateSpot: {fileID: 0}
   interactableToggle: {fileID: 1712808685263485367}
   triggerSync: {fileID: 74486197067409030}
-  outputspot: {fileID: 0}
+  outputspot: {fileID: 6426207975900063567}
   interactiveCamera: {fileID: 8662807067590852494}
   renderTexture: {fileID: 8400000, guid: 45f23028384a61149be92bc657ba3e67, type: 2}
   uploadUrl: http://localhost:5000/upload
   Left: {fileID: 0}
   Right: {fileID: 0}
+  audioUrl: https://your-audio-url.com/audio.wav
 --- !u!114 &74486197067409030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19343,11 +19348,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   solarSystem: {fileID: 0}
+  grabbable: {fileID: 0}
   generateSpot: {fileID: 0}
   jsonUrl: http://localhost:8000/physicsProperties.json
   planetGravity: 9.81
   planetAtmosphereDrag: 0
   massOnEarth: 1
+  objectRigidbody: {fileID: 3471819366124012386}
   debugobject: 0
   setPhysic: 0
 --- !u!114 &4951649523192139036
@@ -19363,10 +19370,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOnFire: 0
-  fireSync: {fileID: 0}
+  fireSync: {fileID: -7546681190652815305}
   firelfe: 5
   fireParticleLife: {fileID: 4222790191876512365}
   firesceneManager: {fileID: 0}
+--- !u!114 &-7546681190652815305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191651285109885349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ac86efc87e4884d9e97c32adce1457, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireSpot: {fileID: 4951649523192139036}
+  __fireLife: 0
 --- !u!1 &3253298116833696021
 GameObject:
   m_ObjectHideFlags: 0
@@ -39032,7 +39053,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4397846319280765731
 RectTransform:
   m_ObjectHideFlags: 0
@@ -43938,7 +43959,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 12
+    maxNumParticles: 4
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -57129,7 +57150,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2.74
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -57182,7 +57203,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 9.56
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -57300,7 +57321,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.05
+      scalar: 3.84
       minScalar: 1
       maxCurve:
         serializedVersion: 2
