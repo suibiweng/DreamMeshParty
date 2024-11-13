@@ -30,4 +30,20 @@ public class GenerateSpotRPC : NetworkBehaviour
 
         
     }
+    
+    //Remove spot from all player's dictionaries to properly delete a spot
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void RPC_DeleteSpot()
+    {
+        Debug.Log($"RPC received to Delete spot" + _generateSpot.URLID);
+        _generateSpot.Remove();
+        // Additional logic to handle the RPC
+    }
+
+    // Example of how to call an RPC
+    public void CallDeleteSpotRPC()
+    {
+        // Call the RPC on all clients
+        RPC_DeleteSpot();
+    }
 }

@@ -8,6 +8,7 @@ using RealityEditor;
 using UnityEngine.UI;
 using SculptingPro;
 using DimBoxes;
+using ExitGames.Client.Photon.StructWrapping;
 using Oculus.Interaction;
 using Fusion;
 using Meta.XR.MultiplayerBlocks.Fusion;
@@ -380,8 +381,9 @@ public class GenerateSpot : MonoBehaviour
         // GameObject ACopy = Instantiate(this.gameObject);
         GameObject ACopy = manager.SpawnNetworkObject(transform.position, transform.rotation, gameObject);
         ACopy.GetComponent<GenerateSpot>().id=manager.IDs;
-        string NewUrlID = (Int32.Parse(URLID) + 1).ToString(); 
-        ACopy.GetComponent<GenerateSpot>().URLID = NewUrlID;
+        string NewUrlID = (Int64.Parse(URLID) + 1).ToString(); 
+        // ACopy.GetComponent<GenerateSpot>().URLID = NewUrlID;
+        ACopy.GetComponent<GenerateSpot>().ChangeID(NewUrlID);
         Debug.Log("The new Duplicated Cube's URLID is: " + NewUrlID);
         ACopy.GetComponent<PhotonDataSync>().UpdateURLID(NewUrlID);  //setting the network urlid once right after we make the spot.
         Debug.Log("Setting the network urlid to be: " + NewUrlID);
@@ -1041,6 +1043,9 @@ public class GenerateSpot : MonoBehaviour
             Debug.LogError("NetworkRunner is not running. Cannot destroy network object.");
             return;
         }
+        //might need to make this an RPC, since it's getting added to other peoples dictionaries when they grab this cube
+        //But it isn't being removed from their dictionary here. Not removing it from the dictionary is currently breaking things
+        _generateSpotRPC.CallDeleteSpotRPC(); //This Needs to be tested
         _runner.Despawn(GetComponent<NetworkObject>());
         Destroy(gameObject);
     }
