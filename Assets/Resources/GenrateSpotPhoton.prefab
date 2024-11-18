@@ -19322,6 +19322,7 @@ MonoBehaviour:
   Left: {fileID: 0}
   Right: {fileID: 0}
   audioUrl: https://your-audio-url.com/audio.wav
+  theGrabingController: {fileID: 0}
 --- !u!114 &74486197067409030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19335,6 +19336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outputComponent: {fileID: 6426207975900063567}
+  interactableAssets: {fileID: 0}
 --- !u!114 &176731231799175087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19357,6 +19359,7 @@ MonoBehaviour:
   objectRigidbody: {fileID: 3471819366124012386}
   debugobject: 0
   setPhysic: 0
+  getTheData: 0
 --- !u!114 &4951649523192139036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61961,7 +61964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactableAssets: {fileID: 6192821148784459004}
-  light: {fileID: 0}
+  lamplight: {fileID: 0}
   gun: {fileID: 0}
   Sound: {fileID: 0}
   lightOnDuration: 1
