@@ -20,6 +20,7 @@ public class ExtinguisherBehavior : MonoBehaviour
     public GameObject Foam;
     public GameObject Water;
     public GameObject WetChemical;
+    public ExtinguisherType Type;
 
     // Dictionary to map enum values to GameObjects
     private Dictionary<ExtinguisherType, GameObject> extinguisherModels;
@@ -38,6 +39,7 @@ public class ExtinguisherBehavior : MonoBehaviour
 
         // Hide all models at the start
         HideAllModels();
+        ShowExtinguisherModel(Type);
     }
 
  

@@ -54,7 +54,7 @@ public class PressureSteam : MonoBehaviour
         bool leftHandActive = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) && OVRInput.Get(OVRInput.Button.PrimaryHandTrigger)&& isGrabing ;
         bool rightHandActive = OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger) && OVRInput.Get(OVRInput.Button.SecondaryHandTrigger) && isGrabing;
      
-        if(REM.isFireScene==false)return;
+        //if(REM.isFireScene==false)return;
 
 
         if (leftHandActive || rightHandActive)
