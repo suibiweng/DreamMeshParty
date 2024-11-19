@@ -2,6 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Enum for extinguisher types
+public enum ExtinguisherType
+{
+    CO2,
+    DryPowder,
+    Foam,
+    Water,
+    WetChemical
+}
+
 public class ExtinguisherBehavior : MonoBehaviour
 {
     // Public GameObjects for different extinguisher models
@@ -10,16 +20,6 @@ public class ExtinguisherBehavior : MonoBehaviour
     public GameObject Foam;
     public GameObject Water;
     public GameObject WetChemical;
-
-    // Enum for extinguisher types
-    public enum ExtinguisherType
-    {
-        CO2,
-        DryPowder,
-        Foam,
-        Water,
-        WetChemical
-    }
 
     // Dictionary to map enum values to GameObjects
     private Dictionary<ExtinguisherType, GameObject> extinguisherModels;
