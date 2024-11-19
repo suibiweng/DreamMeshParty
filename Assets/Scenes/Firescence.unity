@@ -22936,7 +22936,7 @@ GameObject:
   - component: {fileID: 7680818631241426439}
   - component: {fileID: 7680818631241426440}
   m_Layer: 0
-  m_Name: OriginalExtinguisher
+  m_Name: Extinguishers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
