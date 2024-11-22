@@ -23,15 +23,13 @@ public class RoomData
 [System.Serializable]
 public class FlammableObject
 {
-    public string URID;
+    public string URID { get; set; }       // Unique identifier for the object
+    public string Reason { get; set; }    // Reason why the object is flammable
+    public string FireType { get; set; }  // Type of fire (e.g., Type A, Type B)
+    public string Description { get; set; } // Detailed description of the fire type
 }
 
 
-[System.Serializable]
-public class FlammableItemsData
-{
-    public List<string> flammableItems;  // Simple list to hold the array of strings
-}
 
 
 
@@ -63,36 +61,8 @@ public class FiresceneManager : MonoBehaviour
 
         
     }
-    public List<FutnitureData> cropBoxes = new List<FutnitureData>();
 
-
-
-    public void ServerStart(){
-
-        StartCoroutine(getallCropBoxes());
-
-
-
-
-
-    }
-
-
-    public void StartTheFireScene(){
-
-        StartCoroutine(FetchRoomJson());
-
-
-
-      
-
-
-    }
-
-
-string[] FlamableObject; 
-
-
+    public FlammableObject[] flammableObjects; // Array to store parsed flammable objects
 
     IEnumerator FetchRoomJson()
     {
@@ -108,7 +78,7 @@ string[] FlamableObject;
             string jsonData = request.downloadHandler.text;
             Debug.Log($"Received JSON: {jsonData}");
 
-            // Parse the JSON to extract flammableObjects (an array of strings)
+            // Parse the JSON to extract flammableObjects
             JObject parsedData = JObject.Parse(jsonData);
 
             // Check if the "flammableObjects" key exists and is not null
@@ -117,18 +87,31 @@ string[] FlamableObject;
                 JArray flammableObjectsArray = (JArray)parsedData["flammableObjects"];
                 if (flammableObjectsArray != null && flammableObjectsArray.Count > 0)
                 {
-                    // Create a string array to store the flammable object URIDs
-                    string[] uridArray = flammableObjectsArray.ToObject<string[]>();  // Convert JArray directly to string[]
+                    // Convert JArray to FlammableObject[]
+                    flammableObjects = flammableObjectsArray.ToObject<FlammableObject[]>();
 
-                    // Log each URID
-                    foreach (var urid in uridArray)
+                    // Log each FlammableObject
+                    foreach (var obj in flammableObjects)
                     {
-                        Debug.Log($"Flammable object URID: {urid}");
-                    }
-                    FlamableObject=uridArray;
+                        Debug.Log($"Flammable object - URID: {obj.URID}, Reason: {obj.Reason}");
+                            var fire =findTheSpotinthelist(obj.URID);
 
-                    // Call your setFire function after processing the items
-                    setFire();
+                            fire.setDescription(obj.Reason);
+                            
+                            if(obj.FireType == "Type A") fire.fireType=ExtinguisherType.CO2;
+                            if(obj.FireType == "Type B") fire.fireType=ExtinguisherType.Foam;
+                            if(obj.FireType == "Type C") fire.fireType=ExtinguisherType.DryPowder;
+                            if(obj.FireType == "Type D") fire.fireType=ExtinguisherType.Water;
+
+
+
+
+
+
+                    }
+
+                    // Optionally call a method after processing
+                    // setFire();
                 }
                 else
                 {
@@ -141,6 +124,56 @@ string[] FlamableObject;
             }
         }
     }
+
+
+
+
+
+    public List<FutnitureData> cropBoxes = new List<FutnitureData>();
+
+
+
+    public void ServerStart(){
+
+        StartCoroutine(getallCropBoxes());
+
+
+
+
+
+    }
+
+    public void startAnlyze(){
+         StartCoroutine(getallCropBoxes());
+
+         StartCoroutine(FetchRoomJson());
+
+
+
+
+
+    }
+
+
+
+
+    public void StarttoSimulation(){
+
+       
+
+        setFire();
+
+      
+
+
+    }
+
+
+string[] FlamableObject; 
+
+
+
+  
 
 
     RoomData roomData ;
@@ -254,7 +287,7 @@ private IEnumerator SendJsonToServer(string jsonData, string filename)
         if(Input.GetKeyDown(KeyCode.C)){
 
 
-            StartTheFireScene();
+            StarttoSimulation();
         }
 
 
@@ -270,13 +303,13 @@ private IEnumerator SendJsonToServer(string jsonData, string filename)
 
        
 
-        print(FlamableObject[currentFire]);
+        print(flammableObjects[currentFire].URID);
     
 
-         findTheSpotinthelist(FlamableObject[currentFire]).setFire();
+         findTheSpotinthelist(flammableObjects[currentFire].URID).setFire();
          //findTheSpotinthelist(FlamableObject[currentFire]).fireSync.CallSetFireRPC();
 
-         print("setThefire at"+FlamableObject[currentFire]);
+         print("setThefire at"+flammableObjects[currentFire].URID);
 
 
         

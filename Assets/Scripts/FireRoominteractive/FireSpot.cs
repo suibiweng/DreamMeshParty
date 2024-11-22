@@ -15,7 +15,11 @@ public class FireSpot : MonoBehaviour
 
     public FiresceneManager firesceneManager;
 
-    public TMP_Text ObjectName;
+    public TMP_Text ObjectName,Description;
+
+
+
+    public ExtinguisherType fireType;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +44,15 @@ public class FireSpot : MonoBehaviour
     public void setObjectname(string t){
         if(ObjectName!=null)
         ObjectName.text=t;
+
+
+    }
+
+
+    
+    public void setDescription(string t){
+        if(Description!=null)
+        Description.text=t;
 
 
     }
