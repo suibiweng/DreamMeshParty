@@ -42,7 +42,9 @@ public class FiresceneManager : MonoBehaviour
     
      public RealityEditorManager manager;
     public OSC osc;
-    private string url = "http://192.168.1.139:12000/Room.json";
+   public string url = "http://192.168.0.139:12000/Room.json";
+
+    string RoomID;
 
 
     public FireSpot [] fireSpots;
@@ -52,6 +54,13 @@ public class FiresceneManager : MonoBehaviour
         manager = GetComponent<RealityEditorManager> ();    
         osc=GetComponent<OSC>();
         // osc.SetAddressHandler("/setFire",SetFire);
+
+        RoomID=IDGenerator.GenerateID();
+
+        url="http://192.168.0.139:12000/"+RoomID+"_ROOM.json" ;
+
+
+
         
     }
     public List<FutnitureData> cropBoxes = new List<FutnitureData>();
@@ -167,16 +176,23 @@ string[] FlamableObject;
             };
 
             
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.2f);
 
             GameObject gc= manager.createFireSpot(g.transform.position);
+
+           
+        //    yield return new WaitForSeconds(1f);
             data.URID=gc.GetComponent<GenerateSpot>().URLID;
+             gc.GetComponent<FireSpot>().setObjectname(g.transform.parent.name);
+            print(data.URID);
             cropBoxes.Add(data);
         }
 
 
 
-        fireSpots=FindObjectsOfType<FireSpot>();  
+        fireSpots=FindObjectsOfType<FireSpot>(); 
+        
+         
         CropBoxContainer container = new CropBoxContainer { cropBoxes = this.cropBoxes };         
 
         string json = JsonUtility.ToJson(container, true);
@@ -186,39 +202,43 @@ string[] FlamableObject;
         print("here is:"+json);
 
         // Send the JSON data to the server
-        StartCoroutine(SendJsonToServer(json));
+        StartCoroutine(SendJsonToServer(json,RoomID+"_ROOM.json"));
     }
 
 
 
 
-        private IEnumerator SendJsonToServer(string jsonData)
+private IEnumerator SendJsonToServer(string jsonData, string filename)
+{
+    string url = "http://192.168.0.139:5000/receiveRoom";  // Replace with your local server URL and endpoint
+    
+    // Modify the JSON data to include the filename
+    string modifiedJsonData = $"{{\"filename\":\"{filename}\",\"data\":{jsonData}}}";
+
+    UnityWebRequest request = new UnityWebRequest(url, "POST");
+
+    // Create a byte array from the modified JSON string
+    byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(modifiedJsonData);
+    request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+    request.downloadHandler = new DownloadHandlerBuffer();
+
+    // Set the request content type to application/json
+    request.SetRequestHeader("Content-Type", "application/json");
+
+    // Send the request and wait for the response
+    yield return request.SendWebRequest();
+
+    // Check for errors in the request
+    if (request.result != UnityWebRequest.Result.Success)
     {
-        string url = "http://192.168.1.139:5000/receiveRoom";  // Replace with your local server URL and endpoint
-        UnityWebRequest request = new UnityWebRequest(url, "POST");
-
-        // Create a byte array from the JSON string
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-
-        // Set the request content type to application/json
-        request.SetRequestHeader("Content-Type", "application/json");
-
-        // Send the request and wait for the response
-        yield return request.SendWebRequest();
-
-        // Check for errors in the request
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError("Error sending JSON to server: " + request.error);
-        }
-        else
-        {
-            Debug.Log("Successfully sent JSON to server");
-            Debug.Log("Response: " + request.downloadHandler.text);
-        }
+        Debug.LogError("Error sending JSON to server: " + request.error);
     }
+    else
+    {
+        Debug.Log("Successfully sent JSON to server");
+        Debug.Log("Response: " + request.downloadHandler.text);
+    }
+}
 
 
     // Update is called once per frame
@@ -254,7 +274,7 @@ string[] FlamableObject;
     
 
          findTheSpotinthelist(FlamableObject[currentFire]).setFire();
-         findTheSpotinthelist(FlamableObject[currentFire]).fireSync.CallSetFireRPC();
+         //findTheSpotinthelist(FlamableObject[currentFire]).fireSync.CallSetFireRPC();
 
          print("setThefire at"+FlamableObject[currentFire]);
 
@@ -281,7 +301,7 @@ string[] FlamableObject;
 
         currentFire++;
         findTheSpotinthelist(urid).putOutFire();
-        findTheSpotinthelist(urid).fireSync.CallputFireoutRPC();
+       // findTheSpotinthelist(urid).fireSync.CallputFireoutRPC();
 
 
 

@@ -16,7 +16,7 @@ public class FireParticleLife : MonoBehaviour
     {
         // Initialize current life to max life
         currentLife = maxLife;
-        fireSync.UpdateLife(currentLife);
+       // fireSync.UpdateLife(currentLife);
 
         //// Get the ParticleSystem component attached to this GameObject
         //particle1 = GetComponent<ParticleSystem>();
@@ -42,7 +42,7 @@ public class FireParticleLife : MonoBehaviour
     {
        
         currentLife -= damage;
-         fireSync.UpdateLife(currentLife);
+        // fireSync.UpdateLife(currentLife);
         Debug.Log(gameObject.name + " took damage, remaining life: " + currentLife);
 
         // Check if life has reached zero

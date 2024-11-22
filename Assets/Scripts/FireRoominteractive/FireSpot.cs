@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RealityEditor;
-
+using TMPro;
 public class FireSpot : MonoBehaviour
 {
     public bool isOnFire;
@@ -14,6 +14,8 @@ public class FireSpot : MonoBehaviour
     public FireParticleLife fireParticleLife;
 
     public FiresceneManager firesceneManager;
+
+    public TMP_Text ObjectName;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +33,13 @@ public class FireSpot : MonoBehaviour
         
 
 
+
+
+    }
+
+    public void setObjectname(string t){
+        if(ObjectName!=null)
+        ObjectName.text=t;
 
 
     }

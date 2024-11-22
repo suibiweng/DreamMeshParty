@@ -119,6 +119,24 @@ public static class TimestampGenerator
 }
 
 
+public static class IDGenerator
+{
+    public static string GenerateID()
+    {
+        // Get the current date and time
+        DateTime now = DateTime.Now;
+
+        // Format the date and time as a timestamp string
+        string timestamp = now.ToString("yyyyMMddHHmmss");
+
+        // Append a unique identifier
+        string uniqueId = Guid.NewGuid().ToString("N").Substring(0, 8); // Shortened Guid for readability
+
+        return $"{timestamp}{uniqueId}";
+    }
+}
+
+
 public static class URLChecker
 {
     public static bool CheckURLConnection(string url)

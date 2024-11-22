@@ -222,8 +222,8 @@ public class GenerateSpot : MonoBehaviour
     }
     
     public void ChangeID(string ID){
-        manager.ChangeID(URLID,ID,this.gameObject);
-        URLID=ID;
+        //manager.ChangeID(URLID,ID,this.gameObject);
+        //URLID=ID;
 
     }
     

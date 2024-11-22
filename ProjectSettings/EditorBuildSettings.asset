@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/ModifyFireScene.unity
+    guid: da1c04efe8c7710428e8d597862bab6e
+  - enabled: 1
     path: Assets/Scenes/3Scene.unity
     guid: 355a884e7316d064f993052e96b52efe
   - enabled: 0

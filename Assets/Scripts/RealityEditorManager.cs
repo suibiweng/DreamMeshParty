@@ -145,13 +145,13 @@ public class RealityEditorManager : MonoBehaviour
     
     public GameObject createFireSpot(Vector3 pos)
     {
-        // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
-        GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab); 
+         GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
+       // GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab); 
         gcube.GetComponent<GenerateSpot>().id=IDs;
-        string urlid=TimestampGenerator.GetTimestamp(); 
+        string urlid=IDGenerator.GenerateID();
         gcube.GetComponent<GenerateSpot>().URLID=urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
-        gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
+        // gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
         Debug.Log("Setting the network urlid to be: " + urlid);
         GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
         selectedIDUrl=urlid;  
