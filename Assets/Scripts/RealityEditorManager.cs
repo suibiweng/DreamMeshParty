@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
-using Normal.Realtime;
 using Oculus.Interaction;
 using UnityEngine;
 using RealityEditor;
@@ -18,7 +17,6 @@ public class RealityEditorManager : MonoBehaviour
     public bool isPhysics;
     public GameObject GenerateSpotPrefab;
     private NetworkRunner _runner;
-    private Realtime _realtime;
     public bool isOnline; 
     public Transform LeftHand, RightHand;
     public Transform PlayerCamera; 

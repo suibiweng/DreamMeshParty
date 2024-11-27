@@ -15,4 +15,7 @@ MonoBehaviour:
   _migration:
     lastPromptedVersion: 5
     version: 5
+    editorDLL:
+      prompted: 0
+      migrated: 0
   _projectGUID: 682bfdf0-8fb0-4c54-bb61-8db23930e5b5
