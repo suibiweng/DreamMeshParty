@@ -17075,6 +17075,8 @@ MonoBehaviour:
   fireParticleLife: {fileID: 1074698617689708851}
   firesceneManager: {fileID: 0}
   ObjectName: {fileID: 0}
+  Description: {fileID: 0}
+  fireType: 0
 --- !u!114 &-1234750653806247155
 MonoBehaviour:
   m_ObjectHideFlags: 0

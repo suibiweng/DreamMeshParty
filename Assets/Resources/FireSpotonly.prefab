@@ -6409,7 +6409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 2d8bfb6c-7d7d-46dd-b2d5-cebbaef575dc
+  instanceId: 7d8b5123-551b-4adc-9edd-b0819378b77a
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -6760,7 +6760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLife: 5
-  currentLife: 0
+  currentLife: 5
   particle1: {fileID: 9020159752497941851}
   particle2: {fileID: 2158957495478754766}
   particle3: {fileID: 8245695090296827264}
@@ -13554,8 +13554,6 @@ GameObject:
   - component: {fileID: 5363364053946183982}
   - component: {fileID: 1525839594962778434}
   - component: {fileID: 4095198892658442567}
-  - component: {fileID: 7088085856408745192}
-  - component: {fileID: 2953915838317061740}
   - component: {fileID: 7105997129369349106}
   - component: {fileID: 3779308287223670457}
   - component: {fileID: 1922569660374773943}
@@ -13969,38 +13967,6 @@ MonoBehaviour:
       AxisRange:
         Min: 0
         Max: 10
---- !u!114 &7088085856408745192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1795908715301655889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 2689642426
-  ObjectInterest: 1
-  Flags: 786433
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 2953915838317061740}
---- !u!114 &2953915838317061740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1795908715301655889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07c9aee8aca795d4596e5520b5ea6e72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _NetworkedUrlID: 
-  _NetworkedPrompt: 
 --- !u!114 &7105997129369349106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14068,6 +14034,7 @@ MonoBehaviour:
   firesceneManager: {fileID: 0}
   ObjectName: {fileID: 569935432445959964}
   Description: {fileID: 1168710080252740500}
+  fireType: 0
 --- !u!1 &1811394066482431607
 GameObject:
   m_ObjectHideFlags: 0
@@ -21962,7 +21929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: b96183aa-c582-4eab-84b6-3f258d8ed8ba
+  instanceId: 42d31856-43ab-4222-99f7-d818ea1042be
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -45865,7 +45832,7 @@ RectTransform:
   m_GameObject: {fileID: 6476546383945807854}
   m_LocalRotation: {x: 0.13369212, y: 0, z: 0, w: 0.9910229}
   m_LocalPosition: {x: 0, y: 0, z: -0.05}
-  m_LocalScale: {x: 0.16530816, y: 0.16530816, z: 0.16530816}
+  m_LocalScale: {x: -0.1653082, y: 0.16530816, z: 0.16530816}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4659205379473104717}
@@ -45937,10 +45904,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '
-
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -54260,7 +54224,7 @@ RectTransform:
   m_GameObject: {fileID: 7183080860491059963}
   m_LocalRotation: {x: 0.13369212, y: 0, z: 0, w: 0.9910229}
   m_LocalPosition: {x: 0, y: 0, z: -0.05}
-  m_LocalScale: {x: 0.16530816, y: 0.16530816, z: 0.16530816}
+  m_LocalScale: {x: -0.1653082, y: 0.16530816, z: 0.16530816}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4659205379473104717}
@@ -54332,10 +54296,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '
-
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -54344,8 +54305,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190847
+  m_fontColor: {r: 1, g: 0.009498768, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -480,7 +480,7 @@ public class GenerateSpot : MonoBehaviour
             TestConfirmGeneration = false; 
         }
         
-        if (Prompt != oldPrompt)
+        if (Prompt != oldPrompt && _photonDataSync!=null)
         {
             _photonDataSync.UpdatePrompt(Prompt);
         }

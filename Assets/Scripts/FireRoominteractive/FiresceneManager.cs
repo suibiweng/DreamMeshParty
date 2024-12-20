@@ -61,71 +61,122 @@ public class FiresceneManager : MonoBehaviour
 
         
     }
+// Required for List
 
-    public FlammableObject[] flammableObjects; // Array to store parsed flammable objects
+public List<FlammableObject> flammableObjects; // List to store parsed flammable objects
 
-    IEnumerator FetchRoomJson()
+IEnumerator FetchRoomJson()
+{
+    UnityWebRequest request = UnityWebRequest.Get(url);
+    yield return request.SendWebRequest();
+
+    if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
     {
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        yield return request.SendWebRequest();
+        Debug.LogError($"Error fetching file: {request.error}");
+        yield break;
+    }
 
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+    string jsonData = request.downloadHandler.text;
+    Debug.Log($"Received JSON: {jsonData}");
+
+    try
+    {
+        // Parse the received JSON
+        JObject parsedData = JObject.Parse(jsonData);
+
+        // Check for flammableObjects key directly or inside content
+        JArray flammableObjectsArray = null;
+
+        if (parsedData["flammableObjects"] != null)
         {
-            Debug.LogError($"Error fetching file: {request.error}");
+            // flammableObjects key exists at the root
+            flammableObjectsArray = (JArray)parsedData["flammableObjects"];
+        }
+        else if (parsedData["content"] != null)
+        {
+            // flammableObjects key exists inside content
+            JObject contentData = JObject.Parse(parsedData["content"].ToString());
+            if (contentData["flammableObjects"] != null)
+            {
+                flammableObjectsArray = (JArray)contentData["flammableObjects"];
+            }
+        }
+
+        if (flammableObjectsArray != null && flammableObjectsArray.Count > 0)
+        {
+            // Convert JArray to List<FlammableObject>
+            flammableObjects = flammableObjectsArray.ToObject<List<FlammableObject>>();
+
+            foreach (var obj in flammableObjects)
+            {
+                Debug.Log($"Processing flammable object - URID: {obj.URID}, Reason: {obj.Reason}");
+
+                var fire = findTheSpotinthelist(obj.URID);
+
+                // Set fire description and type based on object data
+                fire.setDescription(obj.Reason);
+
+                switch (obj.FireType)
+                {
+                    case "Type A":
+                        fire.fireType = ExtinguisherType.CO2; // Ordinary Combustibles
+                        break;
+                    case "Type B":
+                        fire.fireType = ExtinguisherType.Foam; // Flammable Liquids
+                        break;
+                    case "Type C":
+                        fire.fireType = ExtinguisherType.DryPowder; // Electrical Fires
+                        break;
+                    case "Type D":
+                        fire.fireType = ExtinguisherType.Water; // Flammable Metals
+                        break;
+                    default:
+                        Debug.LogWarning($"Unknown FireType for URID {obj.URID}: {obj.FireType}");
+                        break;
+                }
+            }
+
+            Debug.Log("All flammable objects processed successfully.");
         }
         else
         {
-            string jsonData = request.downloadHandler.text;
-            Debug.Log($"Received JSON: {jsonData}");
-
-            // Parse the JSON to extract flammableObjects
-            JObject parsedData = JObject.Parse(jsonData);
-
-            // Check if the "flammableObjects" key exists and is not null
-            if (parsedData["flammableObjects"] != null)
-            {
-                JArray flammableObjectsArray = (JArray)parsedData["flammableObjects"];
-                if (flammableObjectsArray != null && flammableObjectsArray.Count > 0)
-                {
-                    // Convert JArray to FlammableObject[]
-                    flammableObjects = flammableObjectsArray.ToObject<FlammableObject[]>();
-
-                    // Log each FlammableObject
-                    foreach (var obj in flammableObjects)
-                    {
-                        Debug.Log($"Flammable object - URID: {obj.URID}, Reason: {obj.Reason}");
-                            var fire =findTheSpotinthelist(obj.URID);
-
-                            fire.setDescription(obj.Reason);
-                            
-                            if(obj.FireType == "Type A") fire.fireType=ExtinguisherType.CO2;
-                            if(obj.FireType == "Type B") fire.fireType=ExtinguisherType.Foam;
-                            if(obj.FireType == "Type C") fire.fireType=ExtinguisherType.DryPowder;
-                            if(obj.FireType == "Type D") fire.fireType=ExtinguisherType.Water;
-
-
-
-
-
-
-                    }
-
-                    // Optionally call a method after processing
-                    // setFire();
-                }
-                else
-                {
-                    Debug.LogError("The flammableObjects array is empty or null.");
-                }
-            }
-            else
-            {
-                Debug.LogError("flammableObjects key not found in the JSON.");
-            }
+            Debug.LogWarning("No flammableObjects found in the JSON.");
         }
     }
+    catch (JsonReaderException e)
+    {
+        Debug.LogError($"Error parsing JSON: {e.Message}");
+    }
+}
 
 
+
+// Function to fix common JSON formatting issues
+string FixMalformedJson(string rawJson)
+{
+    // Locate the JSON start and end
+    int jsonStartIndex = rawJson.IndexOf("{");
+    int jsonEndIndex = rawJson.LastIndexOf("}");
+
+    if (jsonStartIndex >= 0)
+    {
+        string jsonSubstring = rawJson.Substring(jsonStartIndex);
+
+        // Attempt to close incomplete JSON
+        if (!jsonSubstring.TrimEnd().EndsWith("]}"))
+        {
+            jsonSubstring = jsonSubstring.TrimEnd(' ', '\n', '\r') + "]}"; // Append missing brackets if necessary
+        }
+
+        // Sanitize potential issues
+        jsonSubstring = jsonSubstring.Replace("\\\"", "\""); // Unescape improperly escaped quotes
+        jsonSubstring = jsonSubstring.Replace("\n", "\\n").Replace("\r", "\\r"); // Escape line breaks
+
+        return jsonSubstring;
+    }
+
+    return null; // Return null if no valid JSON block is found
+}
 
 
 
@@ -146,7 +197,7 @@ public class FiresceneManager : MonoBehaviour
     public void startAnlyze(){
          StartCoroutine(getallCropBoxes());
 
-         StartCoroutine(FetchRoomJson());
+       
 
 
 
@@ -160,7 +211,7 @@ public class FiresceneManager : MonoBehaviour
     public void StarttoSimulation(){
 
        
-
+        currentFire=0;
         setFire();
 
       
@@ -270,6 +321,8 @@ private IEnumerator SendJsonToServer(string jsonData, string filename)
     {
         Debug.Log("Successfully sent JSON to server");
         Debug.Log("Response: " + request.downloadHandler.text);
+          StartCoroutine(FetchRoomJson());
+
     }
 }
 
@@ -280,7 +333,7 @@ private IEnumerator SendJsonToServer(string jsonData, string filename)
         if(Input.GetKeyDown(KeyCode.Z)){
 
 
-            ServerStart();
+            startAnlyze();
         }
 
 
@@ -294,30 +347,56 @@ private IEnumerator SendJsonToServer(string jsonData, string filename)
         
     }
 
-    int currentFire=0;
+    public int currentFire=0;
 
     
 
-    public void setFire(){
-
-
-       
-
-        print(flammableObjects[currentFire].URID);
-    
-
-         findTheSpotinthelist(flammableObjects[currentFire].URID).setFire();
-         //findTheSpotinthelist(FlamableObject[currentFire]).fireSync.CallSetFireRPC();
-
-         print("setThefire at"+flammableObjects[currentFire].URID);
-
-
-        
-      
-
-        
-
+public void setFire()
+{
+    // Check if the list is null or empty
+    if (flammableObjects == null || flammableObjects.Count == 0)
+    {
+        Debug.LogError("flammableObjects list is null or empty. Cannot set fire.");
+        return;
     }
+
+    // Validate the currentFire index
+    if (currentFire < 0 || currentFire >= flammableObjects.Count)
+    {
+        Debug.LogError($"currentFire index {currentFire} is out of bounds. List count: {flammableObjects.Count}");
+        return;
+    }
+
+    // Log the current URID and set fire
+    print(flammableObjects[currentFire].URID);
+    var fireSpot = findTheSpotinthelist(flammableObjects[currentFire].URID);
+    
+    if (fireSpot != null)
+    {
+        fireSpot.setFire();
+        print("setThefire at " + flammableObjects[currentFire].URID);
+       
+    }
+    else
+    {
+        Debug.LogError($"No FireSpot found for URID: {flammableObjects[currentFire].URID}");
+    }
+     //currentFire++;
+}
+
+public FireSpot findTheSpotinthelist(string id)
+{
+    foreach (FireSpot sp in fireSpots)
+    {
+        if (sp.gameObject.GetComponent<GenerateSpot>().URLID == id)
+        {
+            return sp;
+        }
+    }
+    Debug.LogError($"Can't find the object with URLID: {id}");
+    return null;
+}
+
 
     public void SetFireFromOSC(OscMessage oscMessage){
 
@@ -332,8 +411,8 @@ private IEnumerator SendJsonToServer(string jsonData, string filename)
 
 
 
-        currentFire++;
-        findTheSpotinthelist(urid).putOutFire();
+        //currentFire++;
+        //findTheSpotinthelist(urid).putOutFire();
        // findTheSpotinthelist(urid).fireSync.CallputFireoutRPC();
 
 
@@ -346,19 +425,6 @@ private IEnumerator SendJsonToServer(string jsonData, string filename)
 
 
 
-    public FireSpot findTheSpotinthelist(string id){
-        foreach (FireSpot sp in fireSpots){
-
-            if (sp.gameObject.GetComponent<GenerateSpot>().URLID == id){
-                return sp;
-            }
-
-
-        }
-        print("Can't find the object");
-        return null;
-
-    }
 
 
     }

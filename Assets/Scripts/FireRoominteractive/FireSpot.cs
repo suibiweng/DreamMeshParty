@@ -27,7 +27,7 @@ public class FireSpot : MonoBehaviour
         firesceneManager=FindObjectOfType<FiresceneManager>();  
         if(firesceneManager!=null){
 
-                fireSync=GetComponent<FireSync>();
+                //fireSync=GetComponent<FireSync>();
 
         }
        
@@ -67,7 +67,7 @@ public class FireSpot : MonoBehaviour
 
         if(fireParticleLife.currentLife<=0 && isOnFire){
              putOutFire();
-             firesceneManager.putOutFire(GetComponent<GenerateSpot>().URLID);
+             
 
 
 
@@ -91,7 +91,10 @@ public class FireSpot : MonoBehaviour
     public void putOutFire(){
         fireParticleLife.gameObject.SetActive(false);
         // fireSync.CallputFireoutRPC();
-        isOnFire=false;        
+        isOnFire=false; 
+        firesceneManager.currentFire++; 
+        firesceneManager.putOutFire(GetComponent<GenerateSpot>().URLID);
+              
 
     }
 }
