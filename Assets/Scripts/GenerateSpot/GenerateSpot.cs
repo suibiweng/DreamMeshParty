@@ -17,7 +17,6 @@ using Unity.VisualScripting;
 
 public class GenerateSpot : MonoBehaviour
 {
-    public bool TestConfirmGeneration; 
     public bool isAcopy = false;
     private NetworkRunner _runner;
 
@@ -343,8 +342,8 @@ public class GenerateSpot : MonoBehaviour
         manager.updateSelected(id, URLID);
         if (_networkObject.HasStateAuthority == false)
         {
-            _networkObject.RequestStateAuthority();
-            _networkObject.AssignInputAuthority(_runner.LocalPlayer);
+            takeOwnership(); //this is sawyers function that is taking authority and nothing is stopping it!!!
+
         }        
         
         isselsected = true;
@@ -466,19 +465,43 @@ public class GenerateSpot : MonoBehaviour
 
     bool PanelLock;
 
+    [ContextMenu("Confirm Generation")]
+    private void confirmGenFromEditor()
+    {
+        ConfirmGeneration();
+        _generateSpotRPC.CallConfirmGenerationRPC();
+    }
+    
+    
+    [ContextMenu("Request ownership")]
+    private void takeOwnership()
+    {
+        StartCoroutine(GimmeYoAuthority()); 
+    }
 
+    IEnumerator GimmeYoAuthority()
+    {
+        while (!_networkObject.HasInputAuthority || !_networkObject.HasStateAuthority)
+        {
+            if (!_networkObject.HasStateAuthority)
+            {
+                _networkObject.RequestStateAuthority();
+                yield return 0.5f;
+            }
+            else
+            {
+                _networkObject.AssignInputAuthority(_runner.LocalPlayer);
+                yield return 0.5f;
+            }
+             
+        }
+    }
 
 
 
     // Update is called once per frame
     void Update()
     {
-        if (TestConfirmGeneration)
-        {
-            ConfirmGeneration();
-            _generateSpotRPC.CallConfirmGenerationRPC();
-            TestConfirmGeneration = false; 
-        }
         
         if (Prompt != oldPrompt)
         {

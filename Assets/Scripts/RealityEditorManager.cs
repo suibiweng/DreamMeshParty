@@ -55,7 +55,7 @@ public class RealityEditorManager : MonoBehaviour
          // Debug.Log("The Initial Cubes URLID is: " + InitialGenCube.GetComponent<GenerateSpot>().URLID);
 
     } 
-
+    
 
     public void updateSelected(int id,string IDurl)
     {

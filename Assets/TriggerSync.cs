@@ -30,8 +30,10 @@ public class TriggerSync : NetworkBehaviour
 
     public void LightTriggerRPC(){
 
+        Debug.Log("Called Output RPC : Light trigger before");
 
         outputComponent.ToggleLightState();
+        Debug.Log("Called Output RPC : Light trigger before");
 
 
     }
@@ -40,8 +42,10 @@ public class TriggerSync : NetworkBehaviour
 
     public void SoundTriggerRPC(){
 
+        Debug.Log("Called Output RPC : Sound trigger before");
 
         outputComponent.ToggleSoundState();
+        Debug.Log("Called Output RPC : Sound trigger after");
 
 
     }
@@ -51,8 +55,9 @@ public class TriggerSync : NetworkBehaviour
 
     public void GunTriggerRPC(){
 
-
+        Debug.Log("Called Output RPC : Gun trigger before");
         outputComponent.TogglegunState();
+        Debug.Log("Called Output RPC: Gun trigger after");
 
 
     }
@@ -80,7 +85,7 @@ public class TriggerSync : NetworkBehaviour
 
     }
 
-
+    [ContextMenu("Call CallLightRPC")]
     public void CallLightRPC()
     {
         // Call the RPC on all clients
@@ -93,7 +98,7 @@ public class TriggerSync : NetworkBehaviour
 
 
 
-    
+    [ContextMenu("Call CallSoundRPC")]
     public void CallSoundRPC()
     {
         // Call the RPC on all clients
@@ -104,8 +109,7 @@ public class TriggerSync : NetworkBehaviour
         
     }
 
-
-
+    [ContextMenu("Call CallGunRPC")]
     public void CallGunRPC()
     {
         // Call the RPC on all clients
