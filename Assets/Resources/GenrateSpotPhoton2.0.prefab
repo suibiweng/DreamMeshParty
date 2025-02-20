@@ -16685,6 +16685,7 @@ MonoBehaviour:
   URLIDText: {fileID: 3555927815040261800}
   PromtText: {fileID: 6516043566525104563}
   LitseningText: {fileID: 2588221508605813463}
+  Text_Litsening: {fileID: 0}
   UiMenu: {fileID: 7926898677739198859}
   controlPanels:
   - {fileID: 0}

@@ -48,6 +48,8 @@ public class GenerateSpot : MonoBehaviour
     //Control Interface
     public TMP_Text PromtText;
     public Text LitseningText;
+
+    public TMP_Text Text_Litsening;
     
     // UI panel;
     public GameObject UiMenu;
@@ -268,7 +270,7 @@ public class GenerateSpot : MonoBehaviour
 
     public void initAdd()
     {
-      ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
+   //   ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
         loadingParticles.Play();
         isMaterialChanging = false;
         // VoicePanel.SetActive(true);
@@ -459,7 +461,11 @@ public class GenerateSpot : MonoBehaviour
 
     public void onLitsenClick()
     {
-        Prompt = LitseningText.text;
+      if(LitseningText!=null)  Prompt = LitseningText.text;
+
+
+      Prompt=Text_Litsening.text;
+        
 
     }
 
@@ -744,11 +750,18 @@ public class GenerateSpot : MonoBehaviour
     public void GenrateModel()
     {
         manager.promtGenerateModel(id, Prompt, URLID);
+        manager.sendCommand("ShapeE");
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        
+        
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
 
         DremmeshPrompt=Prompt;
+
+
+        
 
         // PreViewQuad.SetActive(true);
         // loadingIcon.SetActive(true);

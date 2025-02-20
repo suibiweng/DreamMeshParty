@@ -18975,7 +18975,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dcb6804a1b3c9d489cecdeb11023159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestConfirmGeneration: 0
   isAcopy: 0
   id: 0
   downloadURL: http://192.168.1.139:8000/
@@ -18989,6 +18988,7 @@ MonoBehaviour:
   URLIDText: {fileID: 7673356705318334319}
   PromtText: {fileID: 1744017377824426109}
   LitseningText: {fileID: 8020569761399667563}
+  Text_Litsening: {fileID: 0}
   UiMenu: {fileID: 871810884680015161}
   controlPanels:
   - {fileID: 0}
@@ -19322,6 +19322,7 @@ MonoBehaviour:
   Left: {fileID: 0}
   Right: {fileID: 0}
   audioUrl: https://your-audio-url.com/audio.wav
+  theGrabingController: {fileID: 0}
 --- !u!114 &74486197067409030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19335,6 +19336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outputComponent: {fileID: 6426207975900063567}
+  interactableAssets: {fileID: 0}
 --- !u!114 &176731231799175087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19357,6 +19359,7 @@ MonoBehaviour:
   objectRigidbody: {fileID: 3471819366124012386}
   debugobject: 0
   setPhysic: 0
+  getTheData: 0
 --- !u!114 &4951649523192139036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61961,7 +61964,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactableAssets: {fileID: 6192821148784459004}
-  light: {fileID: 0}
+  lamplight: {fileID: 0}
   gun: {fileID: 0}
   Sound: {fileID: 0}
   lightOnDuration: 1
