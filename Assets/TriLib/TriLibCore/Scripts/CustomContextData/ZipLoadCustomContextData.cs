@@ -1,35 +1,45 @@
 ﻿using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
-using TriLibCore.General;
 
 namespace TriLibCore
 {
-    /// <summary>Represents a class passed as the custom data to the Asset Loader Context when loading Models from Zip files.</summary>
+    /// <summary>
+    /// Provides additional context data to the <see cref="AssetLoaderContext"/> when loading models 
+    /// from a <c>.zip</c> archive. This includes references to the <see cref="ZipFile"/>, 
+    /// its corresponding <see cref="ZipEntry"/>, the underlying <see cref="Stream"/>, 
+    /// and optional callbacks for errors and material-loading events.
+    /// </summary>
     public class ZipLoadCustomContextData
     {
         /// <summary>
-        /// The zip file to be used.
+        /// The <see cref="ZipFile"/> object representing the entire archive from which the model is extracted.
         /// </summary>
         public ZipFile ZipFile;
 
         /// <summary>
-        /// The model zip entry inside the zip file.
+        /// The individual <see cref="ZipEntry"/> that corresponds to the model file within the archive.
+        /// May be <c>null</c> if searching for recognized model extensions or if multiple entries are processed.
         /// </summary>
         public ZipEntry ZipEntry;
 
         /// <summary>
-        /// The stream used to load the zip file.
+        /// The <see cref="Stream"/> used to access the contents of the .zip file. 
+        /// This is opened at the start of loading and may be closed automatically 
+        /// once loading is finished, depending on <see cref="AssetLoaderOptions.CloseStreamAutomatically"/>.
         /// </summary>
         public Stream Stream;
 
         /// <summary>
-        /// The original error event passed to the Zip loading method.
+        /// A reference to the original error callback passed during zip-based model loading, 
+        /// allowing custom handlers to be invoked if an error occurs at any point in the load process.
         /// </summary>
         public Action<IContextualizedError> OnError;
 
         /// <summary>
-        /// The original materials load event passed to the Zip loading method.
+        /// A reference to the original material load callback passed during zip-based model loading. 
+        /// This is invoked on the main thread once all model materials, textures, and other resources 
+        /// have successfully loaded.
         /// </summary>
         public Action<AssetLoaderContext> OnMaterialsLoad;
     }

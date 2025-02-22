@@ -39,7 +39,7 @@ using TMPro;
                 return _label;
             }
         }
-        private TMP_Text _label;
+        public TMP_Text _label;
 
         [Header("Listen Settings")]
         [Tooltip("Various voice services to be observed")]

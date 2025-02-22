@@ -5,71 +5,72 @@ using UnityEngine;
 
 namespace TriLibCore.Editor
 {
+    /// <summary>
+    /// Represents a series of Material Mapper utility methods.
+    /// </summary>
+    [InitializeOnLoad]
     public static class CheckMappers
     {
-        [InitializeOnEnterPlayMode]
-        [InitializeOnLoadMethod]
-        public static void Initialize()
+        [MenuItem("Tools/TriLib/Select Material Mappers based on Rendering Pipeline")]
+        private static void AutoSelect()
         {
-            var hasAnyMapper = false;
+            string materialMapperName;
+            for (var i = 0; i < MaterialMapper.RegisteredMappers.Count; i++)
+            {
+                materialMapperName = MaterialMapper.RegisteredMappers[i];
+                TriLibSettings.SetBool(materialMapperName, false);
+            }
+            materialMapperName = AssetLoader.GetCompatibleMaterialMapperName();
+            SelectMapper(materialMapperName);
+        }
+
+        /// <summary>
+        /// Enables a compatible Material Mapper if none is found.
+        /// </summary>
+        public static void EnableCompatibleMaterialMapperIfNeeded()
+        {
+            string materialMapperName;
+            for (var i = 0; i < MaterialMapper.RegisteredMappers.Count; i++)
+            {
+                materialMapperName = MaterialMapper.RegisteredMappers[i];
+                if (TriLibSettings.GetBool(materialMapperName, false))
+                {
+                    return;
+                }
+            }
+            EnableCompatibleMaterialMapper();
+        }
+
+        /// <summary>
+        /// Tries to find the best Material Mapper depending on the Rendering Pipeline.
+        /// </summary>
+        public static void EnableCompatibleMaterialMapper()
+        {
+            var usingMaterialMapper = false;
             for (var i = 0; i < MaterialMapper.RegisteredMappers.Count; i++)
             {
                 var materialMapperName = MaterialMapper.RegisteredMappers[i];
                 if (TriLibSettings.GetBool(materialMapperName))
                 {
-                    hasAnyMapper = true;
+                    usingMaterialMapper = true;
                     break;
                 }
             }
-
-            if (!hasAnyMapper)
+            if (!usingMaterialMapper)
             {
-                string materialMapper;
-                if (GraphicsSettingsUtils.IsUsingHDRPPipeline)
-                {
-                    materialMapper = "HDRPMaterialMapper";
-                }
-                else if (GraphicsSettingsUtils.IsUsingUniversalPipeline)
-                {
-                    materialMapper = "UniversalRPMaterialMapper";
-                }
-                else
-                {
-                    materialMapper = "StandardMaterialMapper";
-                }
-                Debug.Log($"TriLib is configured to use the '{materialMapper}' Material Mapper. If you want to use different Material Mappers, you can change this setting on the Project Settings/TriLib area.");
-                TriLibSettings.SetBool(materialMapper, true);
+                var materialMapperName = AssetLoader.GetCompatibleMaterialMapperName();
+                SelectMapper(materialMapperName);
             }
         }
 
-        [MenuItem("Tools/TriLib/Select Material Mappers based on Rendering Pipeline")]
-        public static void AutoSelect()
+        static CheckMappers()
         {
-            for (var i = 0; i < MaterialMapper.RegisteredMappers.Count; i++)
-            {
-                var materialMapperName = MaterialMapper.RegisteredMappers[i];
-                TriLibSettings.SetBool(materialMapperName, false);
-            }
-
-            string materialMapper;
-            if (GraphicsSettingsUtils.IsUsingHDRPPipeline)
-            {
-                materialMapper = "HDRPMaterialMapper";
-            }
-            else if (GraphicsSettingsUtils.IsUsingUniversalPipeline)
-            {
-                materialMapper = "UniversalRPMaterialMapper";
-            }
-            else
-            {
-                materialMapper = "StandardMaterialMapper";
-            }
-            SelectMapper(materialMapper);
+            EnableCompatibleMaterialMapperIfNeeded();
         }
 
         public static void SelectMapper(string materialMapper)
         {
-            Debug.Log($"TriLib is configured to use the '{materialMapper}' Material Mapper. If you want to use different Material Mappers, you can change this setting on the Project Settings/TriLib area.");
+            Debug.Log($"TriLib is configured to use the '{materialMapper}' Material Mapper. If you want to use different Material Mappers, you can change this setting on the 'Edit->Project Settings->TriLib' menu.");
             TriLibSettings.SetBool(materialMapper, true);
         }
     }

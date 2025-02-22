@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 namespace TriLibCore.Playables
 {
 
-    /// <summary>Represents a Playable used to play Animations from its Animation Clip List using names or indices as parameters.</summary>
+    /// <summary>This is a Playable used to play Animations from its Animation Clip List using names or indices as parameters.</summary>
     public class SimpleAnimationPlayer : MonoBehaviour
     {
         /// <summary>

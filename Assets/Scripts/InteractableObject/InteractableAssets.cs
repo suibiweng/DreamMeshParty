@@ -155,7 +155,7 @@ public class InteractableAssets : MonoBehaviour
         audioUrl=generateSpot.downloadURL+generateSpot.URLID+"_sfx.wav";
 
 
-        generateSpot.toLockthePosition(!interactableToggle.isOn);
+     //   generateSpot.toLockthePosition(!interactableToggle.isOn);
 
         if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger ) ){
 

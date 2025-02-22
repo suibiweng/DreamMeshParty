@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Collections;
 using TriLibCore.General;
 using TriLibCore.Mappers;
 using UnityEngine;
 
 namespace TriLibCore.URP.Mappers
 {
-    /// <summary>Represents a Material Mapper that converts TriLib Materials into Unity UniversalRP Materials.</summary>
+    /// <summary>
+    /// Converts TriLib virtual materials into Unity Universal Render Pipeline (URP) materials 
+    /// by processing various texture maps and material properties through an asynchronous coroutine pipeline.
+    /// </summary>
     [Serializable]
     [CreateAssetMenu(menuName = "TriLib/Mappers/Material/Universal RP Material Mapper", fileName = "UniversalRPMaterialMapper")]
     public class UniversalRPMaterialMapper : MaterialMapper
     {
-        private bool _isCompatible;
-
         #region Standard
         public override Material MaterialPreset => Resources.Load<Material>("Materials/UniversalRP/Standard/TriLibUniversalRP");
 
@@ -26,79 +28,120 @@ namespace TriLibCore.URP.Mappers
 
         public override bool ExtractMetallicAndSmoothness => false;
 
+        public override bool UsesCoroutines => true;
+
         public override bool IsCompatible(MaterialMapperContext materialMapperContext)
         {
-            return _isCompatible;
+            return TriLibSettings.GetBool("UniversalRPMaterialMapper", false);
         }
 
-        private void Awake()
-        {
-            _isCompatible = TriLibSettings.GetBool("UniversalRPMaterialMapper");
-        }
-
-        public override void Map(MaterialMapperContext materialMapperContext)
+        public override IEnumerable MapCoroutine(MaterialMapperContext materialMapperContext)
         {
             materialMapperContext.VirtualMaterial = new VirtualMaterial();
 
-            CheckTransparencyMapTexture(materialMapperContext);
-            CheckSpecularMapTexture(materialMapperContext);
-
-            CheckDiffuseMapTexture(materialMapperContext);
-            CheckDiffuseColor(materialMapperContext);
-
-            CheckNormalMapTexture(materialMapperContext);
-
-            CheckEmissionColor(materialMapperContext);
-            CheckEmissionMapTexture(materialMapperContext);
-
-            CheckOcclusionMapTexture(materialMapperContext);
-
-            CheckGlossinessMapTexture(materialMapperContext);
-            CheckGlossinessValue(materialMapperContext);
-
-            CheckMetallicGlossMapTexture(materialMapperContext);
-            CheckMetallicValue(materialMapperContext);
-
+            foreach (var item in CheckTransparencyMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckSpecularMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckDiffuseMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckDiffuseColor(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckNormalMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckEmissionColor(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckEmissionMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckOcclusionMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckGlossinessMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckGlossinessValue(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckMetallicGlossMapTexture(materialMapperContext))
+            {
+                yield return item;
+            }
+            foreach (var item in CheckMetallicValue(materialMapperContext))
+            {
+                yield return item;
+            }
+            if (materialMapperContext.Context.Options.LoadDisplacementTextures)
+            {
+                foreach (var item in CheckDisplacementTexture(materialMapperContext))
+                {
+                    yield return item;
+                }
+            }
             BuildMaterial(materialMapperContext);
-            //materialMapperContext.AddPostProcessingActionToMainThread(BuildMaterial, materialMapperContext);
         }
 
-        private void CheckDiffuseMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckDiffuseMapTexture(MaterialMapperContext materialMapperContext)
         {
             var diffuseTexturePropertyName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.DiffuseMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(diffuseTexturePropertyName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.Diffuse, textureValue, CheckTextureOffsetAndScaling, ApplyDiffuseMapTexture);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.Diffuse, textureValue, CheckTextureOffsetAndScalingCoroutine, ApplyDiffuseMapTexture))
+            {
+                yield return item;
+            }
         }
 
-        private void ApplyDiffuseMapTexture(TextureLoadingContext textureLoadingContext)
+        private IEnumerable ApplyDiffuseMapTexture(TextureLoadingContext textureLoadingContext)
         {
             if (textureLoadingContext.UnityTexture != null)
             {
                 textureLoadingContext.Context.AddUsedTexture(textureLoadingContext.UnityTexture);
             }
             textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_BaseMap", textureLoadingContext.UnityTexture, GenericMaterialProperty.DiffuseMap);
+            yield break;
         }
 
-        private void CheckGlossinessValue(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckGlossinessValue(MaterialMapperContext materialMapperContext)
         {
-            var value = materialMapperContext.Material.GetGenericFloatValueMultiplied(GenericMaterialProperty.Glossiness, materialMapperContext);
+            var value = materialMapperContext.Material.GetGenericFloatValueMultiplied(GenericMaterialProperty.GlossinessOrRoughness, materialMapperContext);
             materialMapperContext.VirtualMaterial.SetProperty("_Smoothness", value);
+            yield break;
         }
 
-        private void CheckMetallicValue(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckMetallicValue(MaterialMapperContext materialMapperContext)
         {
             var value = materialMapperContext.Material.GetGenericFloatValueMultiplied(GenericMaterialProperty.Metallic, materialMapperContext);
             materialMapperContext.VirtualMaterial.SetProperty("_Metallic", value);
+            yield break;
         }
 
-        private void CheckEmissionMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckEmissionMapTexture(MaterialMapperContext materialMapperContext)
         {
             var emissionTexturePropertyName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.EmissionMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(emissionTexturePropertyName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.Emission, textureValue, CheckTextureOffsetAndScaling, ApplyEmissionMapTexture);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.Emission, textureValue, CheckTextureOffsetAndScalingCoroutine, ApplyEmissionMapTexture))
+            {
+                yield return item;
+            }
         }
 
-        private void ApplyEmissionMapTexture(TextureLoadingContext textureLoadingContext)
+        private IEnumerable ApplyEmissionMapTexture(TextureLoadingContext textureLoadingContext)
         {
             if (textureLoadingContext.UnityTexture == null && textureLoadingContext.MaterialMapperContext.VirtualMaterial.HasEmissionColor)
             {
@@ -119,16 +162,20 @@ namespace TriLibCore.URP.Mappers
                 textureLoadingContext.MaterialMapperContext.VirtualMaterial.DisableKeyword("_EMISSION");
                 textureLoadingContext.MaterialMapperContext.VirtualMaterial.GlobalIlluminationFlags = MaterialGlobalIlluminationFlags.EmissiveIsBlack;
             }
+            yield break;
         }
 
-        private void CheckNormalMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckNormalMapTexture(MaterialMapperContext materialMapperContext)
         {
             var normalMapTexturePropertyName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.NormalMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(normalMapTexturePropertyName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.NormalMap, textureValue, CheckTextureOffsetAndScaling, ApplyNormalMapTexture);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.NormalMap, textureValue, CheckTextureOffsetAndScalingCoroutine, ApplyNormalMapTexture))
+            {
+                yield return item;
+            }
         }
 
-        private void ApplyNormalMapTexture(TextureLoadingContext textureLoadingContext)
+        private IEnumerable ApplyNormalMapTexture(TextureLoadingContext textureLoadingContext)
         {
             if (textureLoadingContext.UnityTexture != null)
             {
@@ -138,37 +185,56 @@ namespace TriLibCore.URP.Mappers
             if (textureLoadingContext.UnityTexture != null)
             {
                 textureLoadingContext.MaterialMapperContext.VirtualMaterial.EnableKeyword("_NORMALMAP");
-                textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_NormalScale", 1f);
+                var normalStrengthPropertyName = textureLoadingContext.MaterialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.NormalStrength);
+                if (textureLoadingContext.MaterialMapperContext.Material.HasProperty(normalStrengthPropertyName))
+                {
+                    var normalStrength = textureLoadingContext.MaterialMapperContext.Material.GetGenericFloatValueMultiplied(GenericMaterialProperty.NormalStrength, textureLoadingContext.MaterialMapperContext);
+                    textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_NormalScale", normalStrength);
+                }
+                else
+                {
+                    textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_NormalScale", 1f);
+                }
             }
             else
             {
                 textureLoadingContext.MaterialMapperContext.VirtualMaterial.DisableKeyword("_NORMALMAP");
             }
+            yield break;
         }
 
-        private void CheckTransparencyMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckTransparencyMapTexture(MaterialMapperContext materialMapperContext)
         {
             materialMapperContext.VirtualMaterial.HasAlpha |= materialMapperContext.Material.UsesAlpha;
             var transparencyTexturePropertyName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.TransparencyMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(transparencyTexturePropertyName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.Transparency, textureValue, CheckTextureOffsetAndScaling);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.Transparency, textureValue, CheckTextureOffsetAndScalingCoroutine))
+            {
+                yield return item;
+            }
         }
 
-        private void CheckSpecularMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckSpecularMapTexture(MaterialMapperContext materialMapperContext)
         {
             var specularTexturePropertyName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.SpecularMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(specularTexturePropertyName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.Specular, textureValue, CheckTextureOffsetAndScaling);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.Specular, textureValue, CheckTextureOffsetAndScalingCoroutine))
+            {
+                yield return item;
+            }
         }
 
-        private void CheckOcclusionMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckOcclusionMapTexture(MaterialMapperContext materialMapperContext)
         {
             var occlusionMapTextureName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.OcclusionMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(occlusionMapTextureName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.Occlusion, textureValue, CheckTextureOffsetAndScaling, ApplyOcclusionMapTexture);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.Occlusion, textureValue, CheckTextureOffsetAndScalingCoroutine, ApplyOcclusionMapTexture))
+            {
+                yield return item;
+            }
         }
 
-        private void ApplyOcclusionMapTexture(TextureLoadingContext textureLoadingContext)
+        private IEnumerable ApplyOcclusionMapTexture(TextureLoadingContext textureLoadingContext)
         {
             if (textureLoadingContext.Texture != null)
             {
@@ -183,23 +249,45 @@ namespace TriLibCore.URP.Mappers
             {
                 textureLoadingContext.MaterialMapperContext.VirtualMaterial.DisableKeyword("_OCCLUSIONMAP");
             }
+            yield break;
         }
 
-        private void CheckGlossinessMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckGlossinessMapTexture(MaterialMapperContext materialMapperContext)
         {
             var auxiliaryMapTextureName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.GlossinessOrRoughnessMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(auxiliaryMapTextureName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.GlossinessOrRoughness, textureValue, CheckTextureOffsetAndScaling);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.GlossinessOrRoughness, textureValue, CheckTextureOffsetAndScalingCoroutine, ApplyGlossinessMapTexture))
+            {
+                yield return item;
+            }
         }
 
-        private void CheckMetallicGlossMapTexture(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckMetallicGlossMapTexture(MaterialMapperContext materialMapperContext)
         {
             var metallicGlossMapTextureName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.MetallicMap);
             var textureValue = materialMapperContext.Material.GetTextureValue(metallicGlossMapTextureName);
-            LoadTextureWithCallbacks(materialMapperContext, TextureType.Metalness, textureValue, CheckTextureOffsetAndScaling, ApplyMetallicGlossMapTexture);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.Metalness, textureValue, CheckTextureOffsetAndScalingCoroutine, ApplyMetallicGlossMapTexture))
+            {
+                yield return item;
+            }
         }
 
-        private void ApplyMetallicGlossMapTexture(TextureLoadingContext textureLoadingContext)
+        private IEnumerable CheckDisplacementTexture(MaterialMapperContext materialMapperContext)
+        {
+            var displacementMapTextureName = materialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.DisplacementMap);
+            var textureValue = materialMapperContext.Material.GetTextureValue(displacementMapTextureName);
+            foreach (var item in LoadTextureWithCoroutineCallbacks(materialMapperContext, TextureType.Displacement, textureValue, CheckTextureOffsetAndScalingCoroutine, ApplyDisplacementTexture))
+            {
+                yield return item;
+            }
+        }
+
+        protected virtual IEnumerable ApplyGlossinessMapTexture(TextureLoadingContext textureLoadingContext)
+        {
+            yield break;
+        }
+
+        private IEnumerable ApplyMetallicGlossMapTexture(TextureLoadingContext textureLoadingContext)
         {
             if (textureLoadingContext.UnityTexture != null)
             {
@@ -208,15 +296,44 @@ namespace TriLibCore.URP.Mappers
             textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_MetallicGlossMap", textureLoadingContext.UnityTexture, GenericMaterialProperty.MetallicMap);
             if (textureLoadingContext.UnityTexture != null)
             {
-                textureLoadingContext.MaterialMapperContext.VirtualMaterial.EnableKeyword("_METALLICGLOSSMAP");
+                textureLoadingContext.MaterialMapperContext.VirtualMaterial.EnableKeyword("METALLICSPECGLOSSMAP");
             }
             else
             {
-                textureLoadingContext.MaterialMapperContext.VirtualMaterial.DisableKeyword("_METALLICGLOSSMAP");
+                textureLoadingContext.MaterialMapperContext.VirtualMaterial.DisableKeyword("METALLICSPECGLOSSMAP");
             }
+            yield break;
         }
 
-        private void CheckEmissionColor(MaterialMapperContext materialMapperContext)
+        private IEnumerable ApplyDisplacementTexture(TextureLoadingContext textureLoadingContext)
+        {
+            if (textureLoadingContext.UnityTexture != null)
+            {
+                textureLoadingContext.Context.AddUsedTexture(textureLoadingContext.UnityTexture);
+            }
+            textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_ParallaxMap", textureLoadingContext.UnityTexture, GenericMaterialProperty.DisplacementMap);
+            if (textureLoadingContext.UnityTexture != null)
+            {
+                textureLoadingContext.MaterialMapperContext.VirtualMaterial.EnableKeyword("_PARALLAXMAP");
+                var displacementStrengthPropertyName = textureLoadingContext.MaterialMapperContext.Material.GetGenericPropertyName(GenericMaterialProperty.DisplacementStrength);
+                if (textureLoadingContext.MaterialMapperContext.Material.HasProperty(displacementStrengthPropertyName))
+                {
+                    var normalStrength = textureLoadingContext.MaterialMapperContext.Material.GetGenericFloatValueMultiplied(GenericMaterialProperty.DisplacementStrength, textureLoadingContext.MaterialMapperContext);
+                    textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_Parallax", normalStrength);
+                }
+                else
+                {
+                    textureLoadingContext.MaterialMapperContext.VirtualMaterial.SetProperty("_Parallax", 0f);
+                }
+            }
+            else
+            {
+                textureLoadingContext.MaterialMapperContext.VirtualMaterial.DisableKeyword("_PARALLAXMAP");
+            }
+            yield break;
+        }
+
+        private IEnumerable CheckEmissionColor(MaterialMapperContext materialMapperContext)
         {
             var value = materialMapperContext.Material.GetGenericColorValueMultiplied(GenericMaterialProperty.EmissionColor, materialMapperContext);
             materialMapperContext.VirtualMaterial.SetProperty("_EmissionColor", materialMapperContext.Context.Options.ApplyGammaCurveToMaterialColors ? value.gamma : value);
@@ -232,14 +349,16 @@ namespace TriLibCore.URP.Mappers
                 materialMapperContext.VirtualMaterial.DisableKeyword("_EMISSION");
                 materialMapperContext.VirtualMaterial.GlobalIlluminationFlags = MaterialGlobalIlluminationFlags.EmissiveIsBlack;
             }
+            yield break;
         }
 
-        private void CheckDiffuseColor(MaterialMapperContext materialMapperContext)
+        private IEnumerable CheckDiffuseColor(MaterialMapperContext materialMapperContext)
         {
             var value = materialMapperContext.Material.GetGenericColorValueMultiplied(GenericMaterialProperty.DiffuseColor, materialMapperContext);
             value.a *= materialMapperContext.Material.GetGenericFloatValueMultiplied(GenericMaterialProperty.AlphaValue);
             materialMapperContext.VirtualMaterial.HasAlpha |= value.a < 1f;
             materialMapperContext.VirtualMaterial.SetProperty("_BaseColor", materialMapperContext.Context.Options.ApplyGammaCurveToMaterialColors ? value.gamma : value);
+            yield break;
         }
 
         public override string GetDiffuseTextureName(MaterialMapperContext materialMapperContext)

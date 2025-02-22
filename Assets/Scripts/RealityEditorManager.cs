@@ -23,6 +23,7 @@ public class RealityEditorManager : MonoBehaviour
     public Transform PlayerCamera; 
     public string uploadPort,downloadPort;
     public string ServerURL;
+    private string comandURL;
     
     public Dictionary<string,GameObject> GenCubesDic;
 
@@ -43,7 +44,9 @@ public class RealityEditorManager : MonoBehaviour
 
         osc = FindObjectOfType<OSC>();
         _runner = FindObjectOfType<NetworkRunner>(); 
+        comandURL=ServerURL+":"+uploadPort+"/";
         ServerURL+=":"+downloadPort+"/";
+        //comandURL+=":"+uploadPort+"/";
         //GenCubes= new List<GameObject>();
         GenCubesDic=new Dictionary<string,GameObject>();
         // IDs=GenCubes.Count;
@@ -84,6 +87,12 @@ public class RealityEditorManager : MonoBehaviour
     {
 
         if(isFireScene) return;
+
+
+        if(Input.GetKeyDown(KeyCode.F1)){
+           createSpotOnMenu();
+        }
+
         
         //OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
         // if(OVRInput.GetUp(OVRInput.RawButton.A)){
@@ -129,7 +138,7 @@ public class RealityEditorManager : MonoBehaviour
     {
         // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
         GameObject gcube = SpawnNetworkObject(LeftHand.position, Quaternion.identity, GenerateSpotPrefab); 
-        gcube.GetComponent<GenerateSpot>().id=IDs;
+       // gcube.GetComponent<GenerateSpot>().id=IDs;
         string urlid=TimestampGenerator.GetTimestamp(); 
         gcube.GetComponent<GenerateSpot>().URLID=urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
@@ -302,7 +311,8 @@ public class RealityEditorManager : MonoBehaviour
     }
 
 public void sendCommand(string command){
-    StartCoroutine(SendtheCommand(ServerURL+"/commad",command,selectedIDUrl,GenCubesDic[selectedIDUrl].GetComponent<GenerateSpot>().Prompt));
+
+    StartCoroutine(SendtheCommand(comandURL+"command",command,selectedIDUrl,GenCubesDic[selectedIDUrl].GetComponent<GenerateSpot>().Prompt));
 }
 
 

@@ -1,32 +1,42 @@
 ﻿using System.Collections.Generic;
 using TriLibCore.General;
-using TriLibCore.Interfaces;
 using TriLibCore.Utils;
 using UnityEngine;
 
 namespace TriLibCore.Mappers
 {
-    /// <summary>Represents a Mapper that searches for a root bone on the Models by the bone names.</summary>
+    /// <summary>
+    /// Implements a root bone selection strategy by searching for a matching bone name 
+    /// within the loaded model’s hierarchy. This mapper iterates over a predefined list of 
+    /// candidate root bone names (e.g., "Hips", "Bip01", "Pelvis") and returns the first match 
+    /// found based on the configured string comparison settings.
+    /// </summary>
     [CreateAssetMenu(menuName = "TriLib/Mappers/Root Bone/By Name Root Bone Mapper", fileName = "ByNameRootBoneMapper")]
     public class ByNameRootBoneMapper : RootBoneMapper
     {
         /// <summary>
-        /// String comparison mode to use on the mapping.
+        /// Specifies the string comparison mode for matching loaded GameObject names 
+        /// against the candidate root bone names.
         /// </summary>
+        /// <remarks>
+        /// The "left" value is the name of the loaded GameObject and the "right" value is one of 
+        /// the candidate names specified in <see cref="RootBoneNames"/>.
+        /// </remarks>
         [Header("Left = Loaded GameObjects Names, Right = Names in RootBoneNames")]
         public StringComparisonMode StringComparisonMode;
 
         /// <summary>
-        /// Is the string comparison case insensitive?
+        /// Indicates whether the string comparisons for matching root bone names should be case insensitive.
         /// </summary>
         public bool CaseInsensitive = true;
 
         /// <summary>
-        /// Root bone names to be searched.
+        /// A list of candidate root bone names to search for in the loaded model. 
+        /// Examples might include "Hips", "Bip01", and "Pelvis".
         /// </summary>
         public string[] RootBoneNames = { "Hips", "Bip01", "Pelvis" };
 
-        /// <inheritdoc />        
+        /// <inheritdoc />
         public override Transform Map(AssetLoaderContext assetLoaderContext, IList<Transform> bones)
         {
             if (RootBoneNames != null)
@@ -44,6 +54,19 @@ namespace TriLibCore.Mappers
             return base.Map(assetLoaderContext, bones);
         }
 
+        /// <summary>
+        /// Searches through the given list of transforms for a GameObject whose name matches the provided target name.
+        /// </summary>
+        /// <param name="transforms">
+        /// A list of candidate transforms that may represent bones in the model.
+        /// </param>
+        /// <param name="right">
+        /// The target name to search for.
+        /// </param>
+        /// <returns>
+        /// The first <see cref="Transform"/> whose name matches the target (using the configured string comparison),
+        /// or <c>null</c> if no match is found.
+        /// </returns>
         private Transform FindDeepChild(IList<Transform> transforms, string right)
         {
             for (var i = 0; i < transforms.Count; i++)
@@ -54,7 +77,6 @@ namespace TriLibCore.Mappers
                     return transform;
                 }
             }
-
             return null;
         }
     }

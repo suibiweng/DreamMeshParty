@@ -184,16 +184,14 @@ public class GenerateSpot : MonoBehaviour
 
             grabInteractable.Disable();
 
-           // grabFreeTransformer.enabled=false;
-// _grabbable.enabled = false;
-            //
+
         }else{
 
             
-          //  grabFreeTransformer.enabled=true;
+
 
             grabInteractable.Enable();
-            //
+
 
 
         }
@@ -278,7 +276,7 @@ public class GenerateSpot : MonoBehaviour
 
     void initReconstruction()
     {
-        ScanningPanel.SetActive(true);
+        if(ScanningPanel!=null)  ScanningPanel.SetActive(true);
     }
 
 
@@ -289,7 +287,7 @@ public class GenerateSpot : MonoBehaviour
 
     void CloseEditMenu()
     {
-        EditMenu.SetActive(false);
+      if(EditMenu!=null) EditMenu.SetActive(false);
     }
 
   bool isErasing=false;
@@ -361,20 +359,12 @@ public class GenerateSpot : MonoBehaviour
         manager.updateSelected(id, URLID);
         isselsected = true;
         Debug.Log("should be requesting the transform and view in grab");
-        //URLIDText.text = "should be requesting the transform and view in grab";
-        // _realtimeTransform.RequestOwnership();
-        // _realtimeView.RequestOwnershipOfSelfAndChildren();
-        //  Outlinebox.line_renderer=true;
+  
     }
 
     public void Release()
     {
-        // Debug.Log("The grabbable script.enabled is: " + GetComponent<Grabbable>().enabled);
 
-        // Debug.Log("should be releasing the cube");
-
-        // URLIDText.text = "should be releasing the cube";
-        // Outlinebox.line_renderer=false;
 
     }
     public void Copy()
@@ -417,9 +407,7 @@ public class GenerateSpot : MonoBehaviour
             {
                 if(!originTex){
                     originTex=true;
-
-
-                     OriginTex=TargetMaterial.GetTexture("_MainTex");
+                    OriginTex=TargetMaterial.GetTexture("_MainTex");
                      
                 }
 
@@ -514,6 +502,16 @@ public class GenerateSpot : MonoBehaviour
             _photonDataSync.UpdatePrompt(Prompt);
         }
         oldPrompt = Prompt; 
+
+
+        if(Input.GetKeyDown(KeyCode.F3))
+        {
+
+             ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + "20250221165209" + "_ShapE.zip"));
+          
+
+        }
+
         
         // if (_realtimeView.isOwnedLocallySelf)
         // {
@@ -545,8 +543,8 @@ public class GenerateSpot : MonoBehaviour
 
             case GenerateType.Add:
                 setMaterialforGenrated(TargetObject.transform,VertexColor);
-                EraseBtn.gameObject.SetActive(false);
-                ColorBtn.SetActive(true);
+               if(EraseBtn!=null) EraseBtn.gameObject.SetActive(false);
+               if(ColorBtn!=null) ColorBtn.SetActive(true);
 
                 break;
 
@@ -577,17 +575,17 @@ public class GenerateSpot : MonoBehaviour
 
                 if(!PanelLock){
                     PanelLock=true;
-                    ErasingPanel.SetActive(true);
+                  if(ErasingPanel!=null) ErasingPanel.SetActive(true);
                 }
 
                    TargetMaterial.SetTexture("_MainTex", WhiteTex);
                    ProjectorMeterial.SetFloat("_Amt",Britheness.value);
 
-             }else{
+                }else{
                     PanelLock=false;
                     ErasingPanel.SetActive(false);
-                 TargetMaterial.SetTexture("_MainTex", OriginTex);
-             }
+                    TargetMaterial.SetTexture("_MainTex", OriginTex);
+                }
 
                 
 
@@ -956,6 +954,20 @@ public class GenerateSpot : MonoBehaviour
                 }
 
             }
+
+            if(url.Contains("ShapE")){
+
+                if(!promptGenrated)
+                {
+                    promptGenrated=true;
+                    downloadModel(url,TargetObject);
+                }
+
+            }
+
+
+
+
 
             if (url.Contains("inpainting")){
 

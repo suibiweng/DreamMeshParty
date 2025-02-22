@@ -2,15 +2,26 @@
 
 namespace TriLibCore.Mappers
 {
-    /// <summary>Represents a Mapper used to fill Animator Override Animation Clips.</summary>
+    /// <summary>
+    /// Provides a mechanism for applying an <see cref="AnimatorOverrideController"/> to the animator 
+    /// of a loaded model while processing animation clips. This mapper is designed to work with 
+    /// Animator Override Controllers, allowing you to override default animation clips with custom ones.
+    /// </summary>
     public class AnimatorOverrideAnimationClipMapper : AnimationClipMapper
     {
         /// <summary>
-        /// Animator controller override to use on the animator.
+        /// The Animator Override Controller to assign to the model’s <see cref="Animator"/>.
+        /// If not set, the mapper will not override the animator controller.
         /// </summary>
         public AnimatorOverrideController AnimatorOverrideController;
 
-        ///<inheritdoc />
+        /// <inheritdoc />
+        /// <remarks>
+        /// This method retrieves the <see cref="Animator"/> component from the root GameObject in the 
+        /// Asset Loader Context and assigns the specified <see cref="AnimatorOverrideController"/> to it.
+        /// If either the animator or the override controller is missing, a warning is issued (if enabled in the options)
+        /// and the original animation clips are returned unmodified.
+        /// </remarks>
         public override AnimationClip[] MapArray(AssetLoaderContext assetLoaderContext, AnimationClip[] sourceAnimationClips)
         {
             var animator = assetLoaderContext.RootGameObject.GetComponent<Animator>();
@@ -22,6 +33,7 @@ namespace TriLibCore.Mappers
                 }
                 return sourceAnimationClips;
             }
+
             animator.runtimeAnimatorController = AnimatorOverrideController;
             return sourceAnimationClips;
         }

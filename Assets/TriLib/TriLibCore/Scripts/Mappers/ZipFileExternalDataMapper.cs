@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using TriLibCore.Utils;
 
 namespace TriLibCore.Mappers
 {
-    /// <summary>Represents a mapper class used to load external data from Zip files.</summary>
+    /// <summary>
+    /// Provides an external data mapping strategy for extracting data from Zip files.
+    /// This mapper searches through the entries of a Zip file (provided via custom context data)
+    /// for an entry whose short filename matches the specified <paramref name="originalFilename"/>.
+    /// If a match is found, it opens a stream for that Zip entry.
+    /// </summary>
     public class ZipFileExternalDataMapper : ExternalDataMapper
     {
         /// <inheritdoc />
@@ -15,21 +19,24 @@ namespace TriLibCore.Mappers
             var zipLoadCustomContextData = CustomDataHelper.GetCustomData<ZipLoadCustomContextData>(assetLoaderContext.CustomData);
             if (zipLoadCustomContextData == null)
             {
-                throw new Exception("Missing custom context data.");
+                finalPath = null;
+                return null;
             }
+
             var zipFile = zipLoadCustomContextData.ZipFile;
             if (zipFile == null)
             {
                 throw new Exception("Zip file instance is null.");
             }
-            var shortFileName = FileUtils.GetShortFilename(originalFilename).ToLowerInvariant();
+
+            var shortFileName = FileUtils.GetShortFilename(originalFilename).Trim().ToLowerInvariant();
             foreach (ZipEntry zipEntry in zipFile)
             {
                 if (!zipEntry.IsFile)
                 {
                     continue;
                 }
-                var checkingFileShortName = FileUtils.GetShortFilename(zipEntry.Name).ToLowerInvariant();
+                var checkingFileShortName = FileUtils.GetShortFilename(zipEntry.Name).Trim().ToLowerInvariant();
                 if (shortFileName == checkingFileShortName)
                 {
                     finalPath = zipFile.Name;

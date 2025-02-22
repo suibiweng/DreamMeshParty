@@ -141,8 +141,7 @@ namespace TriLibCore.SFB
                 {
                     result[i] = new ItemWithStream()
                     {
-                        Name = filenames[i]//,
-                        //Stream = File.OpenRead(filenames[i])
+                        Name = filenames[i]
                     };
                 }
                 return result;

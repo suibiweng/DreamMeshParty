@@ -25,8 +25,11 @@
                 float2 uv : TEXCOORD0;
             };
 
-            sampler2D _MainTex;
+            sampler2D _MainTex;            
+            float4 _MainTex_TexelSize;
+            float4 _Color;
             float4 _MainTex_ST;
+
 
             v2f vert(appdata v)
             {
@@ -38,8 +41,7 @@
 
             fixed4 frag(v2f i) : SV_Target
             {
-                float4 albedo = tex2D(_MainTex, i.uv);
-                return albedo;
+                return all(_MainTex_TexelSize.zw <= 16) ? _Color : tex2D(_MainTex, i.uv);
             }
             ENDCG
         }

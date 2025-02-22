@@ -4,15 +4,27 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 namespace TriLibCore.Samples
 {
     /// <summary>
-    /// Represents a sample that loads the "TriLibSample.obj" Model from the "Models" folder.
+    /// Provides a sample showing how to load the <c>TriLibSample.obj</c> model 
+    /// from a specific local path at runtime or in the Unity Editor.  
+    /// This example demonstrates basic usage of <see cref="TriLibCore.General.AssetLoader"/> 
+    /// for loading 3D assets from a file.
     /// </summary>
     public class LoadModelFromFileSample : MonoBehaviour
     {
         /// <summary>
-        /// Returns the path to the "TriLibSample.obj" Model.
+        /// Stores <see cref="AssetLoaderOptions"/> for configuring how TriLib loads the model 
+        /// (e.g., whether to import animations, materials, etc.).
+        /// </summary>
+        private AssetLoaderOptions _assetLoaderOptions;
+
+        /// <summary>
+        /// Gets the path to the <c>TriLibSample.obj</c> model.  
+        /// When in the Unity Editor, a direct path to the <c>Assets/TriLib</c> folder is returned; 
+        /// at runtime, a relative path is used.
         /// </summary>
         private string ModelPath
         {
@@ -25,64 +37,73 @@ namespace TriLibCore.Samples
 #endif
             }
         }
-
         /// <summary>
-        /// Cached Asset Loader Options instance.
+        /// Triggered if an error occurs during model loading, such as missing files or format issues.
         /// </summary>
-        private AssetLoaderOptions _assetLoaderOptions;
-
-        /// <summary>
-        /// Loads the "Models/TriLibSample.obj" Model using the given AssetLoaderOptions.
-        /// </summary>
-        /// <remarks>
-        /// You can create the AssetLoaderOptions by right clicking on the Assets Explorer and selecting "TriLib->Create->AssetLoaderOptions->Pre-Built AssetLoaderOptions".
-        /// </remarks>
-        private void Start()
-        {
-            if (_assetLoaderOptions == null)
-            {
-                _assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions(false, true);
-            }
-            AssetLoader.LoadModelFromFile(ModelPath, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, _assetLoaderOptions);
-        }
-
-        /// <summary>
-        /// Called when any error occurs.
-        /// </summary>
-        /// <param name="obj">The contextualized error, containing the original exception and the context passed to the method where the error was thrown.</param>
+        /// <param name="obj">
+        /// The contextualized error, containing both the original exception and the context 
+        /// passed to the method where the error was thrown.
+        /// </param>
         private void OnError(IContextualizedError obj)
         {
             Debug.LogError($"An error occurred while loading your Model: {obj.GetInnerException()}");
         }
 
         /// <summary>
-        /// Called when the Model loading progress changes.
+        /// Called when the model's meshes and hierarchy are first loaded, before materials and textures finish.  
+        /// The partially loaded <see cref="GameObject"/> is available through <c>assetLoaderContext.RootGameObject</c>.
         /// </summary>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
-        /// <param name="progress">The loading progress.</param>
-        private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
+        /// <param name="assetLoaderContext">The context used to load the model.</param>
+        /// <remarks>
+        /// If your application needs to do any setup or processing of the base mesh data 
+        /// before materials are applied, use this callback.
+        /// </remarks>
+        private void OnLoad(AssetLoaderContext assetLoaderContext)
         {
-            Debug.Log($"Loading Model. Progress: {progress:P}");
+            Debug.Log("Model loaded. Loading materials.");
         }
 
         /// <summary>
-        /// Called when the Model (including Textures and Materials) has been fully loaded.
+        /// Called when the model (including all textures and materials) has finished loading.  
+        /// The fully loaded <see cref="GameObject"/> is available through <c>assetLoaderContext.RootGameObject</c>.
         /// </summary>
-        /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
+        /// <param name="assetLoaderContext">The context that was used to load the model.</param>
+        /// <remarks>
+        /// After this callback, the model is completely ready, 
+        /// including its hierarchy, meshes, materials, and textures.
+        /// </remarks>
         private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
         {
             Debug.Log("Materials loaded. Model fully loaded.");
         }
 
         /// <summary>
-        /// Called when the Model Meshes and hierarchy are loaded.
+        /// Invoked when there is an update in the loading progress of the model (0% to 100%).
         /// </summary>
-        /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
-        private void OnLoad(AssetLoaderContext assetLoaderContext)
+        /// <param name="assetLoaderContext">The context used to load the model, which holds relevant loading information.</param>
+        /// <param name="progress">The current load progress, as a normalized value between 0.0 and 1.0.</param>
+        private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
         {
-            Debug.Log("Model loaded. Loading materials.");
+            Debug.Log($"Loading Model. Progress: {progress:P}");
+        }
+
+        /// <summary>
+        /// Automatically loads the <c>TriLibSample.obj</c> model once the script starts running, 
+        /// using either a user-defined <see cref="AssetLoaderOptions"/> or a default configuration.
+        /// </summary>
+        /// <remarks>
+        /// You can create <see cref="AssetLoaderOptions"/> by right-clicking in the Assets window 
+        /// and selecting <c>TriLib -&gt; Create -&gt; AssetLoaderOptions -&gt; Pre-Built AssetLoaderOptions</c>.
+        /// </remarks>
+        private void Start()
+        {
+            // Use a default set of loader options if none were set via the Inspector or elsewhere.
+            if (_assetLoaderOptions == null)
+            {
+                _assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions(false, true);
+            }
+            // Instruct TriLib to load the model from file, providing callbacks for progress, errors, etc.
+            AssetLoader.LoadModelFromFile(ModelPath, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, _assetLoaderOptions);
         }
     }
 }

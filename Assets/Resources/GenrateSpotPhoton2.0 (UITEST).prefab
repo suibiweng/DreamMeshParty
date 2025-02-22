@@ -437,7 +437,7 @@ Transform:
   m_GameObject: {fileID: 148142542391886219}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.06166666, y: -0.028333332, z: 0}
+  m_LocalPosition: {x: 0.06166666, y: -0.02833334, z: 0.0000000047683715}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9417,7 +9417,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u200B"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9498,6 +9498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a687bbc284fc814eadf83d835878d92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _label: {fileID: 5059679257659740836}
   _voiceServices: []
   _transcriptionColor: {r: 0, g: 0, b: 0, a: 1}
   _promptColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
@@ -22002,7 +22003,7 @@ Transform:
   m_GameObject: {fileID: 2577648896028792538}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.06166666, y: 0.028333332, z: 0}
+  m_LocalPosition: {x: -0.06166666, y: 0.028333344, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -23780,7 +23781,7 @@ Transform:
   m_GameObject: {fileID: 3023170841641210735}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.06166666, y: -0.028333332, z: 0}
+  m_LocalPosition: {x: -0.06166666, y: -0.02833334, z: 0.0000000047683715}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -35520,7 +35521,6 @@ GameObject:
   - component: {fileID: 2522915414242859527}
   - component: {fileID: 3310318391455922744}
   - component: {fileID: 8215722015013546561}
-  - component: {fileID: -4744697727004210800}
   m_Layer: 0
   m_Name: GenrateSpotPhoton2.0 (UITEST)
   m_TagString: GenerateSpot
@@ -36099,20 +36099,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireSpot: {fileID: 3310318391455922744}
   __fireLife: 0
---- !u!114 &-4744697727004210800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5047066174981070621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1541381998, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Guid:
-    RawGuidValue: 3aef3ecdfa0620648be7de33423acdc4
 --- !u!1 &5064020556461686479
 GameObject:
   m_ObjectHideFlags: 0
@@ -36427,7 +36413,7 @@ Transform:
   m_GameObject: {fileID: 5272221802745716324}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.06166666, y: 0.028333332, z: 0}
+  m_LocalPosition: {x: 0.06166666, y: 0.028333344, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48548,7 +48534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: add0a615-affd-458e-96fc-7204cb85b898
+  instanceId: 89c82bf6-9253-4cd8-8b6d-899c0a5b3d4f
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -48919,7 +48905,7 @@ Transform:
   m_GameObject: {fileID: 7649248847503753851}
   serializedVersion: 2
   m_LocalRotation: {x: 0.17364816, y: -0, z: -0, w: 0.9848078}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.89, z: 0.69}
   m_LocalScale: {x: 13.333332, y: 13.333331, z: 13.333331}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -49767,7 +49753,7 @@ Transform:
   m_GameObject: {fileID: 7828937632104674531}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000014901161, y: -6.938894e-18, z: -4.6566134e-10, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.045, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -55607,7 +55593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 6f3189b9-acde-4819-b4e4-c0b61401cddb
+  instanceId: 194376d0-3497-42c0-b81d-818339a7d215
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
