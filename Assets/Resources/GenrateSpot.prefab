@@ -4318,6 +4318,7 @@ MonoBehaviour:
   sculptMode: {fileID: 0}
   PositionisLock: {fileID: 0}
   SculptingModeOn: 0
+  luaMonoBehavior: {fileID: 0}
   grabInteractable: {fileID: 0}
   isGrabing: 0
   DremmeshPrompt: 

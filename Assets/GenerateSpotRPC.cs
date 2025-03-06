@@ -16,9 +16,10 @@ public class GenerateSpotRPC : NetworkBehaviour
     public void RPC_ConfirmGeneration()
     {
         Debug.Log($"RPC received to ConfirmGeneration");
-        _generateSpot.initAdd();
-        _generateSpot.Outlinebox.wire_renderer = false;
-        _generateSpot.VoicePanel.SetActive(false);
+        // _generateSpot.initAdd();
+        // _generateSpot.Outlinebox.wire_renderer = false;
+        // _generateSpot.VoicePanel.SetActive(false);
+       _generateSpot.RPCGenrateModel();
         // Additional logic to handle the RPC
     }
 

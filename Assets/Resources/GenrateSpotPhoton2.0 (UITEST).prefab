@@ -4396,7 +4396,7 @@ MonoBehaviour:
   particle1: {fileID: 4559471173199746405}
   particle2: {fileID: 5172392696827058071}
   particle3: {fileID: 6658089935740688899}
-  fireSync: {fileID: 8215722015013546561}
+  fireSync: {fileID: 0}
 --- !u!1 &890709018067480948
 GameObject:
   m_ObjectHideFlags: 0
@@ -35518,9 +35518,7 @@ GameObject:
   - component: {fileID: 6304489181478054851}
   - component: {fileID: 7728327809292825037}
   - component: {fileID: 1418298262282382212}
-  - component: {fileID: 2522915414242859527}
-  - component: {fileID: 3310318391455922744}
-  - component: {fileID: 8215722015013546561}
+  - component: {fileID: 7417036898871245724}
   m_Layer: 0
   m_Name: GenrateSpotPhoton2.0 (UITEST)
   m_TagString: GenerateSpot
@@ -35733,6 +35731,7 @@ MonoBehaviour:
   sculptMode: {fileID: 0}
   PositionisLock: {fileID: 0}
   SculptingModeOn: 0
+  luaMonoBehavior: {fileID: 7417036898871245724}
   grabInteractable: {fileID: 0}
   isGrabing: 0
   DremmeshPrompt: 
@@ -35963,7 +35962,6 @@ MonoBehaviour:
   - {fileID: 3691291921717289414}
   - {fileID: 6304489181478054851}
   - {fileID: 1418298262282382212}
-  - {fileID: 8215722015013546561}
 --- !u!114 &3025939802649717183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36030,6 +36028,7 @@ MonoBehaviour:
   Left: {fileID: 0}
   Right: {fileID: 0}
   audioUrl: https://your-audio-url.com/audio.wav
+  fetchingInteractable: 0
   theGrabingController: {fileID: 0}
 --- !u!114 &1418298262282382212
 MonoBehaviour:
@@ -36045,7 +36044,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outputComponent: {fileID: 3759112930442307562}
   interactableAssets: {fileID: 0}
---- !u!114 &2522915414242859527
+--- !u!114 &7417036898871245724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -36054,51 +36053,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5047066174981070621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 662edc867a09b9946bc6311c7b51d04d, type: 3}
+  m_Script: {fileID: 11500000, guid: 505bcb10b9d8ac24bbf9d210ec84da15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  solarSystem: {fileID: 0}
-  grabbable: {fileID: 7821475916984307016}
-  generateSpot: {fileID: 0}
-  jsonUrl: http://localhost:8000/physicsProperties.json
-  planetGravity: 9.81
-  planetAtmosphereDrag: 0
-  massOnEarth: 1
-  objectRigidbody: {fileID: 7859544821532538141}
-  debugobject: 0
-  setPhysic: 0
-  getTheData: 0
---- !u!114 &3310318391455922744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5047066174981070621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 396d9dad4bfea474ca470ac07b315aba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isOnFire: 0
-  fireSync: {fileID: 8215722015013546561}
-  firelfe: 5
-  fireParticleLife: {fileID: 7253853168605574945}
-  firesceneManager: {fileID: 0}
---- !u!114 &8215722015013546561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5047066174981070621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ac86efc87e4884d9e97c32adce1457, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireSpot: {fileID: 3310318391455922744}
-  __fireLife: 0
+  SpwanPoint: {fileID: 7782502458055524982}
+  ID: 
+  serverURL: http://yourserver.com/
+  uiText: {fileID: 0}
+  uiButton: {fileID: 0}
+  rb: {fileID: 0}
+  luaScriptText: 
+  checkInterval: 10
+  defaultParticleMaterial: {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &5064020556461686479
 GameObject:
   m_ObjectHideFlags: 0
@@ -48534,7 +48500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 89c82bf6-9253-4cd8-8b6d-899c0a5b3d4f
+  instanceId: 6478371a-4dff-4de4-a2cd-a79ad4346f82
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -55365,7 +55331,19 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3466578776031410222}
         m_TargetAssemblyTypeName: GenerateSpot, Assembly-CSharp
-        m_MethodName: GenrateModel
+        m_MethodName: ConfirmGeneration
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6304489181478054851}
+        m_TargetAssemblyTypeName: GenerateSpotRPC, Assembly-CSharp
+        m_MethodName: CallConfirmGenerationRPC
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -55593,7 +55571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 194376d0-3497-42c0-b81d-818339a7d215
+  instanceId: 977ce190-8728-4f22-8fc2-a2310a812be5
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 

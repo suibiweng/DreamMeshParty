@@ -109,7 +109,9 @@ public class GenerateSpot : MonoBehaviour
     // public RealtimeView _realtimeView;
     private NetworkObject _networkObject;
     private PhotonDataSync _photonDataSync;
-    private GenerateSpotRPC _generateSpotRPC; 
+    private GenerateSpotRPC _generateSpotRPC;
+
+    public LuaMonoBehavior luaMonoBehavior; 
   
 
     
@@ -158,7 +160,31 @@ public class GenerateSpot : MonoBehaviour
             selectMenu.SetActive(false);
 
         }
+
+        if(luaMonoBehavior!=null) initLuaMonoBehavior();
     }
+
+
+    void initLuaMonoBehavior()
+    {
+           
+      
+        luaMonoBehavior.ID = URLID;
+        luaMonoBehavior.serverURL = downloadURL;
+     
+
+    //   genObject.dynamicObj=this;
+
+
+        
+
+    
+
+    }
+
+
+
+    
     
     bool hasMeshFilter=false;
 
@@ -268,9 +294,11 @@ public class GenerateSpot : MonoBehaviour
 
     public void initAdd()
     {
-   //   ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
+        //ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
         loadingParticles.Play();
         isMaterialChanging = false;
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+       
         // VoicePanel.SetActive(true);
     }
 
@@ -745,11 +773,25 @@ public class GenerateSpot : MonoBehaviour
     public string DremmeshPrompt;
 
 
+    public void RPCGenrateModel()
+    {
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        
+        
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+    }
+
+
     public void GenrateModel()
     {
         manager.promtGenerateModel(id, Prompt, URLID);
-        manager.sendCommand("ShapeE");
+        //manager.sendCommand("ShapeE");
+        manager.sendCommand("DynamicCoding");
         ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
         
         
         loadingParticles.Play();
