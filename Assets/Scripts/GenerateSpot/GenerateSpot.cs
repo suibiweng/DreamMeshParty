@@ -46,7 +46,10 @@ public class GenerateSpot : MonoBehaviour
     public TMP_Text URLIDText;
     
     //Control Interface
-    public TMP_Text PromtText;
+    // public TMP_Text PromtText;
+    public TMP_InputField PromtText;  //the question is, when text is typed, does it properly update the prompt
+
+    
     public Text LitseningText;
     
     // UI panel;
@@ -461,6 +464,11 @@ public class GenerateSpot : MonoBehaviour
     {
         Prompt = LitseningText.text;
 
+    }
+
+    public void UpdatePromptFromTyping()
+    {
+        Prompt = PromtText.text;
     }
 
     bool PanelLock;

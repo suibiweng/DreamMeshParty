@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/3Scene.unity
     guid: 355a884e7316d064f993052e96b52efe
   - enabled: 0
@@ -23,6 +23,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Multiplayer Anchor.unity
     guid: 895bd73ff0894104499bc7d8cf2d4db9
+  - enabled: 0
+    path: Assets/Scenes/Keyboard.unity
+    guid: 51068f7c6b2844d4e88d85c14793326a
+  - enabled: 1
+    path: Assets/Scenes/3Scene Keyboard.unity
+    guid: 488bbd7ea77d5ca43bb004b171356271
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7dafe5f8db58eca40b1d44174dc3d078, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ad7b311f2f55bc45b379fc5b93a9d20, type: 2}
