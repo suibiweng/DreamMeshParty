@@ -8,6 +8,7 @@ using RealityEditor;
 using TMPro;
 using TriLibCore.Dae.Schema;
 using Unity.VisualScripting;
+using UnityEngine.Networking;
 
 
 public class RealityEditorManager : MonoBehaviour
@@ -22,6 +23,7 @@ public class RealityEditorManager : MonoBehaviour
     public Transform PlayerCamera; 
     public string uploadPort,downloadPort;
     public string ServerURL;
+    private string comandURL;
     
     public Dictionary<string,GameObject> GenCubesDic;
 
@@ -42,7 +44,9 @@ public class RealityEditorManager : MonoBehaviour
 
         osc = FindObjectOfType<OSC>();
         _runner = FindObjectOfType<NetworkRunner>(); 
+        comandURL=ServerURL+":"+uploadPort+"/";
         ServerURL+=":"+downloadPort+"/";
+        //comandURL+=":"+uploadPort+"/";
         //GenCubes= new List<GameObject>();
         GenCubesDic=new Dictionary<string,GameObject>();
         // IDs=GenCubes.Count;
@@ -83,16 +87,22 @@ public class RealityEditorManager : MonoBehaviour
     {
 
         if(isFireScene) return;
+
+
+        if(Input.GetKeyDown(KeyCode.F1)){
+           createSpotOnMenu();
+        }
+
         
         //OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
-        if(OVRInput.GetUp(OVRInput.RawButton.A)){
-            createSpot(RightHand.position);
-        }
-        if(OVRInput.GetUp(OVRInput.RawButton.X)){
+        // if(OVRInput.GetUp(OVRInput.RawButton.A)){
+        //     createSpot(RightHand.position);
+        // }
+        // if(OVRInput.GetUp(OVRInput.RawButton.X)){
           
-            createSpot(LeftHand.position);
+        //     createSpot(LeftHand.position);
             
-        }
+        // }
         if(Input.GetKeyDown(KeyCode.Space)){
             createSpot(new Vector3(0,0,0));
             
@@ -121,6 +131,24 @@ public class RealityEditorManager : MonoBehaviour
         
 
     }
+
+
+
+        public void createSpotOnMenu()
+    {
+        // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
+        GameObject gcube = SpawnNetworkObject(LeftHand.position, Quaternion.identity, GenerateSpotPrefab); 
+       // gcube.GetComponent<GenerateSpot>().id=IDs;
+        string urlid=TimestampGenerator.GetTimestamp(); 
+        gcube.GetComponent<GenerateSpot>().URLID=urlid;
+        Debug.Log("The new Cube's URLID is: " + urlid);
+        gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
+        Debug.Log("Setting the network urlid to be: " + urlid);
+        GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
+        selectedIDUrl=urlid;  
+        IDs++;
+    }
+
 
     
     public void createSpot(Vector3 pos)
@@ -232,7 +260,7 @@ public class RealityEditorManager : MonoBehaviour
     
     public void setPrompt(string txt)
     {
-        //GenCubes[selectedID].GetComponent<GenerateSpot>().Prompt=txt;
+
         GenCubesDic[selectedIDUrl].GetComponent<GenerateSpot>().Prompt=txt;
     }
     
@@ -262,6 +290,14 @@ public class RealityEditorManager : MonoBehaviour
 
 
     }
+
+
+
+
+
+
+
+
     public void sendStop(){
         
         OscMessage message = new OscMessage()
@@ -273,6 +309,37 @@ public class RealityEditorManager : MonoBehaviour
         osc.Send(message);
 
     }
+
+public void sendCommand(string command){
+
+    StartCoroutine(SendtheCommand(comandURL+"command",command,selectedIDUrl,GenCubesDic[selectedIDUrl].GetComponent<GenerateSpot>().Prompt));
+}
+
+
+public IEnumerator SendtheCommand( string url,string command ,string urlid,string Prompt)
+{
+    
+    if (command != "")
+    {
+        WWWForm form = new WWWForm();
+
+        form.AddField("Command", command);
+        form.AddField("URLID",urlid);
+        form.AddField("Prompt",Prompt);
+
+        UnityWebRequest request = UnityWebRequest.Post(url, form);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Command sent: " + command);
+        }
+        else
+        {
+            Debug.LogError("Error: " + request.error);
+        }
+    }
+}
     
     
     

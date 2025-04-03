@@ -12,7 +12,6 @@ namespace TriLibCore.HDRP
         public Texture MetallicTexture;
         public Texture OcclusionTexture;
         public Texture DetailMaskTexture;
-        [Obsolete("Not used anymore.")]
         public Texture SmoothnessTexture;
     }
 }

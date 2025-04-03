@@ -1,5 +1,8 @@
-﻿Shader "Hidden/ShowMetallic"
+﻿Shader"Hidden/ShowMetallic"
 {
+    Properties {
+        _MetallicGlossMap ("_MetallicGlossMap", 3D) = "black" {}
+    }
     SubShader
     {
         Tags { "RenderType" = "Opaque" }
@@ -27,6 +30,8 @@
 
             sampler2D _MetallicGlossMap;
             float4 _MetallicGlossMap_ST;
+            float4 _MetallicGlossMap_TexelSize;
+            float _Metallic;
 
             v2f vert(appdata v)
             {
@@ -38,8 +43,7 @@
 
             fixed4 frag(v2f i) : SV_Target
             {
-                float4 metallicSmooth = tex2D(_MetallicGlossMap, i.uv);
-                return metallicSmooth.x;
+                return all(_MetallicGlossMap_TexelSize.zw <= 16) ? _Metallic : tex2D(_MetallicGlossMap, i.uv).x;
             }
             ENDCG
         }

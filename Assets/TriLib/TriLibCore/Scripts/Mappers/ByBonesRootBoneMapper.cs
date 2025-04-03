@@ -5,11 +5,15 @@ using UnityEngine;
 
 namespace TriLibCore.Mappers
 {
-    /// <summary>Represents a Mapper that looks for the Game Object which has only a Transform component and has the biggest number of children as the root bone.</summary>
+    /// <summary>
+    /// Implements a root bone selection strategy by scanning a list of bones 
+    /// (Transform components) and choosing the one with the greatest number of child transforms.
+    /// This mapper is useful when the asset hierarchy does not provide a clear root bone 
+    /// from naming conventions alone.
+    /// </summary>
     [CreateAssetMenu(menuName = "TriLib/Mappers/Root Bone/By Bones Root Bone Mapper", fileName = "ByBonesRootBoneMapper")]
     public class ByBonesRootBoneMapper : RootBoneMapper
     {
-        /// <inheritdoc />
         public override Transform Map(AssetLoaderContext assetLoaderContext, IList<Transform> bones)
         {
             Transform bestBone = null;

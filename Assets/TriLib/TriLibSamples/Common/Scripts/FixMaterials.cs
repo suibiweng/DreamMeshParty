@@ -4,31 +4,13 @@ using UnityEngine;
 namespace TriLibCore.Samples
 {
     /// <summary>
-    /// Represents a class used to fix TriLib sample models depending on the rendering pipeline.
+    /// Configures sample materials depending on the rendering pipeline.
     /// </summary>
     public class FixMaterials : MonoBehaviour
     {
         private void Start()
         {
-            MaterialMapper materialMapper = null;
-            for (var i = 0; i < MaterialMapper.RegisteredMappers.Count; i++)
-            {
-                var materialMapperName = MaterialMapper.RegisteredMappers[i];
-                if (TriLibSettings.GetBool(materialMapperName))
-                {
-                    try
-                    {
-                        materialMapper = ScriptableObject.CreateInstance(materialMapperName) as MaterialMapper;
-                    }
-                    catch
-                    {
-                        materialMapper = null;
-                    }
-
-                    break;
-                }
-            }
-
+            var materialMapper = AssetLoader.GetSelectedMaterialMapper(true);
             if (materialMapper == null)
             {
                 return;

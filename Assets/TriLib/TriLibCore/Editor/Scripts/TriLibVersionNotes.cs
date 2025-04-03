@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace TriLibCore.Editor
 {
@@ -8,8 +11,6 @@ namespace TriLibCore.Editor
     {
         private class Styles
         {
-            public const float WindowWidth = 0.75f;
-            public const float WindowHeight = 0.5f;
             public static readonly GUIStyle HeaderStyle = new GUIStyle("label") { fontSize = 19, fontStyle = FontStyle.Bold, margin = new RectOffset(10, 10, 5, 5) };
             public static readonly GUIStyle SubHeaderStyle = new GUIStyle("label") { margin = new RectOffset(10, 10, 5, 5), fontStyle = FontStyle.Bold };
             public static readonly GUIStyle TextStyle = new GUIStyle("label") { margin = new RectOffset(20, 20, 5, 5) };
@@ -19,8 +20,12 @@ namespace TriLibCore.Editor
 
         private string _text;
         private bool _loaded;
-        private Vector2 _changeLogScrollPosition;
-        private Vector2 _notesScrollPosition;
+        private Vector2 _scrollPosition;
+
+        private static readonly string ChangelogPattern = @"(?<=Changelog:)(.*?)(?=(Version Notes:|$))";
+        private static readonly string VersionNotesPattern = @"(?<=Version Notes:)(.*)";
+        private static readonly string Pattern = @"(https?://[^\s]+)";
+        private static readonly Regex URIRegex = new Regex(@"^https?://");
 
         private static TriLibVersionNotes Instance
         {
@@ -28,7 +33,6 @@ namespace TriLibCore.Editor
             {
                 var window = GetWindow<TriLibVersionNotes>();
                 window.titleContent = new GUIContent("TriLib Version Notes");
-                window.minSize = new Vector2(Styles.WindowWidth * Screen.width, Styles.WindowHeight * Screen.height);
                 return window;
             }
         }
@@ -72,61 +76,46 @@ namespace TriLibCore.Editor
                 }
                 _loaded = true;
             }
-            EditorGUILayout.BeginVertical();
-            using (var stringReader = new StringReader(_text))
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+            var changelogMatch = Regex.Match(_text, ChangelogPattern, RegexOptions.Singleline);
+            var changelogSection = changelogMatch.Success ? changelogMatch.Value.Trim() : "No changelog found";
+            var versionNotesMatch = Regex.Match(_text, VersionNotesPattern, RegexOptions.Singleline);
+            var versionNotesSection = versionNotesMatch.Success ? versionNotesMatch.Value.Trim() : "No version notes found";
+            GUILayout.Label("Version Notes", Styles.SubHeaderStyle);
+            var groups = Regex.Split(versionNotesSection, Pattern);
+            foreach (var group in groups)
             {
-                var changeLogOpen = false;
-                var version = stringReader.ReadLine();
-                GUILayout.Label($"TriLib {version}", Styles.HeaderStyle);
-                for (; ; )
+                if (!string.IsNullOrEmpty(group))
                 {
-                    var line = stringReader.ReadLine();
-                    if (line == null)
+                    if (URIRegex.IsMatch(group))
                     {
-                        break;
-                    }
-                    if (line.ToLowerInvariant() == "changelog:")
-                    {
-                        EditorGUILayout.Space();
-                        GUILayout.Label("Changelog", Styles.SubHeaderStyle);
-                        _changeLogScrollPosition = GUILayout.BeginScrollView(_changeLogScrollPosition, GUILayout.Height(260f));
-                        changeLogOpen = true;
-                    }
-                    else if (line.ToLowerInvariant() == "version notes:")
-                    {
-                        if (changeLogOpen)
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Space(20);
+                        if (EditorGUILayout.LinkButton(group))
                         {
-                            GUILayout.EndScrollView();
-                            changeLogOpen = false;
+                            Application.OpenURL(group);
                         }
-                        EditorGUILayout.Space();
-                        GUILayout.Label("Version Notes", Styles.SubHeaderStyle);
-                        var versionInfo = stringReader.ReadToEnd();
-                        _notesScrollPosition = EditorGUILayout.BeginScrollView(_notesScrollPosition);
-                        EditorGUILayout.TextArea(versionInfo, Styles.TextAreaStyle);
-                        EditorGUILayout.EndScrollView();
-                        break;
+                        GUILayout.EndHorizontal();
                     }
                     else
                     {
-                        GUILayout.Label(line, Styles.TextStyle);
+                        EditorGUILayout.TextArea(group, Styles.TextAreaStyle);
                     }
                 }
-                if (changeLogOpen)
-                {
-                    GUILayout.EndScrollView();
-                }
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.Space();
-                GUILayout.Label("You can show this window on the Project Settings/TriLib area", Styles.SubHeaderStyle);
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Close", Styles.ButtonStyle))
-                {
-                    Close();
-                }
-                EditorGUILayout.EndHorizontal();
             }
+            EditorGUILayout.Space();
+            GUILayout.Label("Changelog", Styles.SubHeaderStyle);
+            EditorGUILayout.TextArea(changelogSection, Styles.TextAreaStyle);
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.Space();
+            GUILayout.Label("You can show this window on the Project Settings/TriLib area", Styles.SubHeaderStyle);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Close", Styles.ButtonStyle))
+            {
+                Close();
+            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

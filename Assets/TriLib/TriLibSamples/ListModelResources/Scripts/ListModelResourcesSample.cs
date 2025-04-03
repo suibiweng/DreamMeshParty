@@ -5,74 +5,77 @@ using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 namespace TriLibCore.Samples
 {
     /// <summary>
-    /// Represents a sample that loads the "TriLibSample.obj" Model from the "Models" folder and lists the Model Resources.
+    /// Demonstrates how to use TriLib to load a 3D model and list its associated 
+    /// resources (model path, textures, and external data). This sample allows 
+    /// the user to select a model via a file-picker and displays the loaded 
+    /// resources in a UI text component.
     /// </summary>
     public class ListModelResourcesSample : MonoBehaviour
     {
-
-#if UNITY_EDITOR
         /// <summary>
-        /// The Model asset used to locate the filename when running in Unity Editor.
-        /// </summary>
-        [SerializeField]
-        private Object ModelAsset;
-#endif
-
-        /// <summary>
-        /// Returns the path to the "TriLibSample.obj" Model.
-        /// </summary>
-        private string ModelPath
-        {
-            get
-            {
-#if UNITY_EDITOR
-                return AssetDatabase.GetAssetPath(ModelAsset);
-#else
-                return "Models/TriLibSampleModel.obj";
-#endif
-            }
-        }
-
-        /// <summary>
-        /// The Text used to display the Model Resources.
+        /// A reference to a UI <see cref="Text"/> component used to display 
+        /// the paths of the loaded model, textures, and external resources.
         /// </summary>
         [SerializeField]
         private Text ResourcesText;
 
         /// <summary>
-        /// The previously loaded GameObject, if any.
+        /// A reference to the currently loaded model’s root <see cref="GameObject"/>, 
+        /// which will be replaced when loading a new model.
         /// </summary>
         private GameObject _loadedGameObject;
 
         /// <summary>
-        /// Cached Asset Loader Options instance.
+        /// A cached <see cref="AssetLoaderOptions"/> instance used to configure 
+        /// model loading behaviors. Created on demand if not already set.
         /// </summary>
         private AssetLoaderOptions _assetLoaderOptions;
 
         /// <summary>
-        /// Creates the AssetLoaderOptions instance and displays the Model file-picker.
+        /// Invokes TriLib’s file-picker dialog for selecting a model. 
+        /// If <see cref="_assetLoaderOptions"/> is null, a default set of 
+        /// loader options is created first. Registers callback methods for 
+        /// load progress, completion, and errors.
         /// </summary>
         /// <remarks>
-        /// You can create the AssetLoaderOptions by right clicking on the Assets Explorer and selecting "TriLib->Create->AssetLoaderOptions->Pre-Built AssetLoaderOptions".
+        /// You can create <see cref="AssetLoaderOptions"/> via 
+        /// <c>TriLib &gt; Create &gt; AssetLoaderOptions &gt; Pre-Built AssetLoaderOptions</c>
+        /// in the Unity editor.
         /// </remarks>
         public void LoadModel()
         {
+            // Ensure we have AssetLoaderOptions
             if (_assetLoaderOptions == null)
             {
                 _assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions(false, true);
             }
+
+            // Create the file picker and begin an asynchronous load
             var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
-            assetLoaderFilePicker.LoadModelFromFilePickerAsync("Select a Model file", OnLoad, OnMaterialsLoad, OnProgress, OnBeginLoad, OnError, null, _assetLoaderOptions);
+            assetLoaderFilePicker.LoadModelFromFilePickerAsync(
+                "Select a Model file",
+                onLoad: OnLoad,
+                onMaterialsLoad: OnMaterialsLoad,
+                onProgress: OnProgress,
+                onBeginLoad: OnBeginLoad,
+                onError: OnError,
+                wrapperGameObject: null,
+                assetLoaderOptions: _assetLoaderOptions
+            );
         }
 
         /// <summary>
-        /// Loads the "Models/TriLibSample.obj" Model using the given AssetLoaderOptions.
+        /// Called by Unity when this script instance is being loaded. 
+        /// If <see cref="_assetLoaderOptions"/> is not assigned, creates a default set 
+        /// of TriLib loader options. You can also load a model at startup if desired.
         /// </summary>
         /// <remarks>
-        /// You can create the AssetLoaderOptions by right clicking on the Assets Explorer and selecting "TriLib->Create->AssetLoaderOptions->Pre-Built AssetLoaderOptions".
+        /// By default, this sample does not automatically load a model at startup. 
+        /// The user can initiate loading via <see cref="LoadModel"/>.
         /// </remarks>
         private void Start()
         {
@@ -80,104 +83,127 @@ namespace TriLibCore.Samples
             {
                 _assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions(false, true);
             }
-            AssetLoader.LoadModelFromFile(ModelPath, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, _assetLoaderOptions);
         }
+
         /// <summary>
-        /// Called when the the Model begins to load, configuring the scene.
+        /// Invoked when the user confirms a file selection in the file-picker 
+        /// (i.e., when model loading begins). Resets any previously loaded model 
+        /// and updates the UI to indicate loading has started.
         /// </summary>
-        /// <param name="filesSelected">Indicates if any file has been selected.</param>
+        /// <param name="filesSelected">True if a file was selected; otherwise, false.</param>
         private void OnBeginLoad(bool filesSelected)
         {
             if (filesSelected)
             {
-                Debug.Log($"User selected a Model.");
+                Debug.Log("User selected a Model.");
 
-                //Destroys the previously loaded GameObject, if any.
+                // Destroy the previously loaded GameObject, if present.
                 if (_loadedGameObject != null)
                 {
                     Destroy(_loadedGameObject);
                 }
 
-                //Resets the Resources Text and the previous loaded GameObject.
+                // Reset the resources text and clear the old model reference.
                 ResourcesText.text = "Loading Model";
                 _loadedGameObject = null;
             }
         }
 
         /// <summary>
-        /// Called when any error occurs.
+        /// Called when an error occurs during model loading. 
+        /// Logs a detailed message for troubleshooting.
         /// </summary>
-        /// <param name="obj">The contextualized error, containing the original exception and the context passed to the method where the error was thrown.</param>
+        /// <param name="obj">
+        /// An object implementing <see cref="IContextualizedError"/>, containing
+        /// the original exception and additional context.
+        /// </param>
         private void OnError(IContextualizedError obj)
         {
             Debug.LogError($"An error occurred while loading your Model: {obj.GetInnerException()}");
         }
 
         /// <summary>
-        /// Called when the Model loading progress changes.
+        /// Invoked periodically to report loading progress. 
+        /// You can use this to update a progress bar or similar UI element.
         /// </summary>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
-        /// <param name="progress">The loading progress.</param>
+        /// <param name="assetLoaderContext">
+        /// The TriLib context managing the current model load operation.
+        /// </param>
+        /// <param name="progress">A float representing progress from 0.0 to 1.0.</param>
         private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
         {
             Debug.Log($"Loading Model. Progress: {progress:P}");
         }
 
         /// <summary>
-        /// Called when the Model (including Textures and Materials) has been fully loaded.
+        /// Invoked once the model, including all textures and materials, 
+        /// has fully loaded. Gathers and displays the loaded model’s path, 
+        /// texture paths, and any external data paths in the <see cref="ResourcesText"/>.
         /// </summary>
-        /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
+        /// <remarks>
+        /// The loaded root <see cref="GameObject"/> can be accessed via 
+        /// <c>assetLoaderContext.RootGameObject</c> if you need to manipulate it further.
+        /// </remarks>
+        /// <param name="assetLoaderContext">
+        /// The TriLib context containing references to loaded assets and paths.
+        /// </param>
         private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
         {
             Debug.Log("Materials loaded. Model fully loaded.");
 
-            //The text containing all the Model Resources.
-            var text = "";
+            // Build a string containing all resources used by the model
+            var text = string.Empty;
 
-            //ModelPath contains the loaded model path
+            // 1) Model File Path
             var modelPath = assetLoaderContext.Filename;
             if (!string.IsNullOrEmpty(modelPath))
             {
                 text += $"Model: '{modelPath}'\n";
             }
 
-            //Iterate the loaded textures list
-            foreach (var kvp in assetLoaderContext.LoadedTextures)
+            // 2) Texture Files
+            foreach (var kvp in assetLoaderContext.LoadedCompoundTextures)
             {
-                //FinalPath contains the loaded texture filename
-                string finalPath = kvp.Key.ResolvedFilename;
+                // Each key’s ResolvedFilename is the local or absolute path to the loaded texture
+                var finalPath = kvp.Key.ResolvedFilename;
                 if (!string.IsNullOrEmpty(finalPath))
                 {
                     text += $"Texture: '{finalPath}'\n";
                 }
             }
 
-            //Iterate the loaded resources list
+            // 3) External Data (e.g., references to other files used by the model)
             foreach (var kvp in assetLoaderContext.LoadedExternalData)
             {
-                //FinalPath contains the loaded resource filename
-                string finalPath = kvp.Value;
+                var finalPath = kvp.Value;
                 if (!string.IsNullOrEmpty(finalPath))
                 {
                     text += $"External Data: '{finalPath}'\n";
                 }
             }
 
-            //Displays the Model Resources text.
+            // Display the compiled resource paths in the UI
             ResourcesText.text = text;
         }
 
         /// <summary>
-        /// Called when the Model Meshes and hierarchy are loaded.
+        /// Invoked once the model’s meshes and hierarchy are loaded, 
+        /// but before textures and materials have completed loading.
+        /// Stores a reference to the newly loaded <see cref="GameObject"/> 
+        /// for further manipulation in the scene.
         /// </summary>
-        /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
+        /// <remarks>
+        /// For example, you could reposition or scale the model here,
+        /// or attach scripts to the loaded GameObject.
+        /// </remarks>
+        /// <param name="assetLoaderContext">
+        /// The TriLib context that provides references to the loaded model data.
+        /// </param>
         private void OnLoad(AssetLoaderContext assetLoaderContext)
         {
             Debug.Log("Model loaded. Loading materials.");
 
-            //Stores the loaded GameObject reference.
+            // Save reference to the loaded model’s root GameObject
             _loadedGameObject = assetLoaderContext.RootGameObject;
         }
     }

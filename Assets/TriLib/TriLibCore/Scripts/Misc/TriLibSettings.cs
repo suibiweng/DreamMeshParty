@@ -27,18 +27,25 @@ namespace TriLibCore
         [HideInInspector]
         private int _settingsCount;
 
-        private static TriLibSettings GetTriLibPreferences()
+        private static TriLibSettings GetTriLibPreferences(bool createPreferences = true)
         {
             var preferencesFiles = Resources.LoadAll<TriLibSettings>("TriLibSettings");
             TriLibSettings triLibSettings;
             if (preferencesFiles.Length == 0)
             {
 #if UNITY_EDITOR
-                var triLibDirectories = AssetDatabase.FindAssets("TriLibMainFolderPlaceholder");
-                var triLibDirectory = triLibDirectories.Length > 0 ? FileUtils.GetFileDirectory(AssetDatabase.GUIDToAssetPath(triLibDirectories[0])) : "";
-                triLibSettings = CreateInstance<TriLibSettings>();
-                AssetDatabase.CreateAsset(triLibSettings, $"{triLibDirectory}/TriLibSettings.asset");
-                AssetDatabase.SaveAssets();
+                if (createPreferences)
+                {
+                    var triLibDirectories = AssetDatabase.FindAssets("TriLibMainFolderPlaceholder");
+                    var triLibDirectory = triLibDirectories.Length > 0 ? FileUtils.GetFileDirectory(AssetDatabase.GUIDToAssetPath(triLibDirectories[0])) : "";
+                    triLibSettings = CreateInstance<TriLibSettings>();
+                    AssetDatabase.CreateAsset(triLibSettings, $"{triLibDirectory}/TriLibSettings.asset");
+                    AssetDatabase.SaveAssets();
+                }
+                else
+                {
+                    return null;
+                }
 #else
                 throw new Exception("Could not find TriLib preferences file.");
 #endif
@@ -50,7 +57,7 @@ namespace TriLibCore
                     Debug.LogWarning("There is more than one TriLibSettings asset, and there is only one allowed per project.");
                 }
                 triLibSettings = preferencesFiles[0];
-            } 
+            }
             return triLibSettings;
         }
 
@@ -59,9 +66,13 @@ namespace TriLibCore
             return _boolPreferences.GetEnumerator();
         }
 
-        public static bool GetBool(string key)
+        public static bool GetBool(string key, bool createPreferences = true)
         {
-            var triLibPreferences = GetTriLibPreferences();
+            var triLibPreferences = GetTriLibPreferences(createPreferences);
+            if (triLibPreferences == null)
+            {
+                return false;
+            }
             if (triLibPreferences._boolPreferences == null || !triLibPreferences._boolPreferences.TryGetValue(key, out var value))
             {
                 return false;
@@ -69,9 +80,13 @@ namespace TriLibCore
             return value;
         }
 
-        public static void SetBool(string key, bool value)
+        public static void SetBool(string key, bool value, bool createPreferences = true)
         {
-            var triLibPreferences = GetTriLibPreferences();
+            var triLibPreferences = GetTriLibPreferences(createPreferences);
+            if (triLibPreferences == null)
+            {
+                return;
+            }
             if (triLibPreferences._boolPreferences == null)
             {
                 triLibPreferences._boolPreferences = new Dictionary<string, bool>();

@@ -34,6 +34,6 @@ H. GTLF Draco Decoder
 Apache License
 Copyright (c) Google
 
-I. PCX - Point Cloud Importer/Renderer for Unity
-Unlicense License
-Keijiro Takahashi
+I. BitMiracle.LibTiff.Net
+BSD-3-Clause License
+Copyright (c) 2008-2023 Bit Miracle

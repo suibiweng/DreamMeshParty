@@ -4,7 +4,7 @@ using UnityEngine;
 namespace TriLibCore
 {
     /// <summary>
-    /// Represents a class to initialize runtime components.
+    /// TriLib initialization methods.
     /// </summary>
     public class RuntimeInitialization : MonoBehaviour
     {

@@ -5,18 +5,31 @@ using UnityEngine.UI;
 
 namespace TriLibCore.Samples
 {
-    /// <summary>Represents a Class used to add paste capabilities to WebGL projects.</summary>
+    /// <summary>
+    /// Provides paste functionality to WebGL builds via a singleton manager.
+    /// This class automatically sets itself up in WebGL to handle text paste events,
+    /// allowing them to be inserted into Unity's <see cref="InputField"/> components.
+    /// </summary>
     public class PasteManager : MonoBehaviour
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-		[DllImport("__Internal")]
-		private static extern void PasteManagerSetup();
+        /// <summary>
+        /// Interop method for setting up WebGL-specific paste handling.
+        /// </summary>
+        [DllImport("__Internal")]
+        private static extern void PasteManagerSetup();
 #endif
 
-        /// <summary>The Paste Manager Singleton instance.</summary>
+        /// <summary>
+        /// Gets the PasteManager singleton instance.
+        /// If no instance is found in the scene, one will be created automatically.
+        /// </summary>
         public static PasteManager Instance { get; private set; }
 
-        /// <summary>Checks if the Singleton instance exists.</summary>
+        /// <summary>
+        /// Checks if a PasteManager instance already exists.
+        /// If none is found, a new <see cref="GameObject"/> with a PasteManager is created.
+        /// </summary>
         public static void CheckInstance()
         {
             if (Instance == null)
@@ -26,14 +39,20 @@ namespace TriLibCore.Samples
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
+        /// <summary>
+        /// On startup (WebGL builds only), calls <c>PasteManagerSetup()</c> for browser-specific configuration.
+        /// </summary>
         private void Start()
-		{
-			PasteManagerSetup();
-		}
+        {
+            PasteManagerSetup();
+        }
 #endif
 
-        /// <summary>Called when the user pastes the given value in the Web-Browser.</summary>
-		/// <param name="value">The pasted value.</param>
+        /// <summary>
+        /// Called when the user pastes the specified text within the WebGL build.
+        /// Inserts the pasted text into a currently selected <see cref="InputField"/>, if available.
+        /// </summary>
+        /// <param name="value">The text value that was pasted.</param>
         public void Paste(string value)
         {
             var currentCurrentSelectedGameObject = EventSystem.current.currentSelectedGameObject;
@@ -42,7 +61,10 @@ namespace TriLibCore.Samples
                 var inputField = currentCurrentSelectedGameObject.GetComponentInChildren<InputField>();
                 if (inputField != null)
                 {
-                    var newText = $"{inputField.text.Substring(0, inputField.selectionAnchorPosition)}{value}{inputField.text.Substring(inputField.selectionFocusPosition)}";
+                    // Insert the pasted text at the selection anchor position
+                    var newText = $"{inputField.text.Substring(0, inputField.selectionAnchorPosition)}"
+                                  + $"{value}"
+                                  + $"{inputField.text.Substring(inputField.selectionFocusPosition)}";
                     inputField.text = newText;
                 }
             }

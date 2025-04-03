@@ -44,6 +44,8 @@ public class InteractableAssets : MonoBehaviour
 
     public string audioUrl = "https://your-audio-url.com/audio.wav"; 
 
+    public bool fetchingInteractable=true;
+
 
     void Start()
     {
@@ -62,7 +64,7 @@ public class InteractableAssets : MonoBehaviour
 
 
 
-    
+    if(!fetchingInteractable)
         checkCoroutine = StartCoroutine(CheckForJsonOnServer( generateSpot.downloadURL+generateSpot.URLID+"_interactable.json",3f));
 
      //   StartCoroutine(UploadTexture());
@@ -82,17 +84,6 @@ public class InteractableAssets : MonoBehaviour
 
  private Coroutine checkCoroutine;
     public void SetInteractable(){
-
-        //interactiveCamera.SetActive(true);      
-        //  StartCoroutine(UploadSnapShotTexture());
-
-        //  OscMessage msg = new OscMessage{
-        //     address="/SetInteractive"
-        //  };
-
-        //  msg.values.Add(generateSpot.URLID);
-        //  msg.values.Add(generateSpot.DremmeshPrompt);
-        //  manager.osc.Send(msg);
 
 
 
@@ -155,7 +146,7 @@ public class InteractableAssets : MonoBehaviour
         audioUrl=generateSpot.downloadURL+generateSpot.URLID+"_sfx.wav";
 
 
-        generateSpot.toLockthePosition(!interactableToggle.isOn);
+     //   generateSpot.toLockthePosition(!interactableToggle.isOn);
 
         if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger ) ){
 
@@ -210,7 +201,7 @@ public class InteractableAssets : MonoBehaviour
                  
                 
                 
-                    //output.BroadcastMessage("triggerOutPut");
+        
                 
                 }
 

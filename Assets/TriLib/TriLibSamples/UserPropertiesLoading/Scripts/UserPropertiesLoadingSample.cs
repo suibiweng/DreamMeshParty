@@ -1,84 +1,99 @@
 ﻿#pragma warning disable 649
-
 using System.Collections.Generic;
 using TriLibCore.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 namespace TriLibCore.Samples
 {
     /// <summary>
-    /// Represents a sample that allows users to load a Model using the built-in File-Picker and displays the Model User Properties.
+    /// Demonstrates how to load a 3D model using the built-in TriLib file picker and retrieve 
+    /// custom user properties embedded within the model. Displays the retrieved properties 
+    /// in the Unity UI.
     /// </summary>
     public class UserPropertiesLoadingSample : MonoBehaviour
     {
         /// <summary>
-        /// The Dictionaries containing the Model Properties sorted by type.
+        /// Caches user properties of type <see cref="float"/>, keyed by "[GameObjectName].[PropertyName]".
         /// </summary>
         private Dictionary<string, float> _floatValues;
+
+        /// <summary>
+        /// Caches user properties of type <see cref="int"/>, keyed by "[GameObjectName].[PropertyName]".
+        /// </summary>
         private Dictionary<string, int> _intValues;
+
+        /// <summary>
+        /// Caches user properties of type <see cref="Vector2"/>, keyed by "[GameObjectName].[PropertyName]".
+        /// </summary>
         private Dictionary<string, Vector2> _vector2Values;
+
+        /// <summary>
+        /// Caches user properties of type <see cref="Vector3"/>, keyed by "[GameObjectName].[PropertyName]".
+        /// </summary>
         private Dictionary<string, Vector3> _vector3Values;
+
+        /// <summary>
+        /// Caches user properties of type <see cref="Vector4"/>, keyed by "[GameObjectName].[PropertyName]".
+        /// </summary>
         private Dictionary<string, Vector4> _vector4Values;
+
+        /// <summary>
+        /// Caches user properties of type <see cref="Color"/>, keyed by "[GameObjectName].[PropertyName]".
+        /// </summary>
         private Dictionary<string, Color> _colorValues;
+
+        /// <summary>
+        /// Caches user properties of type <see cref="bool"/>, keyed by "[GameObjectName].[PropertyName]".
+        /// </summary>
         private Dictionary<string, bool> _boolValues;
+
+        /// <summary>
+        /// Caches user properties of type <see cref="string"/>, keyed by "[GameObjectName].[PropertyName]".
+        /// </summary>
         private Dictionary<string, string> _stringValues;
 
         /// <summary>
-        /// The last loaded GameObject.
+        /// Holds a reference to the last loaded model's root <see cref="GameObject"/>.
+        /// When loading a new model, any previously loaded GameObject is destroyed.
         /// </summary>
         private GameObject _loadedGameObject;
 
         /// <summary>
-        /// The load Model Button.
+        /// A reference to a UI Button used to start the file-picker and load a model.
         /// </summary>
         [SerializeField]
         private Button _loadModelButton;
 
         /// <summary>
-        /// The progress indicator Text;
+        /// A UI Text component used to display real-time loading progress to the user.
         /// </summary>
         [SerializeField]
         private Text _progressText;
 
         /// <summary>
-        /// The properties listing Text;
+        /// A UI Text component used to display the user properties associated with the loaded model.
         /// </summary>
         [SerializeField]
         private Text _propertiesText;
 
         /// <summary>
-        /// Cached Asset Loader Options instance.
+        /// Cached set of TriLib loader options, including a custom <see cref="UserPropertiesMapper"/> 
+        /// to capture user properties from the loaded model.
         /// </summary>
         private AssetLoaderOptions _assetLoaderOptions;
 
         /// <summary>
-        /// Returns the path to the "TriLibSample.obj" Model.
+        /// Callback invoked by the custom <c>SampleUserPropertiesMapper</c> for every user property 
+        /// found on the loaded model’s <see cref="GameObject"/>. Populates internal dictionaries 
+        /// based on property type.
         /// </summary>
-        private string ModelPath
-        {
-            get
-            {
-#if UNITY_EDITOR
-                return $"{Application.dataPath}/TriLib/TriLibSamples/UserPropertiesLoading/Models/WithMyData.fbx";
-#else
-                return "Models/WithMyData.fbx";
-#endif
-            }
-        }
-
-        /// <summary>
-        /// The callback passed to our custom UserPropertiesMapper, called for every Model and its every User Property.
-        /// </summary>
-        /// <param name="gameObject">The GameObject containing the User Property.</param>
-        /// <param name="propertyName">The User Property name.</param>
-        /// <param name="propertyValue">The User Property value.</param>
+        /// <param name="gameObject">The <see cref="GameObject"/> that owns the user property.</param>
+        /// <param name="propertyName">The user property’s name.</param>
+        /// <param name="propertyValue">The user property’s value, which may be float, int, Vector2, etc.</param>
         private void OnUserDataProcessed(GameObject gameObject, string propertyName, object propertyValue)
         {
             var propertyKey = $"{gameObject.name}.{propertyName}";
+            Debug.Log($"Found property for [{gameObject.name}] ({propertyName}:{propertyValue})");
             switch (propertyValue)
             {
                 case float floatValue:
@@ -133,28 +148,44 @@ namespace TriLibCore.Samples
         }
 
         /// <summary>
-        /// Creates the AssetLoaderOptions instance and displays the Model file-picker.
-        /// It also creates our custom UserPropertiesMapper (SampleUserPropertiesMapper) instance and passes a callback function to it.
+        /// Initiates a file-picker dialog for selecting a model to load, constructing 
+        /// custom TriLib <see cref="AssetLoaderOptions"/> if necessary, and registering 
+        /// event handlers for progress, errors, and completion.
         /// </summary>
         /// <remarks>
-        /// You can create the AssetLoaderOptions by right clicking on the Assets Explorer and selecting "TriLib->Create->AssetLoaderOptions->Pre-Built AssetLoaderOptions".
+        /// The file-picker interface will allow the user to select a model file at runtime. 
+        /// Once selected, TriLib begins loading and triggers corresponding events 
+        /// (<see cref="OnBeginLoad"/>, <see cref="OnProgress"/>, <see cref="OnLoad"/>, 
+        /// <see cref="OnMaterialsLoad"/>, and <see cref="OnError"/>).
         /// </remarks>
         public void LoadModel()
         {
             var assetLoaderOptions = CreateAssetLoaderOptions();
             var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
-            assetLoaderFilePicker.LoadModelFromFilePickerAsync("Select a Model file", OnLoad, OnMaterialsLoad, OnProgress, OnBeginLoad, OnError, null, assetLoaderOptions);
+            assetLoaderFilePicker.LoadModelFromFilePickerAsync(
+                title: "Select a Model file",
+                onLoad: OnLoad,
+                onMaterialsLoad: OnMaterialsLoad,
+                onProgress: OnProgress,
+                onBeginLoad: OnBeginLoad,
+                onError: OnError,
+                wrapperGameObject: null,
+                assetLoaderOptions: assetLoaderOptions
+            );
         }
 
         /// <summary>
-        /// Creates an AssetLoaderOptions with the sample UserPropertiesMapper.
+        /// Creates and configures <see cref="AssetLoaderOptions"/>, attaching a custom 
+        /// <see cref="SampleUserPropertiesMapper"/> to capture user property data via 
+        /// <see cref="OnUserDataProcessed"/>.
         /// </summary>
-        /// <returns>The created AssetLoaderOptions.</returns>
+        /// <returns>A configured <see cref="AssetLoaderOptions"/> instance.</returns>
         private AssetLoaderOptions CreateAssetLoaderOptions()
         {
             if (_assetLoaderOptions == null)
             {
                 _assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions(false, true);
+
                 var userPropertiesMapper = ScriptableObject.CreateInstance<SampleUserPropertiesMapper>();
                 userPropertiesMapper.OnUserDataProcessed += OnUserDataProcessed;
                 _assetLoaderOptions.UserPropertiesMapper = userPropertiesMapper;
@@ -163,11 +194,14 @@ namespace TriLibCore.Samples
         }
 
         /// <summary>
-        /// Called when the the Model begins to load, configuring the scene.
+        /// Event handler invoked when the user begins loading a model (i.e., once a file has been selected).
+        /// Initializes or clears the property dictionaries, updates the UI, and locks the load button 
+        /// until the process completes or is canceled.
         /// </summary>
-        /// <param name="filesSelected">Indicates if any file has been selected.</param>
+        /// <param name="filesSelected">Indicates whether the user has chosen a file.</param>
         private void OnBeginLoad(bool filesSelected)
         {
+            // Reset dictionaries
             _floatValues = new Dictionary<string, float>();
             _intValues = new Dictionary<string, int>();
             _vector2Values = new Dictionary<string, Vector2>();
@@ -176,36 +210,41 @@ namespace TriLibCore.Samples
             _colorValues = new Dictionary<string, Color>();
             _boolValues = new Dictionary<string, bool>();
             _stringValues = new Dictionary<string, string>();
+
+            // Update UI
             _loadModelButton.interactable = !filesSelected;
             _progressText.enabled = filesSelected;
             _progressText.text = string.Empty;
         }
 
         /// <summary>
-        /// Called when any error occurs.
+        /// Event handler invoked if an error occurs during model loading.
+        /// Logs the error details for debugging.
         /// </summary>
-        /// <param name="obj">The contextualized error, containing the original exception and the context passed to the method where the error was thrown.</param>
+        /// <param name="obj">Contains error context and the original exception.</param>
         private void OnError(IContextualizedError obj)
         {
-            Debug.LogError($"An error occurred while loading your Model: {obj.GetInnerException()}");
+            Debug.LogError($"An error occurred while loading your model: {obj.GetInnerException()}");
         }
 
-
         /// <summary>
-        /// Called when the Model loading progress changes.
+        /// Event handler for reporting model-loading progress, which can be displayed on-screen.
         /// </summary>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
-        /// <param name="progress">The loading progress.</param>
+        /// <param name="assetLoaderContext">Provides context about the loading process.</param>
+        /// <param name="progress">A value from 0.0 to 1.0 representing the loading progress.</param>
         private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
         {
             _progressText.text = $"Progress: {progress:P}";
         }
 
         /// <summary>
-        /// Called when the Model (including Textures and Materials) has been fully loaded.
+        /// Event handler invoked once textures and materials have finished loading and the model is fully ready.
+        /// At this point, user properties have already been processed, so they can be displayed via <see cref="ListProperties"/>.
         /// </summary>
-        /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
+        /// <remarks>
+        /// If <see cref="assetLoaderContext.RootGameObject"/> is <c>null</c>, the model may have failed to load.
+        /// </remarks>
+        /// <param name="assetLoaderContext">Contains references to the loaded model’s root <see cref="GameObject"/>.</param>
         private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
         {
             if (assetLoaderContext.RootGameObject != null)
@@ -217,16 +256,20 @@ namespace TriLibCore.Samples
             {
                 Debug.Log("Model could not be loaded.");
             }
+            // Re-enable UI elements
             _loadModelButton.interactable = true;
             _progressText.enabled = false;
         }
 
         /// <summary>
-        /// Updates the User Properties Text content with the loaded Model User Properties, categorizing the Properties by type.
+        /// Compiles the collected user properties into a formatted text block, separating each 
+        /// data type for clarity, and updates the on-screen <see cref="_propertiesText"/>.
         /// </summary>
         private void ListProperties()
         {
             var text = string.Empty;
+
+            // String properties
             if (_stringValues.Count > 0)
             {
                 text += "<b>String</b>\n";
@@ -235,6 +278,8 @@ namespace TriLibCore.Samples
                     text += $"{kvp.Key}=\"{kvp.Value}\"\n";
                 }
             }
+
+            // Float properties
             if (_floatValues.Count > 0)
             {
                 text += "\n<b>Float</b>\n";
@@ -243,6 +288,8 @@ namespace TriLibCore.Samples
                     text += $"{kvp.Key}={kvp.Value}\n";
                 }
             }
+
+            // Integer properties
             if (_intValues.Count > 0)
             {
                 text += "\n<b>Integer</b>\n";
@@ -251,6 +298,8 @@ namespace TriLibCore.Samples
                     text += $"{kvp.Key}={kvp.Value}\n";
                 }
             }
+
+            // Boolean properties
             if (_boolValues.Count > 0)
             {
                 text += "\n<b>Boolean</b>\n";
@@ -259,6 +308,8 @@ namespace TriLibCore.Samples
                     text += $"{kvp.Key}={kvp.Value}\n";
                 }
             }
+
+            // Vector2 properties
             if (_vector2Values.Count > 0)
             {
                 text += "\n<b>Vector2</b>\n";
@@ -267,6 +318,8 @@ namespace TriLibCore.Samples
                     text += $"{kvp.Key}={kvp.Value}\n";
                 }
             }
+
+            // Vector3 properties
             if (_vector3Values.Count > 0)
             {
                 text += "\n<b>Vector3</b>\n";
@@ -275,6 +328,8 @@ namespace TriLibCore.Samples
                     text += $"{kvp.Key}={kvp.Value}\n";
                 }
             }
+
+            // Vector4 properties
             if (_vector4Values.Count > 0)
             {
                 text += "\n<b>Vector4</b>\n";
@@ -283,45 +338,45 @@ namespace TriLibCore.Samples
                     text += $"{kvp.Key}={kvp.Value}\n";
                 }
             }
+
+            // Color properties
             if (_colorValues.Count > 0)
             {
                 text += "\n<b>Color</b>\n";
                 foreach (var kvp in _colorValues)
                 {
+                    // Embed color tags around the text for a visual effect
                     text += "<color=#" + ColorUtility.ToHtmlStringRGB(kvp.Value) + ">";
                     text += $"{kvp.Key}={kvp.Value}\n";
                     text += "</color>";
                 }
             }
-            _propertiesText.text = string.IsNullOrEmpty(text) ? "The model has no user properties" : $"<b>Model User Properties</b>\n\n{text}";
+
+            _propertiesText.text = string.IsNullOrEmpty(text)
+                ? "The model has no user properties"
+                : $"<b>Model User Properties</b>\n\n{text}";
         }
 
         /// <summary>
-        /// Called when the Model Meshes and hierarchy are loaded.
+        /// Event handler invoked once the model’s meshes and hierarchy are loaded 
+        /// (but before textures and materials are fully processed).
+        /// Destroys the previously loaded model, if any, and fits the camera view 
+        /// to the newly loaded model’s bounds.
         /// </summary>
-        /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
-        /// <param name="assetLoaderContext">The context used to load the Model.</param>
+        /// <param name="assetLoaderContext">Contains references to the loaded model’s root <see cref="GameObject"/>.</param>
         private void OnLoad(AssetLoaderContext assetLoaderContext)
         {
+            // Clean up the previously loaded GameObject
             if (_loadedGameObject != null)
             {
                 Destroy(_loadedGameObject);
             }
+
             _loadedGameObject = assetLoaderContext.RootGameObject;
-            if (_loadedGameObject != null)
+            if (_loadedGameObject != null && Camera.main != null)
             {
                 Camera.main.FitToBounds(assetLoaderContext.RootGameObject, 4f);
             }
-        }
-
-        /// <summary>
-        /// Loads the sample Model.
-        /// </summary>
-        private void Start()
-        {
-            var assetLoaderOptions = CreateAssetLoaderOptions();
-            OnBeginLoad(true); //Workaround to create lists
-            AssetLoader.LoadModelFromFile(ModelPath, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
         }
     }
 }

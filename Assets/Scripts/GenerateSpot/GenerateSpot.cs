@@ -51,6 +51,8 @@ public class GenerateSpot : MonoBehaviour
 
     
     public Text LitseningText;
+
+    public TMP_Text Text_Litsening;
     
     // UI panel;
     public GameObject UiMenu;
@@ -110,7 +112,9 @@ public class GenerateSpot : MonoBehaviour
     // public RealtimeView _realtimeView;
     private NetworkObject _networkObject;
     private PhotonDataSync _photonDataSync;
-    private GenerateSpotRPC _generateSpotRPC; 
+    private GenerateSpotRPC _generateSpotRPC;
+
+    public LuaMonoBehavior luaMonoBehavior; 
   
 
     
@@ -159,7 +163,31 @@ public class GenerateSpot : MonoBehaviour
             selectMenu.SetActive(false);
 
         }
+
+        if(luaMonoBehavior!=null) initLuaMonoBehavior();
     }
+
+
+    void initLuaMonoBehavior()
+    {
+           
+      
+        luaMonoBehavior.ID = URLID;
+        luaMonoBehavior.serverURL = downloadURL;
+     
+
+    //   genObject.dynamicObj=this;
+
+
+        
+
+    
+
+    }
+
+
+
+    
     
     bool hasMeshFilter=false;
 
@@ -185,16 +213,14 @@ public class GenerateSpot : MonoBehaviour
 
             grabInteractable.Disable();
 
-           // grabFreeTransformer.enabled=false;
-// _grabbable.enabled = false;
-            //
+
         }else{
 
             
-          //  grabFreeTransformer.enabled=true;
+
 
             grabInteractable.Enable();
-            //
+
 
 
         }
@@ -271,15 +297,17 @@ public class GenerateSpot : MonoBehaviour
 
     public void initAdd()
     {
-      ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
+        //ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
         loadingParticles.Play();
         isMaterialChanging = false;
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+       
         // VoicePanel.SetActive(true);
     }
 
     void initReconstruction()
     {
-        ScanningPanel.SetActive(true);
+        if(ScanningPanel!=null)  ScanningPanel.SetActive(true);
     }
 
 
@@ -290,7 +318,7 @@ public class GenerateSpot : MonoBehaviour
 
     void CloseEditMenu()
     {
-        EditMenu.SetActive(false);
+      if(EditMenu!=null) EditMenu.SetActive(false);
     }
 
   bool isErasing=false;
@@ -362,20 +390,12 @@ public class GenerateSpot : MonoBehaviour
         manager.updateSelected(id, URLID);
         isselsected = true;
         Debug.Log("should be requesting the transform and view in grab");
-        //URLIDText.text = "should be requesting the transform and view in grab";
-        // _realtimeTransform.RequestOwnership();
-        // _realtimeView.RequestOwnershipOfSelfAndChildren();
-        //  Outlinebox.line_renderer=true;
+  
     }
 
     public void Release()
     {
-        // Debug.Log("The grabbable script.enabled is: " + GetComponent<Grabbable>().enabled);
 
-        // Debug.Log("should be releasing the cube");
-
-        // URLIDText.text = "should be releasing the cube";
-        // Outlinebox.line_renderer=false;
 
     }
     public void Copy()
@@ -418,9 +438,7 @@ public class GenerateSpot : MonoBehaviour
             {
                 if(!originTex){
                     originTex=true;
-
-
-                     OriginTex=TargetMaterial.GetTexture("_MainTex");
+                    OriginTex=TargetMaterial.GetTexture("_MainTex");
                      
                 }
 
@@ -462,7 +480,11 @@ public class GenerateSpot : MonoBehaviour
 
     public void onLitsenClick()
     {
-        Prompt = LitseningText.text;
+      if(LitseningText!=null)  Prompt = LitseningText.text;
+
+
+      Prompt=Text_Litsening.text;
+        
 
     }
 
@@ -516,6 +538,16 @@ public class GenerateSpot : MonoBehaviour
             _photonDataSync.UpdatePrompt(Prompt);
         }
         oldPrompt = Prompt; 
+
+
+        if(Input.GetKeyDown(KeyCode.F3))
+        {
+
+             ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + "20250221165209" + "_ShapE.zip"));
+          
+
+        }
+
         
         // if (_realtimeView.isOwnedLocallySelf)
         // {
@@ -547,8 +579,8 @@ public class GenerateSpot : MonoBehaviour
 
             case GenerateType.Add:
                 setMaterialforGenrated(TargetObject.transform,VertexColor);
-                EraseBtn.gameObject.SetActive(false);
-                ColorBtn.SetActive(true);
+               if(EraseBtn!=null) EraseBtn.gameObject.SetActive(false);
+               if(ColorBtn!=null) ColorBtn.SetActive(true);
 
                 break;
 
@@ -579,17 +611,17 @@ public class GenerateSpot : MonoBehaviour
 
                 if(!PanelLock){
                     PanelLock=true;
-                    ErasingPanel.SetActive(true);
+                  if(ErasingPanel!=null) ErasingPanel.SetActive(true);
                 }
 
                    TargetMaterial.SetTexture("_MainTex", WhiteTex);
                    ProjectorMeterial.SetFloat("_Amt",Britheness.value);
 
-             }else{
+                }else{
                     PanelLock=false;
                     ErasingPanel.SetActive(false);
-                 TargetMaterial.SetTexture("_MainTex", OriginTex);
-             }
+                    TargetMaterial.SetTexture("_MainTex", OriginTex);
+                }
 
                 
 
@@ -749,14 +781,35 @@ public class GenerateSpot : MonoBehaviour
     public string DremmeshPrompt;
 
 
+    public void RPCGenrateModel()
+    {
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        
+        
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+    }
+
+
     public void GenrateModel()
     {
         manager.promtGenerateModel(id, Prompt, URLID);
+        //manager.sendCommand("ShapeE");
+        manager.sendCommand("DynamicCoding");
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        
+        
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
 
         DremmeshPrompt=Prompt;
+
+
+        
 
         // PreViewQuad.SetActive(true);
         // loadingIcon.SetActive(true);
@@ -951,6 +1004,20 @@ public class GenerateSpot : MonoBehaviour
                 }
 
             }
+
+            if(url.Contains("ShapE")){
+
+                if(!promptGenrated)
+                {
+                    promptGenrated=true;
+                    downloadModel(url,TargetObject);
+                }
+
+            }
+
+
+
+
 
             if (url.Contains("inpainting")){
 

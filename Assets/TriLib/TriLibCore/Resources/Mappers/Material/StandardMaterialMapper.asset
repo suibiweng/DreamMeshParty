@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b82e7a957b947f8bb8fedcd22eeefbe, type: 3}
   m_Name: StandardMaterialMapper
   m_EditorClassIdentifier: 
-  ForceStandardMaterial: 0
   CheckingOrder: 0
+  DisableAlpha: 0
+  ForceShaderVariantCollection: 0

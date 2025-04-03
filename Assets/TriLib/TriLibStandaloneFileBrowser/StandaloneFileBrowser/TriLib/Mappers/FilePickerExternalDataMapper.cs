@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using TriLibCore.SFB;
 using TriLibCore.Utils;
+using UnityEngine;
 
 namespace TriLibCore.Mappers
-{    /// <summary>Represents a class used to load external data from a series of selected files.</summary>
+{
+    /// <summary>
+    /// Provides an external data mapping strategy for file picker–based workflows.
+    /// This mapper searches through a collection of file items (each with an associated stream)
+    /// to find one whose short filename matches the given <paramref name="originalFilename"/>.
+    /// If a match is found, the file’s stream is returned, along with its full name as the final path.
+    /// </summary>
     public class FilePickerExternalDataMapper : ExternalDataMapper
     {
         /// <inheritdoc />
@@ -16,7 +23,7 @@ namespace TriLibCore.Mappers
                 var itemsWithStream = CustomDataHelper.GetCustomData<IList<ItemWithStream>>(assetLoaderContext.CustomData);
                 if (itemsWithStream != null)
                 {
-                    var shortFileName = FileUtils.GetShortFilename(originalFilename).ToLowerInvariant();
+                    var shortFileName = FileUtils.GetShortFilename(originalFilename).Trim().ToLowerInvariant();
                     foreach (var itemWithStream in itemsWithStream)
                     {
                         if (!itemWithStream.HasData)
@@ -24,7 +31,7 @@ namespace TriLibCore.Mappers
                             continue;
                         }
 
-                        var checkingFileShortName = FileUtils.GetShortFilename(itemWithStream.Name).ToLowerInvariant();
+                        var checkingFileShortName = FileUtils.GetShortFilename(itemWithStream.Name).Trim().ToLowerInvariant();
                         if (shortFileName == checkingFileShortName)
                         {
                             finalPath = itemWithStream.Name;
@@ -34,7 +41,7 @@ namespace TriLibCore.Mappers
                 }
                 else
                 {
-                    throw new Exception("Missing custom context data.");
+                    Debug.LogWarning("Missing custom context data.");
                 }
             }
             finalPath = null;

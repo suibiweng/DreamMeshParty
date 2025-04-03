@@ -63,8 +63,9 @@ namespace TriLibCore.SFB
 
     public class StandaloneFileBrowserWebGL : IStandaloneFileBrowser<ItemWithStream>
     {
+
         [DllImport("__Internal")]
-        private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
+        private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple, bool selectDirectory);
 
         [DllImport("__Internal")]
         private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
@@ -96,12 +97,14 @@ namespace TriLibCore.SFB
         {
             var helper = new GameObject(Guid.NewGuid().ToString()).AddComponent<StandloneFileBrowserWebGLHelper>();
             helper.MultipleFilesCallback = cb;
-            UploadFile(helper.name, "InvokeCallback", GetFilterFromFileExtensionList(extensions), multiselect);
+            UploadFile(helper.name, "InvokeCallback", GetFilterFromFileExtensionList(extensions), multiselect, false);
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<IList<ItemWithStream>> cb)
         {
-            throw new NotSupportedException();
+            var helper = new GameObject(Guid.NewGuid().ToString()).AddComponent<StandloneFileBrowserWebGLHelper>();
+            helper.MultipleFilesCallback = cb;
+            UploadFile(helper.name, "InvokeCallback", null, false, true);
         }
 
         public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<ItemWithStream> cb)

@@ -33,12 +33,8 @@ namespace TriLibCore.SFB
 
         public IList<ItemWithStream> OpenFolderPanel(string title, string directory, bool multiselect)
         {
-            var path = EditorUtility.OpenFolderPanel(title, directory, "");
-            var itemWithStream = new ItemWithStream
-            {
-                Name = path
-            };
-            return new [] { itemWithStream };
+            var filename = EditorUtility.OpenFolderPanel(title, directory, "");
+            return StandaloneFileBrowser.BuildItemsFromFolderContents(filename);
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<IList<ItemWithStream>> cb)

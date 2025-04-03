@@ -4281,6 +4281,7 @@ MonoBehaviour:
   URLIDText: {fileID: 696682105605600011}
   PromtText: {fileID: 0}
   LitseningText: {fileID: 6148612480976159198}
+  Text_Litsening: {fileID: 0}
   UiMenu: {fileID: 6148612480887782685}
   controlPanels:
   - {fileID: 0}
@@ -4317,6 +4318,7 @@ MonoBehaviour:
   sculptMode: {fileID: 0}
   PositionisLock: {fileID: 0}
   SculptingModeOn: 0
+  luaMonoBehavior: {fileID: 0}
   grabInteractable: {fileID: 0}
   isGrabing: 0
   DremmeshPrompt: 

@@ -4,14 +4,20 @@ using UnityEngine;
 
 namespace TriLibCore.Mappers
 {
-    /// <summary>Represents a Mapper that creates a Simple Animation Player used to play Animation Clips by their index or name.</summary>
+    /// <summary>
+    /// Implements an <see cref="AnimationClipMapper"/> that creates a <see cref="SimpleAnimationPlayer"/> 
+    /// for playing animation clips by index or name. When the animation type is set to Generic or Humanoid,
+    /// and at least one animation clip is available, this mapper adds a <see cref="SimpleAnimationPlayer"/> to 
+    /// the model's root GameObject and assigns the animation clips to it.
+    /// </summary>
     [CreateAssetMenu(menuName = "TriLib/Mappers/Animation Clip/Simple Animation Player Animation Clip Mapper", fileName = "SimpleAnimationPlayerAnimationClipMapper")]
     public class SimpleAnimationPlayerAnimationClipMapper : AnimationClipMapper
     {
-        ///<inheritdoc />
+        /// <inheritdoc />
         public override AnimationClip[] MapArray(AssetLoaderContext assetLoaderContext, AnimationClip[] sourceAnimationClips)
         {
-            if ((assetLoaderContext.Options.AnimationType == AnimationType.Generic || assetLoaderContext.Options.AnimationType == AnimationType.Humanoid) && sourceAnimationClips.Length > 0)
+            if ((assetLoaderContext.Options.AnimationType == AnimationType.Generic ||
+                 assetLoaderContext.Options.AnimationType == AnimationType.Humanoid) && sourceAnimationClips.Length > 0)
             {
                 var simpleAnimationPlayer = assetLoaderContext.RootGameObject.AddComponent<SimpleAnimationPlayer>();
                 simpleAnimationPlayer.AnimationClips = sourceAnimationClips;

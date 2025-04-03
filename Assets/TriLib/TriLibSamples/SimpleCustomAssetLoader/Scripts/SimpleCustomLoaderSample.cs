@@ -8,17 +8,19 @@ using UnityEngine;
 namespace TriLibCore.Samples
 {
     /// <summary>
-    /// This sample loads an OBJ model with a single texture from Strings contents as the data source.
+    /// Demonstrates how to load an OBJ model (with a single texture) entirely from string-encoded data.
+    /// This class uses <see cref="SimpleCustomAssetLoader"/> to parse model geometry, material (.mtl) files,
+    /// and texture images stored as string constants.
     /// </summary>
     public class SimpleCustomLoaderSample : MonoBehaviour
     {
         /// <summary>
-        /// This is the smile.png file data encoded as a Base64 String. 
+        /// Base64-encoded data for a small PNG texture (smile.png).
         /// </summary>
         private const string SmilePngData = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAJUExURQAAAP/yAP///1XtZyMAAAA+SURBVAjXY1gFBAyrQkNXMawMDc1iWBoaGsUwNTQ0jGGqoyOMAHNBxJTQUDGGqaIhQK4DYxhEMVgb2ACQUQBbZhuGX7UQtQAAAABJRU5ErkJggg==";
 
         /// <summary>
-        /// This is the cube.obj file data as a String.
+        /// OBJ-formatted data (cube geometry) stored as a text string.
         /// </summary>
         private const string CubeObjData =
         @"mtllib cube.mtl
@@ -91,7 +93,7 @@ namespace TriLibCore.Samples
         ";
 
         /// <summary>
-        /// This is the Cube.mtl file data as a String.
+        /// MTL-formatted data containing material definitions (references the smile.png texture).
         /// </summary>
         private const string CubeMtlData =
         @"newmtl initialShadingGroup
@@ -106,34 +108,49 @@ namespace TriLibCore.Samples
         ";
 
         /// <summary>
-        /// Cube.obj filename.
+        /// Filename for the OBJ model.
         /// </summary>
         private const string CubeObjFilename = "cube.obj";
 
         /// <summary>
-        /// Cube.mtl filename.
+        /// Filename for the MTL material file.
         /// </summary>
         private const string CubeMtlFilename = "cube.mtl";
 
         /// <summary>
-        /// Smile.png filename.
+        /// Filename for the PNG texture.
         /// </summary>
         private const string SmilePngFilename = "smile.png";
 
         /// <summary>
-        /// Uses the Cube.obj data bytes to load the model.
+        /// Called automatically when the script is first enabled. 
+        /// Converts the <c>CubeObjData</c> string to bytes and uses 
+        /// <see cref="SimpleCustomAssetLoader"/> to load the model with callbacks.
         /// </summary>
         private void Start()
         {
             var cubeObjBytes = Encoding.UTF8.GetBytes(CubeObjData);
-            SimpleCustomAssetLoader.LoadModelFromByteData(cubeObjBytes, FileUtils.GetFileExtension(CubeObjFilename, false), OnError, OnProgress, OnModelFullyLoad, CustomDataReceivingCallback, CustomFilenameReceivingCallback, CustomTextureReceivingCallback, CubeObjFilename, gameObject);
+            SimpleCustomAssetLoader.LoadModelFromByteData(
+                data: cubeObjBytes,
+                modelExtension: FileUtils.GetFileExtension(CubeObjFilename, false),
+                onError: OnError,
+                onProgress: OnProgress,
+                onModelFullyLoad: OnModelFullyLoad,
+                customDataReceivingCallback: CustomDataReceivingCallback,
+                customFilenameReceivingCallback: CustomFilenameReceivingCallback,
+                customTextureReceivingCallback: CustomTextureReceivingCallback,
+                modelFilename: CubeObjFilename,
+                wrapperGameObject: gameObject
+            );
         }
 
         /// <summary>
-        /// Event triggered when the loader needs to retrieve the data Stream for a given Texture.
+        /// Callback for retrieving the texture data stream given a texture reference.
+        /// If the requested texture filename matches <see cref="SmilePngFilename"/>, 
+        /// the method returns a <see cref="MemoryStream"/> built from Base64-decoded PNG data.
         /// </summary>
-        /// <param name="texture">The source Texture.</param>
-        /// <returns>The Texture data Stream.</returns>
+        /// <param name="texture">The texture metadata required by TriLib.</param>
+        /// <returns>A <see cref="Stream"/> containing the texture data, or <c>null</c> if unrecognized.</returns>
         private Stream CustomTextureReceivingCallback(ITexture texture)
         {
             var textureShortFilename = FileUtils.GetShortFilename(texture.Filename);
@@ -146,21 +163,23 @@ namespace TriLibCore.Samples
         }
 
         /// <summary>
-        /// Event triggered when the loader needs to retrieve the full file-system filename to a given file.
-        /// This event is optional, so we simply return the filename back.
+        /// Callback for resolving the full filesystem path for a given filename.
+        /// This is optional, so by default we simply return the filename itself.
         /// </summary>
-        /// <param name="filename">The file name.</param>
-        /// <returns>The full file-system filename.</returns>
+        /// <param name="filename">The original filename reference.</param>
+        /// <returns>The resolved path or <paramref name="filename"/> if no changes are necessary.</returns>
         private string CustomFilenameReceivingCallback(string filename)
         {
             return filename;
         }
 
         /// <summary>
-        /// Event triggered when the loader has to retrieve the data Stream for a given external resource.
+        /// Callback for retrieving external resource data (e.g., .mtl files). 
+        /// If the requested filename matches <see cref="CubeMtlFilename"/>, 
+        /// this method returns a <see cref="MemoryStream"/> containing the MTL data.
         /// </summary>
-        /// <param name="filename">The external resource filename.</param>
-        /// <returns>The external resource data Stream.</returns>
+        /// <param name="filename">The filename referencing external model data.</param>
+        /// <returns>A <see cref="Stream"/> containing the file data, or <c>null</c> if unrecognized.</returns>
         private Stream CustomDataReceivingCallback(string filename)
         {
             var externalDataShortFilename = FileUtils.GetShortFilename(filename);
@@ -173,9 +192,10 @@ namespace TriLibCore.Samples
         }
 
         /// <summary>
-        /// Event triggered when the model and all the resources have been fully loaded.
+        /// Callback invoked once the model and all referenced resources have finished loading.
+        /// If successful, <see cref="AssetLoaderContext.RootGameObject"/> will be instantiated in the scene.
         /// </summary>
-        /// <param name="assetLoaderContext"></param>
+        /// <param name="assetLoaderContext">Provides context about the loaded model, including the root <see cref="GameObject"/>.</param>
         private void OnModelFullyLoad(AssetLoaderContext assetLoaderContext)
         {
             if (assetLoaderContext.RootGameObject != null)
@@ -185,19 +205,20 @@ namespace TriLibCore.Samples
         }
 
         /// <summary>
-        /// Event triggered when the model loading progress changes.
+        /// Callback invoked periodically to report loading progress, where <c>progress</c> ranges from 0.0 to 1.0.
         /// </summary>
-        /// <param name="assetLoaderContext"></param>
-        /// <param name="progress">The model loading progress in the 0-1 float range.</param>
+        /// <param name="assetLoaderContext">Provides context about the model loading process.</param>
+        /// <param name="progress">A float representing the loading progress (0 to 1).</param>
         private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
         {
             Debug.Log($"Progress: {progress:P}");
         }
 
         /// <summary>
-        /// Event triggered when any model loading error occurs.
+        /// Callback invoked if any error occurs while loading the model or its resources.
+        /// Logs the error details for debugging.
         /// </summary>
-        /// <param name="contextualizedError">The error containing the related context.</param>
+        /// <param name="contextualizedError">Contains exception information and additional context.</param>
         private void OnError(IContextualizedError contextualizedError)
         {
             Debug.LogError($"There was an error loading your model: {contextualizedError}");

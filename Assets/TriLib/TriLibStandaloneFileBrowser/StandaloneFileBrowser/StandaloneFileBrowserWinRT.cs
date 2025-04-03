@@ -78,12 +78,24 @@ namespace TriLibCore.SFB
             UnityEngine.WSA.Application.InvokeOnUIThread(async () =>
             {
                 var folderPicker = new Windows.Storage.Pickers.FolderPicker();
+                folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+                folderPicker.FileTypeFilter.Add("*");
                 var folder = await folderPicker.PickSingleFolderAsync();
-                var folderWithStream = new ItemWithStream()
+                if (folder != null)
                 {
-                    Name = folder.Name
-                };
-                await Task.Run(() => cb(new[] { folderWithStream }));
+                    var files = await folder.GetFilesAsync();
+                    var itemsWithStream = new List<ItemWithStream>();
+                    foreach (var file in files)
+                    {
+                        var itemWithStream = new ItemWithStream()
+                        {
+                            Name = file.Name,
+                            Stream = await ReadStorageFile(file) 
+                        };
+                        itemsWithStream.Add(itemWithStream);
+                    }
+                    await Task.Run(() => cb(itemsWithStream.ToArray()));
+                }
             }, false);
         }
 

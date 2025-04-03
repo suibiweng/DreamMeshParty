@@ -17,21 +17,38 @@ namespace TriLibCore.SFB
         public delegate void AsyncCallback(string path);
 
         [AOT.MonoPInvokeCallback(typeof(AsyncCallback))]
-        private static void openFileCb(string result)
+        private static void openFileCb(string paths)
         {
-            _openFileCb.Invoke(ParseResults(result));
+            var filenames = ParseResults(paths);
+            var results = StandaloneFileBrowser.BuildItemsFromFilenames(filenames);
+            _openFileCb.Invoke(results);
         }
 
         [AOT.MonoPInvokeCallback(typeof(AsyncCallback))]
-        private static void openFolderCb(string result)
+        private static void openFolderCb(string paths)
         {
-            _openFolderCb.Invoke(ParseResults(result));
+            IList<ItemWithStream> results = null;
+            var filenames = ParseResults(paths);
+            if (filenames?.Count > 0)
+            {
+                var filename = filenames[0];
+                results = StandaloneFileBrowser.BuildItemsFromFolderContents(filename);
+            }
+            _openFolderCb.Invoke(results);
         }
 
         [AOT.MonoPInvokeCallback(typeof(AsyncCallback))]
-        private static void saveFileCb(string result)
+        private static void saveFileCb(string path)
         {
-            _saveFileCb.Invoke(ParseResults(result)?[0]);
+            ItemWithStream result = null;
+            if (path != null)
+            {
+                result = new ItemWithStream
+                {
+                    Name = path
+                };
+            }
+            _saveFileCb(result);
         }
 
         [DllImport("StandaloneFileBrowser")]
@@ -54,7 +71,9 @@ namespace TriLibCore.SFB
                 directory,
                 GetFilterFromFileExtensionList(extensions),
                 multiselect));
-            return ParseResults(paths);
+            var filenames = ParseResults(paths);
+            var results = StandaloneFileBrowser.BuildItemsFromFilenames(filenames);
+            return results;
         }
 
         public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<IList<ItemWithStream>> cb)
@@ -74,7 +93,13 @@ namespace TriLibCore.SFB
                 title,
                 directory,
                 multiselect));
-            return ParseResults(paths);
+            var filenames = ParseResults(paths);
+            if (filenames?.Count > 0)
+            {
+                var filename = filenames[0];
+                return StandaloneFileBrowser.BuildItemsFromFolderContents(filename);
+            }
+            return null;
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<IList<ItemWithStream>> cb)
@@ -94,10 +119,14 @@ namespace TriLibCore.SFB
                 directory,
                 defaultName,
                 GetFilterFromFileExtensionList(extensions)));
-            return new ItemWithStream
+            if (filename != null)
             {
-                Name = filename
-            };
+                return new ItemWithStream
+                {
+                    Name = filename
+                };
+            }
+            return null;
         }
 
         public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<ItemWithStream> cb)
@@ -138,21 +167,12 @@ namespace TriLibCore.SFB
             return filterString;
         }
 
-        private static IList<ItemWithStream> ParseResults(string paths)
+        private static IList<string> ParseResults(string paths)
         {
             if (paths != null)
             {
                 var filenames = paths.Split((char)28);
-                var result = new ItemWithStream[filenames.Length];
-                for (var i = 0; i < filenames.Length; i++)
-                {
-                    result[i] = new ItemWithStream()
-                    {
-                        Name = filenames[i]//,
-                        //Stream = File.OpenRead(filenames[i])
-                    };
-                }
-                return result;
+                return filenames;
             }
             return null;
         }

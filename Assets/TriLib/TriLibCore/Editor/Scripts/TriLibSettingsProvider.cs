@@ -39,7 +39,7 @@ namespace TriLibCore.Editor
             GUILayout.Label("You can disable runtime file-formats importing here");
             EditorGUILayout.Space();
             ShowConditionalToggle("Disable runtime FBX importing", "TRILIB_DISABLE_FBX_IMPORT");
-            ShowConditionalToggle("Disable runtime gLTF2 importing", "TRILIB_DISABLE_GLTF_IMPORT");
+            ShowConditionalToggle("Disable runtime glTF2 importing", "TRILIB_DISABLE_GLTF_IMPORT");
             ShowConditionalToggle("Disable runtime OBJ importing", "TRILIB_DISABLE_OBJ_IMPORT");
             ShowConditionalToggle("Disable runtime STL importing", "TRILIB_DISABLE_STL_IMPORT");
             ShowConditionalToggle("Disable runtime PLY importing", "TRILIB_DISABLE_PLY_IMPORT");
@@ -51,7 +51,7 @@ namespace TriLibCore.Editor
             EditorPrefs.SetInt("TriLibTimeout", EditorGUILayout.IntField("Loading timeout", EditorPrefs.GetInt("TriLibTimeout", 180)));
             GUILayout.Label("You can disable in editor file-formats importing to avoid conflicts with other editor importers");
             EditorGUILayout.Space();
-            ShowConditionalToggle("Disable in editor gLTF2 importing", "TRILIB_DISABLE_EDITOR_GLTF_IMPORT");
+            ShowConditionalToggle("Disable in editor glTF2 importing", "TRILIB_DISABLE_EDITOR_GLTF_IMPORT");
             ShowConditionalToggle("Disable in editor PLY importing", "TRILIB_DISABLE_EDITOR_PLY_IMPORT");
             ShowConditionalToggle("Disable in editor 3MF importing", "TRILIB_DISABLE_EDITOR_3MF_IMPORT");
             ShowConditionalToggle("Disable in editor STL importing", "TRILIB_DISABLE_EDITOR_STL_IMPORT");
@@ -75,10 +75,8 @@ namespace TriLibCore.Editor
             GUILayout.Label("Misc Options", EditorStyles.boldLabel);
             GUILayout.Label("Advanced and experimental options");
             EditorGUILayout.Space();
-            //todo: fbx sdk will be included in a future update
-            //ShowConditionalToggle("Use FBX SDK (Experimental)", "TRILIB_USE_FBXSDK");
             ShowConditionalToggle("Enable UWP threaded loading (Experimental)", "TRILIB_ENABLE_UWP_THREADS");
-            ShowConditionalToggle("Enable gLTF2 Draco decompression (Experimental)", "TRILIB_DRACO");
+            ShowConditionalToggle("Enable glTF2 Draco decompression (Experimental)", "TRILIB_DRACO");
             ShowConditionalToggle("Force synchronous loading", "TRILIB_FORCE_SYNC");
             ShowConditionalToggle("Change thread names (Debug purposes only)", "TRILIB_USE_THREAD_NAMES");
             ShowConditionalToggle("Disable asset loader options validations", "TRILIB_DISABLE_VALIDATIONS");
@@ -96,7 +94,11 @@ namespace TriLibCore.Editor
             }
             if (GUILayout.Button("Wiki"))
             {
-                Application.OpenURL("https://web.archive.org/web/20221123174306/https://ricardoreis.net/trilibwiki/index.php/Main_Page");
+                Application.OpenURL("https://ricardoreis.net/trilibwiki/index.php");
+            }
+            if (GUILayout.Button("Discord Server"))
+            {
+                Application.OpenURL("https://discord.gg/FV6tqCxY2U");
             }
             if (GUILayout.Button("Support"))
             {
@@ -104,7 +106,6 @@ namespace TriLibCore.Editor
             }
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
-            CheckMappers.Initialize();
             base.OnGUI(searchContext);
         }
 

@@ -34,7 +34,7 @@ using TriLibCore.Dae.Reader;
 namespace TriLibCore
 {
     /// <summary>
-    /// Represents a series of methods to retrieve TriLib reader infos.
+    /// Represents a series of methods to retrieve TriLib readers information.
     /// </summary>
     public class Readers
     {

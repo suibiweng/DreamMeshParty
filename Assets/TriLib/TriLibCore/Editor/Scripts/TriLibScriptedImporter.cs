@@ -1,13 +1,10 @@
 ﻿#pragma warning disable CS0105
+#pragma warning disable CS0618
 using UnityEngine;
 using TriLibCore.Interfaces;
 using UnityEditor;
 using TriLibCore.Utils;
-#if UNITY_2020_2_OR_NEWER
 using UnityEditor.AssetImporters;
-#else
-using UnityEditor.Experimental.AssetImporters;
-#endif
 namespace TriLibCore.Editor
 {
     public class TriLibScriptedImporter : ScriptedImporter
@@ -21,6 +18,10 @@ namespace TriLibCore.Editor
                 {
                     EditorJsonUtility.FromJsonOverwrite(userData, assetLoaderOptions);
                 }
+                //Editor coroutines are not allowed
+                assetLoaderOptions.UseCoroutines = false;
+                //Asset Unloader is not suitable for editor loading
+                assetLoaderOptions.AddAssetUnloader = false;
                 return assetLoaderOptions;
             }
             set => userData = EditorJsonUtility.ToJson(value);

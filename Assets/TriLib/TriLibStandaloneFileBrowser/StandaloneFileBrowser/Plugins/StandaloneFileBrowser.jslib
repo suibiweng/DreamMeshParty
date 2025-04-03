@@ -7,8 +7,9 @@ var TriLibStandaloneFileBrowserWebGLPlugin = {
   //     Match all video files: "video/*"
   //     Match all audio files: "audio/*"
   //     Custom: ".plist, .xml, .yaml"
-  // multiselect: Allows multiple file selection
-  UploadFile: function(gameObjectNamePtr, methodNamePtr, filterPtr, multiselect) {
+  // multiselect: Allows multiple file selection.
+  // selectDirectory: Allows selecting a directory and all its files.
+  UploadFile: function(gameObjectNamePtr, methodNamePtr, filterPtr, multiselect, selectDirectory) {
     var gameObjectName = UTF8ToString(gameObjectNamePtr);
     var methodName = UTF8ToString(methodNamePtr);
     var filter = UTF8ToString(filterPtr);
@@ -20,18 +21,22 @@ var TriLibStandaloneFileBrowserWebGLPlugin = {
     fileInput.setAttribute('id', gameObjectName);
     fileInput.setAttribute('type', 'file');
     fileInput.setAttribute('class', 'standalone-file-picker');
-    if (multiselect) {
-      fileInput.setAttribute('multiple', 'multiple');
-    }
-    if (filter) {
-      fileInput.setAttribute('accept', filter);
+    if (selectDirectory) {
+      fileInput.setAttribute('webkitdirectory', 'webkitdirectory');
+    } else {
+      if (multiselect) {
+        fileInput.setAttribute('multiple', 'multiple');
+      }
+      if (filter) {
+        fileInput.setAttribute('accept', filter);
+      }
     }
     fileInput.onclick = function(event) {
-	  event.stopPropagation();
+      event.stopPropagation();
       this.value = null;
     };
     fileInput.onchange = function(event) {
-	  event.stopPropagation();	
+      event.stopPropagation();	
       var urls = [];
       for (var i = 0; i < event.target.files.length; i++) {
         urls.push({
@@ -42,16 +47,20 @@ var TriLibStandaloneFileBrowserWebGLPlugin = {
       SendMessage(gameObjectName, methodName, JSON.stringify(urls));
       document.body.removeChild(fileInput);
     };
+    fileInput.oncancel = function(event) {
+      event.stopPropagation();  
+      document.body.removeChild(fileInput);
+    };
     document.body.appendChild(fileInput);
-	fileInput.focus();
+    fileInput.focus();
     fileInput.click();
     this.oldGameObjectName = gameObjectName;
   },
 
-  // DownloadFile method does not open SaveFileDialog like standalone builds, its just allows user to download file
+  // DownloadFile method does not open SaveFileDialog like standalone builds, its just allows user to download files.
   // gameObjectNamePtr: Unique GameObject name. Required for calling back unity with SendMessage.
   // methodNamePtr: Callback method name on given GameObject.
-  // filenamePtr: Filename with extension
+  // filenamePtr: Filename with extension.
   // byteArray: byte[]
   // byteArraySize: byte[].Length
   DownloadFile: function(gameObjectNamePtr, methodNamePtr, filenamePtr, byteArray, byteArraySize) {

@@ -26,6 +26,7 @@
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float3x3 tbn : TEXCOORD1;
+                float3 normal : NORMAL;
             };
         
             v2f vert (appdata v)
@@ -36,21 +37,26 @@
                 float3 tangent = normalize(v.tangent.xyz - v.normal * dot(v.normal, v.tangent.xyz));
                 float3 bitangent = cross(v.normal, tangent) * v.tangent.w;
                 o.tbn = float3x3(tangent, bitangent, v.normal);
+                o.normal = v.normal;
                 return o;
             }
 
             sampler2D _BumpMap;
+            float4 _BumpMap_TexelSize;
 
             float4 frag(v2f i) : SV_Target
             {
-                float3 normal = tex2D(_BumpMap, i.uv).xyz;
-                if (length(normal) == 0.0 || any(abs(normal) > 1.0))
+                float3 normal;
+                if (all(_BumpMap_TexelSize.zw <= 16))
                 {
-                    normal = float3(0.0, 0.0, 1.0);
+                    normal = i.normal;
+                } 
+                else
+                {
+                    normal = tex2D(_BumpMap, i.uv).xyz;
+                    normal = normal * 2.0 - 1.0;
+                    normal = normalize(mul(normal, i.tbn));
                 }
-                normal = (2.0 * normal) - 1.0;
-                normal = normalize(mul(normal, i.tbn));
-                normal = mul(normal, unity_ObjectToWorld).xyz;
                 normal = (normal + 1.0) / 2.0;
                 return float4(normal, 1.0);
             }
