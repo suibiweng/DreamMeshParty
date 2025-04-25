@@ -7,7 +7,7 @@ using RealityEditor;
 // using Normal.Realtime; 
 using TMPro;
 using TriLibCore.Dae.Schema;
-using Unity.VisualScripting;
+
 using UnityEngine.Networking;
 
 
@@ -17,7 +17,7 @@ public class RealityEditorManager : MonoBehaviour
 
     public bool isPhysics;
     public GameObject GenerateSpotPrefab;
-    private NetworkRunner _runner;
+    public NetworkRunner _runner;
     public bool isOnline; 
     public Transform LeftHand, RightHand;
     public Transform PlayerCamera; 

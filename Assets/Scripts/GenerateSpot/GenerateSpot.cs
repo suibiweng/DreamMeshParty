@@ -535,7 +535,7 @@ public class GenerateSpot : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F3))
         {
 
-             ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + "20250221165209" + "_ShapE.zip"));
+           DebugGenrateModel();
           
 
         }
@@ -709,13 +709,6 @@ public class GenerateSpot : MonoBehaviour
     public void ConfirmGeneration(string Prompt){
 
 
-
-
-
-
-
-
-
     }
 
 
@@ -759,12 +752,25 @@ public class GenerateSpot : MonoBehaviour
 
     public void DebugGenrateModel()
     {
-        manager.promtGenerateModel(id, "Apple", URLID);
-        URLIDText.text = URLID;
-        // PreViewQuad.SetActive(true);
-        loadingIcon.SetActive(true);
-        Prompt = "";
+        manager.promtGenerateModel(id, "CampFire", URLID);
+        //manager.sendCommand("ShapeE");
+        manager.sendCommand("DynamicCoding");
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        
+        
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
 
+        // DremmeshPrompt=Prompt;
+
+
+        
+
+        // PreViewQuad.SetActive(true);
+        // loadingIcon.SetActive(true);
+        // Prompt = "";
     }
 
 

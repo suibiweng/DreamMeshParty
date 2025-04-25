@@ -5,9 +5,12 @@ using Fusion;
 using RealityEditor;
 using UnityEngine.Networking;
 using Oculus.Platform.Models;
+using Unity.VisualScripting;
 public class AvatarForDreamPortal : MonoBehaviour
 {
     GameObject UserHead;
+    GameObject UserLeftHand;
+    GameObject UserRightHand;
 
     public Transform LeftHand, RightHand;
     public Transform Head; 
@@ -15,14 +18,12 @@ public class AvatarForDreamPortal : MonoBehaviour
     RealityEditorManager realityEditorManager;
 
 
-     private NetworkRunner _runner;
+    public NetworkRunner _runner;
     
+    public GameObject AvatarHead, AvatarHand;
 
 
-
-    public GameObject AvatarHead;
-
-    
+    private bool PlayerSetup = false;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +37,7 @@ public class AvatarForDreamPortal : MonoBehaviour
         Head=realityEditorManager.PlayerCamera;
 
 
-        StartCoroutine(delaySpwanBody());
+        // StartCoroutine(delaySpwanBody());
 
 
         
@@ -51,11 +52,22 @@ public class AvatarForDreamPortal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(_runner.IsRunning && !PlayerSetup)
+        {
+            SpawnBody();
+            print("Player is setup");
+            PlayerSetup=true;
+        }
         if(UserHead!=null)
         {
             print("UserHead is not null");
             UserHead.transform.position=Head.position;
             UserHead.transform.rotation=Head.rotation;
+            UserLeftHand.transform.position=LeftHand.position;
+            UserLeftHand.transform.rotation=LeftHand.rotation;
+            UserRightHand.transform.position=RightHand.position;
+            UserRightHand.transform.rotation=RightHand.rotation;
+
         }   
 
       
@@ -64,14 +76,22 @@ public class AvatarForDreamPortal : MonoBehaviour
 
 
 
-    IEnumerator delaySpwanBody()
+    void SpawnBody()
     {
-        yield return new WaitForSeconds(3);
+        // yield return new WaitForSeconds(8);
 
 
         UserHead = SpawnNetworkObject(Head.position, Quaternion.identity, AvatarHead); 
-        BodyPartSyc bodyPartSyc=UserHead.GetComponent<BodyPartSyc>();
-        bodyPartSyc.SetTarget(Head);
+        UserLeftHand = SpawnNetworkObject(LeftHand.position, Quaternion.identity, AvatarHand);
+        UserRightHand = SpawnNetworkObject(RightHand.position, Quaternion.identity, AvatarHand);        
+        BodyPartSync HeadSync=UserHead.GetComponent<BodyPartSync>();
+        BodyPartSync LeftHandSync=UserLeftHand.GetComponent<BodyPartSync>();
+        BodyPartSync RightHandSync=UserRightHand.GetComponent<BodyPartSync>();
+           
+        
+        HeadSync.SetTarget(Head);
+        LeftHandSync.SetTarget(LeftHand);
+        RightHandSync.SetTarget(RightHand);
         
 
     }   

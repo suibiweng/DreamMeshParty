@@ -11,6 +11,8 @@ TagManager:
   - ErasineLine
   - USBCamera
   - Hat
+  - AvatarHead
+  - AvatarHand
   layers:
   - Default
   - TransparentFX

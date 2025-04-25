@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-public class BodyPartSyc : MonoBehaviour
+public class BodyPartSync : MonoBehaviour
 {
 
     private NetworkObject _networkObject;
