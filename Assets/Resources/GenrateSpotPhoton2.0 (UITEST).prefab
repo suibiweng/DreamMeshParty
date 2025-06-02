@@ -35692,7 +35692,7 @@ MonoBehaviour:
   SmoothCubeRenderer: {fileID: 1195611799808208076}
   Prompt: 
   URLIDText: {fileID: 4632498897580574659}
-  PromtText: {fileID: 7436817293525037348}
+  PromtText: {fileID: 0}
   LitseningText: {fileID: 0}
   Text_Litsening: {fileID: 5059679257659740836}
   UiMenu: {fileID: 7828937632104674531}
