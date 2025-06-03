@@ -17262,6 +17262,7 @@ MonoBehaviour:
       AxisRange:
         Min: 0
         Max: 10
+  _resetScaleResponsivenessOnConstraintOvershoot: 0
 --- !u!114 &8250427669350316377
 MonoBehaviour:
   m_ObjectHideFlags: 0

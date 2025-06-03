@@ -113,7 +113,7 @@ partial class OculusBuildSamples
     {
         InitializeBuild("com.oculus.unitysample.startscene", "Meta XR SDK Samples");
 
-        var projectSettings = OVRProjectConfig.GetProjectConfig();
+        var projectSettings = OVRProjectConfig.CachedProjectConfig;
         projectSettings.insightPassthroughSupport = OVRProjectConfig.FeatureSupport.Supported;
         projectSettings.anchorSupport = OVRProjectConfig.AnchorSupport.Enabled;
         projectSettings.sceneSupport = OVRProjectConfig.FeatureSupport.Supported;
