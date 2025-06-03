@@ -410,6 +410,13 @@
       "dependencies": {},
       "hash": "d1ef610e9fe3ad0b490cce91594449fc0af809a6"
     },
+    "com.yasirkula.assetusagedetector": {
+      "version": "https://github.com/yasirkula/UnityAssetUsageDetector.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "790a508dcd45526e338e06b771026b875f9f04a0"
+    },
     "jp.keijiro.klak.ndi": {
       "version": "2.1.2",
       "depth": 0,
