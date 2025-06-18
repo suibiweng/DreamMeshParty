@@ -16725,6 +16725,7 @@ MonoBehaviour:
   luaMonoBehavior: {fileID: 0}
   grabInteractable: {fileID: 0}
   isGrabing: 0
+  debugPrompt: CampFire
   DremmeshPrompt: 
   Text_Scanning_Btn: {fileID: 0}
   Text_Instruction: {fileID: 0}
