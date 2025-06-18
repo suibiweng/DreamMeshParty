@@ -88,7 +88,7 @@ public class LuaMonoBehavior : MonoBehaviour
     {
         if (fileCheckCoroutine == null)
         {
-            string urlToCheck = downloadURL + downloadID + "_DynamicCoding.json";
+            string urlToCheck = downloadURL +"/objects/"+downloadID+"/"+ downloadID+"_DynamicCoding.json";
             fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
         }
     }

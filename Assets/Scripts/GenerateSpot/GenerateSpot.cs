@@ -748,6 +748,8 @@ public class GenerateSpot : MonoBehaviour
         //  UiMenu.SetActive(false);
 
     }
+    
+    public string debugPrompt = "CampFire";
 
 
     public void DebugGenrateModel()
@@ -755,10 +757,10 @@ public class GenerateSpot : MonoBehaviour
         manager.promtGenerateModel(id, "CampFire", URLID);
         //manager.sendCommand("ShapeE");
         manager.sendCommand("DynamicCoding");
-        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
-        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
-        
-        
+        ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+
+
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
@@ -766,7 +768,7 @@ public class GenerateSpot : MonoBehaviour
         // DremmeshPrompt=Prompt;
 
 
-        
+
 
         // PreViewQuad.SetActive(true);
         // loadingIcon.SetActive(true);

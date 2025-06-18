@@ -21,8 +21,6 @@ public class AvatarForDreamPortal : MonoBehaviour
     public NetworkRunner _runner;
     
     public GameObject AvatarHead, AvatarHand;
-
-
     private bool PlayerSetup = false;
 
     // Start is called before the first frame update
