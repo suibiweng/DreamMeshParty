@@ -11,15 +11,10 @@ public class AvatarForDreamPortal : MonoBehaviour
     GameObject UserHead;
     GameObject UserLeftHand;
     GameObject UserRightHand;
-
     public Transform LeftHand, RightHand;
     public Transform Head; 
-
     RealityEditorManager realityEditorManager;
-
-
     public NetworkRunner _runner;
-    
     public GameObject AvatarHead, AvatarHand;
     private bool PlayerSetup = false;
 
@@ -27,23 +22,11 @@ public class AvatarForDreamPortal : MonoBehaviour
     void Start()
     {   
         realityEditorManager=GetComponent<RealityEditorManager>();
-
         _runner = FindObjectOfType<NetworkRunner>(); 
-
         LeftHand=realityEditorManager.LeftHand;
         RightHand=realityEditorManager.RightHand;
         Head=realityEditorManager.PlayerCamera;
-
-
         // StartCoroutine(delaySpwanBody());
-
-
-        
-    
-
-
-            
-        
            //GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab); 
     }
 
