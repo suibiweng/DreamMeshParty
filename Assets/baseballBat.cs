@@ -17,17 +17,17 @@ public class BaseballBat : NetworkBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (!Object.HasInputAuthority)
-            return;
+        // if (!Object.HasInputAuthority)
+        //     return;
 
         Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
-        if (rb == null)
-            return;
+        // if (rb == null)
+        //     return;
 
         NetworkObject netObj = other.gameObject.GetComponent<NetworkObject>();
 
         Vector3 hitDir = -other.contacts[0].normal;
-        Vector3 force = hitDir * 300f;
+        Vector3 force = hitDir * 5f;
 
         if (netObj != null)
         {

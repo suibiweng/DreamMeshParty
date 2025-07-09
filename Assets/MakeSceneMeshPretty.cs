@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MakeSceneMeshPretty : MonoBehaviour
 {
-    public List<Rigidbody> balls = new List<Rigidbody>();
+    // public List<Rigidbody> balls = new List<Rigidbody>();
     // Start is called before the first frame update
     void Start()
     {
@@ -46,10 +46,10 @@ public class MakeSceneMeshPretty : MonoBehaviour
         GameObject.Find("GLOBAL_MESH").SetActive(false);
         yield return new WaitForSeconds(1);
 
-        foreach (var ball in balls)
-        {
-            ball.isKinematic = false;
-        }
+        // foreach (var ball in balls)
+        // {
+        //     ball.isKinematic = false;
+        // }
 
     }
 }
