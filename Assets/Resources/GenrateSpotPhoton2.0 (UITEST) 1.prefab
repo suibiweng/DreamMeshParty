@@ -35520,7 +35520,7 @@ GameObject:
   - component: {fileID: 1418298262282382212}
   - component: {fileID: 7417036898871245724}
   m_Layer: 0
-  m_Name: GenrateSpotPhoton2.0 (UITEST)
+  m_Name: GenrateSpotPhoton2.0 (UITEST) 1
   m_TagString: GenerateSpot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35953,7 +35953,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 2304931672
+  SortKey: 2822998812
   ObjectInterest: 1
   Flags: 786433
   NestedObjects: []

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
+    path: Assets/Sawyer/NetworkMSDK.unity
+    guid: 0f2fbc4638f68dc40bc3da7de997dc5b
+  - enabled: 0
     path: Assets/Scenes/3Scene.unity
     guid: 355a884e7316d064f993052e96b52efe
   - enabled: 0
@@ -21,17 +24,26 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 58f41a00b8794cc479336bf675383b06
   - enabled: 0
-    path: Assets/Scenes/Multiplayer Anchor.unity
-    guid: 895bd73ff0894104499bc7d8cf2d4db9
-  - enabled: 0
     path: Assets/Scenes/Keyboard.unity
     guid: 51068f7c6b2844d4e88d85c14793326a
   - enabled: 0
     path: Assets/Scenes/3Scene Keyboard.unity
     guid: 488bbd7ea77d5ca43bb004b171356271
-  - enabled: 1
+  - enabled: 0
     path: Assets/Sawyer/KeyboardSoonMovement.unity
     guid: 294270ba0e7d72b4f9fc88369d2ee6a5
+  - enabled: 0
+    path: Assets/Samples/Meta XR Movement SDK/76.0.1/Advanced Samples/Scenes/MovementNetworking.unity
+    guid: 3f44ee1b823653440a4a894e072e92b7
+  - enabled: 0
+    path: Assets/Scenes/RoomMesh.unity
+    guid: 35c3dd24104b3514e822c7bc1244f3c7
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer Anchor.unity
+    guid: 895bd73ff0894104499bc7d8cf2d4db9
+  - enabled: 0
+    path: Assets/Scenes/SharedRoomMesh.unity
+    guid: 48e8e1f28061ab24daad7f2bd9868620
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7dafe5f8db58eca40b1d44174dc3d078, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ad7b311f2f55bc45b379fc5b93a9d20, type: 2}

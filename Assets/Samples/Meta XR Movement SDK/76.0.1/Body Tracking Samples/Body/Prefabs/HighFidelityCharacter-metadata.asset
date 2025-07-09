@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3d881e962d099f4a8eb492ef7e9a8c0, type: 3}
-  m_Name: OculusPlatformSettings
+  m_Script: {fileID: 11500000, guid: f19d1e02490929e41b903b049fc91c34, type: 3}
+  m_Name: HighFidelityCharacter-metadata
   m_EditorClassIdentifier: 
-  ovrAppID: 8044391642321044
-  ovrMobileAppID: 8044391642321044
-  ovrUseMobileAppIDInEditor: 0
-  ovrUseStandalonePlatform: 1
+  _model: {fileID: 7904580889813928459, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  _configJson: {fileID: 4900000, guid: 04e9e8f81cc7d2c40aaace3f6484d108, type: 3}

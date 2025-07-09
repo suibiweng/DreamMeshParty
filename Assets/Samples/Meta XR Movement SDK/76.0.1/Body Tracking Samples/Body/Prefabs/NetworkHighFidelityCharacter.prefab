@@ -1,0 +1,1557 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2126065678368157407
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420074960326168753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7904580889813928459, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_Name
+      value: NetworkHighFidelityCharacter
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7904580889813928459, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3224914352321384730}
+  m_SourcePrefab: {fileID: 100100000, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+--- !u!4 &412209189069247637 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1745491659582831178, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &522047295018736798 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1927507964130964033, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &573409962360662220 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1906258677147747859, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &576000195988369417 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1909262738114846422, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &650568002823196306 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1478875431318560845, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &783781745218822019 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1684838980920324444, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &790693108870280596 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1691196532160158539, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &854336162753265148 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1610735395767915299, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1051348649798829552 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1375402728478485295, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1172766049014156316 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 992988717900112579, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1346926977980364479 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1094501751976908896, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1419908205493993672 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1023948263233515031, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1466583429558970308 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 710184059642218779, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1732790175261185658 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400070515121879205, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1902957983685780711 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 570241143193537080, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1904321944751749874 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 571059677494776877, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1915658493738461159 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 510178035034818872, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1971918962919405857 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 494521439360276478, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1980397798260443577 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 502859677328942950, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2004954740079493726 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 455508765125651585, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2023362073463143302 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 114033021053310297, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2128347345445670740 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2293418108117387, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2419766517651133444 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4329632336006249179, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2522971195751267010 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4504208306730128413, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2587496233517884807 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4497388923604306776, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2651054363094642596 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4128431544891720059, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2687323947780854756 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4092091578815380795, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2850077243094585071 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4182946159261343792, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2983857800162735416 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3812727699981655015, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3220122336476810015 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3544721362495530432, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3460934491297102742 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3280583075794359625, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3508616992435068186 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3256192591602217925, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3709651943459806610 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3385046321714623309, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4004952025715047782 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3032400145400550329, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4179146980200233580 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2629571603778999475, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4195712851283468131 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2862996215329616316, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4462950299284424832 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2337043707319739999, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4518312007535459017 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2536944602280154134, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4925302201858566768 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6474906575213561007, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5029191212242710304 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6361910322901975551, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5131024516717547489 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6535922508599501118, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5162612261136831667 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6495322094130936428, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5235410216360181289 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6135772558832816374, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5432679576323934082 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6261565007012981085, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5702857691800697933 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5955398780712571538, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5735089935434759466 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5915034531912029173, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5912561620575894060 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5732218176532387059, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6061502309728507950 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5305105413452822257, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6097310236965199170 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5268281529118847901, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6281199645097858018 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5380113478228294973, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6593096233857779760 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5115578383031838447, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6650147175085843175 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4740985181878848568, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7208651547253887941 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8758106114298215706, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7516448899455960962 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8488870829360834909, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7543717666736727812 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8444783972065921499, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7687174095530139881 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8588110935244148278, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7723374885012975505 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8552263064212701518, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7824494551780067238 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8149119689849317753, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7931599420454552933 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8328280365855402938, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7976600843772208608 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8301217462781152063, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8041202914647537921 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8221701593841424350, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8082958407424791332 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7903010995864829435, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8085081768844846292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7904580889813928459, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3224914352321384730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085081768844846292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d79480c96c262f47ad05cd9f4b91cf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 4900000, guid: 28dda867e484e6b4cbdddb0f39576615, type: 3}
+  _jointPairs:
+  - Joint: {fileID: 2128347345445670740}
+    ParentJoint: {fileID: 0}
+  - Joint: {fileID: 1419908205493993672}
+    ParentJoint: {fileID: 2128347345445670740}
+  - Joint: {fileID: 573409962360662220}
+    ParentJoint: {fileID: 1419908205493993672}
+  - Joint: {fileID: 4462950299284424832}
+    ParentJoint: {fileID: 573409962360662220}
+  - Joint: {fileID: 7687174095530139881}
+    ParentJoint: {fileID: 4462950299284424832}
+  - Joint: {fileID: 783781745218822019}
+    ParentJoint: {fileID: 7687174095530139881}
+  - Joint: {fileID: 3508616992435068186}
+    ParentJoint: {fileID: 7687174095530139881}
+  - Joint: {fileID: 1971918962919405857}
+    ParentJoint: {fileID: 3508616992435068186}
+  - Joint: {fileID: 1172766049014156316}
+    ParentJoint: {fileID: 1971918962919405857}
+  - Joint: {fileID: 576000195988369417}
+    ParentJoint: {fileID: 1172766049014156316}
+  - Joint: {fileID: 5235410216360181289}
+    ParentJoint: {fileID: 1419908205493993672}
+  - Joint: {fileID: 2004954740079493726}
+    ParentJoint: {fileID: 5235410216360181289}
+  - Joint: {fileID: 7824494551780067238}
+    ParentJoint: {fileID: 2004954740079493726}
+  - Joint: {fileID: 1466583429558970308}
+    ParentJoint: {fileID: 7824494551780067238}
+  - Joint: {fileID: 4518312007535459017}
+    ParentJoint: {fileID: 7824494551780067238}
+  - Joint: {fileID: 1902957983685780711}
+    ParentJoint: {fileID: 4518312007535459017}
+  - Joint: {fileID: 1732790175261185658}
+    ParentJoint: {fileID: 1902957983685780711}
+  - Joint: {fileID: 6061502309728507950}
+    ParentJoint: {fileID: 1732790175261185658}
+  - Joint: {fileID: 3460934491297102742}
+    ParentJoint: {fileID: 1419908205493993672}
+  - Joint: {fileID: 7543717666736727812}
+    ParentJoint: {fileID: 3460934491297102742}
+  - Joint: {fileID: 2522971195751267010}
+    ParentJoint: {fileID: 7543717666736727812}
+  - Joint: {fileID: 2687323947780854756}
+    ParentJoint: {fileID: 2522971195751267010}
+  - Joint: {fileID: 8557474943092083987}
+    ParentJoint: {fileID: 2687323947780854756}
+  - Joint: {fileID: 7516448899455960962}
+    ParentJoint: {fileID: 8557474943092083987}
+  - Joint: {fileID: 5702857691800697933}
+    ParentJoint: {fileID: 7516448899455960962}
+  - Joint: {fileID: 7723374885012975505}
+    ParentJoint: {fileID: 5702857691800697933}
+  - Joint: {fileID: 7931599420454552933}
+    ParentJoint: {fileID: 7723374885012975505}
+  - Joint: {fileID: 7976600843772208608}
+    ParentJoint: {fileID: 7931599420454552933}
+  - Joint: {fileID: 6097310236965199170}
+    ParentJoint: {fileID: 7976600843772208608}
+  - Joint: {fileID: 5912561620575894060}
+    ParentJoint: {fileID: 7723374885012975505}
+  - Joint: {fileID: 3709651943459806610}
+    ParentJoint: {fileID: 5912561620575894060}
+  - Joint: {fileID: 1051348649798829552}
+    ParentJoint: {fileID: 3709651943459806610}
+  - Joint: {fileID: 3220122336476810015}
+    ParentJoint: {fileID: 7723374885012975505}
+  - Joint: {fileID: 5162612261136831667}
+    ParentJoint: {fileID: 3220122336476810015}
+  - Joint: {fileID: 8980328582005633186}
+    ParentJoint: {fileID: 5162612261136831667}
+  - Joint: {fileID: 6650147175085843175}
+    ParentJoint: {fileID: 8980328582005633186}
+  - Joint: {fileID: 8756912976748057323}
+    ParentJoint: {fileID: 7723374885012975505}
+  - Joint: {fileID: 7208651547253887941}
+    ParentJoint: {fileID: 8756912976748057323}
+  - Joint: {fileID: 2850077243094585071}
+    ParentJoint: {fileID: 7208651547253887941}
+  - Joint: {fileID: 5735089935434759466}
+    ParentJoint: {fileID: 7723374885012975505}
+  - Joint: {fileID: 4925302201858566768}
+    ParentJoint: {fileID: 5735089935434759466}
+  - Joint: {fileID: 8152745177123424748}
+    ParentJoint: {fileID: 4925302201858566768}
+  - Joint: {fileID: 5432679576323934082}
+    ParentJoint: {fileID: 8152745177123424748}
+  - Joint: {fileID: 4004952025715047782}
+    ParentJoint: {fileID: 2687323947780854756}
+  - Joint: {fileID: 854336162753265148}
+    ParentJoint: {fileID: 4004952025715047782}
+  - Joint: {fileID: 8082958407424791332}
+    ParentJoint: {fileID: 2687323947780854756}
+  - Joint: {fileID: 790693108870280596}
+    ParentJoint: {fileID: 8082958407424791332}
+  - Joint: {fileID: 2023362073463143302}
+    ParentJoint: {fileID: 790693108870280596}
+  - Joint: {fileID: 2651054363094642596}
+    ParentJoint: {fileID: 2023362073463143302}
+  - Joint: {fileID: 8041202914647537921}
+    ParentJoint: {fileID: 2651054363094642596}
+  - Joint: {fileID: 522047295018736798}
+    ParentJoint: {fileID: 8041202914647537921}
+  - Joint: {fileID: 650568002823196306}
+    ParentJoint: {fileID: 522047295018736798}
+  - Joint: {fileID: 5131024516717547489}
+    ParentJoint: {fileID: 2651054363094642596}
+  - Joint: {fileID: 1980397798260443577}
+    ParentJoint: {fileID: 5131024516717547489}
+  - Joint: {fileID: 4179146980200233580}
+    ParentJoint: {fileID: 1980397798260443577}
+  - Joint: {fileID: 8701377979619865358}
+    ParentJoint: {fileID: 2651054363094642596}
+  - Joint: {fileID: 6281199645097858018}
+    ParentJoint: {fileID: 8701377979619865358}
+  - Joint: {fileID: 1915658493738461159}
+    ParentJoint: {fileID: 6281199645097858018}
+  - Joint: {fileID: 1346926977980364479}
+    ParentJoint: {fileID: 1915658493738461159}
+  - Joint: {fileID: 2983857800162735416}
+    ParentJoint: {fileID: 2651054363094642596}
+  - Joint: {fileID: 6593096233857779760}
+    ParentJoint: {fileID: 2983857800162735416}
+  - Joint: {fileID: 412209189069247637}
+    ParentJoint: {fileID: 6593096233857779760}
+  - Joint: {fileID: 2419766517651133444}
+    ParentJoint: {fileID: 2651054363094642596}
+  - Joint: {fileID: 2587496233517884807}
+    ParentJoint: {fileID: 2419766517651133444}
+  - Joint: {fileID: 1904321944751749874}
+    ParentJoint: {fileID: 2587496233517884807}
+  - Joint: {fileID: 9105378583322272298}
+    ParentJoint: {fileID: 1904321944751749874}
+  _shapePoseData:
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_L
+    ShapeIndex: 0
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_R
+    ShapeIndex: 1
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekPuff_L
+    ShapeIndex: 2
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekPuff_R
+    ShapeIndex: 3
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_L
+    ShapeIndex: 4
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_R
+    ShapeIndex: 5
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekSuck_L
+    ShapeIndex: 6
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekSuck_R
+    ShapeIndex: 7
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.chinRaiser_B
+    ShapeIndex: 8
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.chinRaiser_T
+    ShapeIndex: 9
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_L
+    ShapeIndex: 10
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_R
+    ShapeIndex: 11
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_L
+    ShapeIndex: 12
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_R
+    ShapeIndex: 13
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_L
+    ShapeIndex: 14
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_R
+    ShapeIndex: 15
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookLeft_L
+    ShapeIndex: 16
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookLeft_R
+    ShapeIndex: 17
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookRight_L
+    ShapeIndex: 18
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookRight_R
+    ShapeIndex: 19
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookUp_L
+    ShapeIndex: 20
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookUp_R
+    ShapeIndex: 21
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.innerBrowRaiser_L
+    ShapeIndex: 22
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.innerBrowRaiser_R
+    ShapeIndex: 23
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop
+    ShapeIndex: 24
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawSidewaysLeft
+    ShapeIndex: 25
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawSidewaysRight
+    ShapeIndex: 26
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawThrust
+    ShapeIndex: 27
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lidTightener_L
+    ShapeIndex: 28
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lidTightener_R
+    ShapeIndex: 29
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor_L
+    ShapeIndex: 30
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor_R
+    ShapeIndex: 31
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_L
+    ShapeIndex: 32
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_R
+    ShapeIndex: 33
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_LB
+    ShapeIndex: 34
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_LT
+    ShapeIndex: 35
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_RB
+    ShapeIndex: 36
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_RT
+    ShapeIndex: 37
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipPressor_L
+    ShapeIndex: 38
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipPressor_R
+    ShapeIndex: 39
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipPucker_L
+    ShapeIndex: 40
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipPucker_R
+    ShapeIndex: 41
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward_LB
+    ShapeIndex: 42
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward_LT
+    ShapeIndex: 43
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward_RB
+    ShapeIndex: 44
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward_RT
+    ShapeIndex: 45
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher_L
+    ShapeIndex: 46
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher_R
+    ShapeIndex: 47
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck_LB
+    ShapeIndex: 48
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck_LT
+    ShapeIndex: 49
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck_RB
+    ShapeIndex: 50
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck_RT
+    ShapeIndex: 51
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipTightener_L
+    ShapeIndex: 52
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipTightener_R
+    ShapeIndex: 53
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lowerLipDepressor_L
+    ShapeIndex: 54
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lowerLipDepressor_R
+    ShapeIndex: 55
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.mouthLeft
+    ShapeIndex: 56
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.mouthRight
+    ShapeIndex: 57
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nasolabialFurrow_L
+    ShapeIndex: 58
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nasolabialFurrow_R
+    ShapeIndex: 59
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.noseWrinkler_L
+    ShapeIndex: 60
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.noseWrinkler_R
+    ShapeIndex: 61
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nostrilCompressor_L
+    ShapeIndex: 62
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nostrilCompressor_R
+    ShapeIndex: 63
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nostrilDilator_L
+    ShapeIndex: 64
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nostrilDilator_R
+    ShapeIndex: 65
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.outerBrowRaiser_L
+    ShapeIndex: 66
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.outerBrowRaiser_R
+    ShapeIndex: 67
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.upperLidRaiser_L
+    ShapeIndex: 68
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.upperLidRaiser_R
+    ShapeIndex: 69
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.upperLipRaiser_L
+    ShapeIndex: 70
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.upperLipRaiser_R
+    ShapeIndex: 71
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop75
+    ShapeIndex: 72
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward75_LB
+    ShapeIndex: 73
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward75_LT
+    ShapeIndex: 74
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward75_RB
+    ShapeIndex: 75
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward75_RT
+    ShapeIndex: 76
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekPuff50_L
+    ShapeIndex: 77
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekPuff50_R
+    ShapeIndex: 78
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser50_L
+    ShapeIndex: 79
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser50_R
+    ShapeIndex: 80
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler50_L
+    ShapeIndex: 81
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler50_R
+    ShapeIndex: 82
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_L
+    ShapeIndex: 83
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_R
+    ShapeIndex: 84
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown50_L
+    ShapeIndex: 85
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown50_R
+    ShapeIndex: 86
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookLeft50_L
+    ShapeIndex: 87
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookLeft50_R
+    ShapeIndex: 88
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookRight50_L
+    ShapeIndex: 89
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookRight50_R
+    ShapeIndex: 90
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.innerBrowRaiser50_L
+    ShapeIndex: 91
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.innerBrowRaiser50_R
+    ShapeIndex: 92
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop50
+    ShapeIndex: 93
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor50_L
+    ShapeIndex: 94
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor50_R
+    ShapeIndex: 95
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller50_L
+    ShapeIndex: 96
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller50_R
+    ShapeIndex: 97
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler50_LB
+    ShapeIndex: 98
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler50_LT
+    ShapeIndex: 99
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler50_RB
+    ShapeIndex: 100
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler50_RT
+    ShapeIndex: 101
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipPucker50_L
+    ShapeIndex: 102
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipPucker50_R
+    ShapeIndex: 103
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward50_LB
+    ShapeIndex: 104
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward50_LT
+    ShapeIndex: 105
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward50_RB
+    ShapeIndex: 106
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward50_RT
+    ShapeIndex: 107
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher50_L
+    ShapeIndex: 108
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher50_R
+    ShapeIndex: 109
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck50_LB
+    ShapeIndex: 110
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck50_LT
+    ShapeIndex: 111
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck50_RB
+    ShapeIndex: 112
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipSuck50_RT
+    ShapeIndex: 113
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lowerLipDepressor50_L
+    ShapeIndex: 114
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lowerLipDepressor50_R
+    ShapeIndex: 115
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.outerBrowRaiser50_L
+    ShapeIndex: 116
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.outerBrowRaiser50_R
+    ShapeIndex: 117
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop25
+    ShapeIndex: 118
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller25_L
+    ShapeIndex: 119
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller25_R
+    ShapeIndex: 120
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward25_LB
+    ShapeIndex: 121
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward25_LT
+    ShapeIndex: 122
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward25_RB
+    ShapeIndex: 123
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipsToward25_RT
+    ShapeIndex: 124
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher25_L
+    ShapeIndex: 125
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher25_R
+    ShapeIndex: 126
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_cheekRaiser_L
+    ShapeIndex: 127
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_cheekRaiser_R
+    ShapeIndex: 128
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesClosed_L
+    ShapeIndex: 129
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesClosed_R
+    ShapeIndex: 130
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesLookDown_L
+    ShapeIndex: 131
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesLookDown_R
+    ShapeIndex: 132
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_innerBrowRaiser_L
+    ShapeIndex: 133
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_innerBrowRaiser_R
+    ShapeIndex: 134
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekPuff_jawDrop_L
+    ShapeIndex: 135
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekPuff_jawDrop_R
+    ShapeIndex: 136
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_L
+    ShapeIndex: 137
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_R
+    ShapeIndex: 138
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesLookDown_L
+    ShapeIndex: 139
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesLookDown_R
+    ShapeIndex: 140
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_lidTightener_L
+    ShapeIndex: 141
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_lidTightener_R
+    ShapeIndex: 142
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_lipCornerPuller_L
+    ShapeIndex: 143
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_lipCornerPuller_R
+    ShapeIndex: 144
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_noseWrinkler_L
+    ShapeIndex: 145
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_noseWrinkler_R
+    ShapeIndex: 146
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_outerBrowRaiser_L
+    ShapeIndex: 147
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_outerBrowRaiser_R
+    ShapeIndex: 148
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_jawDrop_L
+    ShapeIndex: 149
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_jawDrop_R
+    ShapeIndex: 150
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_lipCornerPuller_L
+    ShapeIndex: 151
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_lipCornerPuller_R
+    ShapeIndex: 152
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_lipStretcher_L
+    ShapeIndex: 153
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_lipStretcher_R
+    ShapeIndex: 154
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_L
+    ShapeIndex: 155
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_R
+    ShapeIndex: 156
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookLeft_L
+    ShapeIndex: 157
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookLeft_R
+    ShapeIndex: 158
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookRight_L
+    ShapeIndex: 159
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookRight_R
+    ShapeIndex: 160
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookUp_L
+    ShapeIndex: 161
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookUp_R
+    ShapeIndex: 162
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_innerBrowRaiser_L
+    ShapeIndex: 163
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_innerBrowRaiser_R
+    ShapeIndex: 164
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_lidTightener_L
+    ShapeIndex: 165
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_lidTightener_R
+    ShapeIndex: 166
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_outerBrowRaiser_L
+    ShapeIndex: 167
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_outerBrowRaiser_R
+    ShapeIndex: 168
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_eyesLookLeft_L
+    ShapeIndex: 169
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_eyesLookLeft_R
+    ShapeIndex: 170
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_eyesLookRight_L
+    ShapeIndex: 171
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_eyesLookRight_R
+    ShapeIndex: 172
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_innerBrowRaiser_L
+    ShapeIndex: 173
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_innerBrowRaiser_R
+    ShapeIndex: 174
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_outerBrowRaiser_L
+    ShapeIndex: 175
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_outerBrowRaiser_R
+    ShapeIndex: 176
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_upperLidRaiser_L
+    ShapeIndex: 177
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookDown_upperLidRaiser_R
+    ShapeIndex: 178
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookLeft_eyesLookUp_L
+    ShapeIndex: 179
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookLeft_eyesLookUp_R
+    ShapeIndex: 180
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookRight_eyesLookUp_L
+    ShapeIndex: 181
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesLookRight_eyesLookUp_R
+    ShapeIndex: 182
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerDepressor_L
+    ShapeIndex: 183
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerDepressor_R
+    ShapeIndex: 184
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_L
+    ShapeIndex: 185
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_R
+    ShapeIndex: 186
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_LB
+    ShapeIndex: 187
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_LT
+    ShapeIndex: 188
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_RB
+    ShapeIndex: 189
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_RT
+    ShapeIndex: 190
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_L
+    ShapeIndex: 191
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_R
+    ShapeIndex: 192
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipsToward_LB
+    ShapeIndex: 193
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipsToward_LT
+    ShapeIndex: 194
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipsToward_RB
+    ShapeIndex: 195
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipsToward_RT
+    ShapeIndex: 196
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipStretcher_L
+    ShapeIndex: 197
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipStretcher_R
+    ShapeIndex: 198
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipSuck_LB
+    ShapeIndex: 199
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipSuck_LT
+    ShapeIndex: 200
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipSuck_RB
+    ShapeIndex: 201
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipSuck_RT
+    ShapeIndex: 202
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lowerLipDepressor_L
+    ShapeIndex: 203
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lowerLipDepressor_R
+    ShapeIndex: 204
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_upperLipRaiser_L
+    ShapeIndex: 205
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_upperLipRaiser_R
+    ShapeIndex: 206
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lidTightener_lipCornerPuller_L
+    ShapeIndex: 207
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lidTightener_lipCornerPuller_R
+    ShapeIndex: 208
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lidTightener_upperLidRaiser_L
+    ShapeIndex: 209
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lidTightener_upperLidRaiser_R
+    ShapeIndex: 210
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor_lipCornerPuller_L
+    ShapeIndex: 211
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor_lipCornerPuller_R
+    ShapeIndex: 212
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor_upperLipRaiser_L
+    ShapeIndex: 213
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerDepressor_upperLipRaiser_R
+    ShapeIndex: 214
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_lipStretcher_L
+    ShapeIndex: 215
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_lipStretcher_R
+    ShapeIndex: 216
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_lowerLipDepressor_L
+    ShapeIndex: 217
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_lowerLipDepressor_R
+    ShapeIndex: 218
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_nasolabialFurrow_L
+    ShapeIndex: 219
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_nasolabialFurrow_R
+    ShapeIndex: 220
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_noseWrinkler_L
+    ShapeIndex: 221
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_noseWrinkler_R
+    ShapeIndex: 222
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_upperLipRaiser_L
+    ShapeIndex: 223
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_upperLipRaiser_R
+    ShapeIndex: 224
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lipPucker_LB
+    ShapeIndex: 225
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lipPucker_LT
+    ShapeIndex: 226
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lipPucker_RB
+    ShapeIndex: 227
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lipPucker_RT
+    ShapeIndex: 228
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lowerLipDepressor_LB
+    ShapeIndex: 229
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lowerLipDepressor_LT
+    ShapeIndex: 230
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lowerLipDepressor_RB
+    ShapeIndex: 231
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipFunneler_lowerLipDepressor_RT
+    ShapeIndex: 232
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher_lowerLipDepressor_L
+    ShapeIndex: 233
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipStretcher_lowerLipDepressor_R
+    ShapeIndex: 234
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nasolabialFurrow_upperLipRaiser_L
+    ShapeIndex: 235
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.nasolabialFurrow_upperLipRaiser_R
+    ShapeIndex: 236
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.noseWrinkler_upperLipRaiser_L
+    ShapeIndex: 237
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.noseWrinkler_upperLipRaiser_R
+    ShapeIndex: 238
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_eyesLookDown_L
+    ShapeIndex: 239
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_eyesLookDown_R
+    ShapeIndex: 240
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_innerBrowRaiser_L
+    ShapeIndex: 241
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_innerBrowRaiser_R
+    ShapeIndex: 242
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_outerBrowRaiser_L
+    ShapeIndex: 243
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_outerBrowRaiser_R
+    ShapeIndex: 244
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown50_L
+    ShapeIndex: 245
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown50_R
+    ShapeIndex: 246
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesClosed_eyesLookDown_L
+    ShapeIndex: 247
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesClosed_eyesLookDown_R
+    ShapeIndex: 248
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesClosed_lidTightener_L
+    ShapeIndex: 249
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_eyesClosed_lidTightener_R
+    ShapeIndex: 250
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_eyesLookDown_L
+    ShapeIndex: 251
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_eyesLookDown_R
+    ShapeIndex: 252
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_lidTightener_L
+    ShapeIndex: 253
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_lidTightener_R
+    ShapeIndex: 254
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_lipCornerPuller_L
+    ShapeIndex: 255
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_eyesClosed_lipCornerPuller_R
+    ShapeIndex: 256
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_lidTightener_lipCornerPuller_L
+    ShapeIndex: 257
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.cheekRaiser_lidTightener_lipCornerPuller_R
+    ShapeIndex: 258
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_jawDrop_lipCornerPuller_L
+    ShapeIndex: 259
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_jawDrop_lipCornerPuller_R
+    ShapeIndex: 260
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_lipCornerPuller_lipStretcher_L
+    ShapeIndex: 261
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.dimpler_lipCornerPuller_lipStretcher_R
+    ShapeIndex: 262
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_eyesLookLeft_L
+    ShapeIndex: 263
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_eyesLookLeft_R
+    ShapeIndex: 264
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_eyesLookRight_L
+    ShapeIndex: 265
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_eyesLookRight_R
+    ShapeIndex: 266
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_innerBrowRaiser_L
+    ShapeIndex: 267
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_innerBrowRaiser_R
+    ShapeIndex: 268
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_outerBrowRaiser_L
+    ShapeIndex: 269
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed_eyesLookDown_outerBrowRaiser_R
+    ShapeIndex: 270
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_lipStretcher_L
+    ShapeIndex: 271
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_lipStretcher_R
+    ShapeIndex: 272
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_lowerLipDepressor_L
+    ShapeIndex: 273
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_lowerLipDepressor_R
+    ShapeIndex: 274
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_upperLipRaiser_L
+    ShapeIndex: 275
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipCornerPuller_upperLipRaiser_R
+    ShapeIndex: 276
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_LB
+    ShapeIndex: 277
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_LT
+    ShapeIndex: 278
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_RB
+    ShapeIndex: 279
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_RT
+    ShapeIndex: 280
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipsToward_LB
+    ShapeIndex: 281
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipsToward_LT
+    ShapeIndex: 282
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipsToward_RB
+    ShapeIndex: 283
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipsToward_RT
+    ShapeIndex: 284
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward_LB
+    ShapeIndex: 285
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward_LT
+    ShapeIndex: 286
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward_RB
+    ShapeIndex: 287
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward_RT
+    ShapeIndex: 288
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_lipStretcher_lowerLipDepressor_L
+    ShapeIndex: 289
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_lipStretcher_lowerLipDepressor_R
+    ShapeIndex: 290
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_nasolabialFurrow_upperLipRaiser_L
+    ShapeIndex: 291
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_nasolabialFurrow_upperLipRaiser_R
+    ShapeIndex: 292
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_noseWrinkler_upperLipRaiser_L
+    ShapeIndex: 293
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.lipCornerPuller_noseWrinkler_upperLipRaiser_R
+    ShapeIndex: 294
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward75_LB
+    ShapeIndex: 295
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward75_LT
+    ShapeIndex: 296
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward75_RB
+    ShapeIndex: 297
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward75_RT
+    ShapeIndex: 298
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_eyesLookDown_innerBrowRaiser_L
+    ShapeIndex: 299
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_eyesLookDown_innerBrowRaiser_R
+    ShapeIndex: 300
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_eyesLookDown_outerBrowRaiser_L
+    ShapeIndex: 301
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.eyesClosed50_eyesLookDown_outerBrowRaiser_R
+    ShapeIndex: 302
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward50_LB
+    ShapeIndex: 303
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward50_LT
+    ShapeIndex: 304
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward50_RB
+    ShapeIndex: 305
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward50_RT
+    ShapeIndex: 306
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward25_LB
+    ShapeIndex: 307
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward25_LT
+    ShapeIndex: 308
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward25_RB
+    ShapeIndex: 309
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipPucker_lipsToward25_RT
+    ShapeIndex: 310
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_cheekRaiser_eyesClosed_lidTightener_L
+    ShapeIndex: 311
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.browLowerer_cheekRaiser_eyesClosed_lidTightener_R
+    ShapeIndex: 312
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_lipsToward_LB
+    ShapeIndex: 313
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_lipsToward_LT
+    ShapeIndex: 314
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_lipsToward_RB
+    ShapeIndex: 315
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.jawDrop_lipFunneler_lipPucker_lipsToward_RT
+    ShapeIndex: 316
+  - SkinnedMesh: {fileID: 5029191212242710304}
+    ShapeName: bls_head.neck_reduction
+    ShapeIndex: 317
+  - SkinnedMesh: {fileID: 4195712851283468131}
+    ShapeName: bls_mouth.jawDrop
+    ShapeIndex: 0
+  - SkinnedMesh: {fileID: 4195712851283468131}
+    ShapeName: bls_mouth.jawSidewaysLeft
+    ShapeIndex: 1
+  - SkinnedMesh: {fileID: 4195712851283468131}
+    ShapeName: bls_mouth.jawSidewaysRight
+    ShapeIndex: 2
+  - SkinnedMesh: {fileID: 4195712851283468131}
+    ShapeName: bls_mouth.jawThrust
+    ShapeIndex: 3
+  - SkinnedMesh: {fileID: 4195712851283468131}
+    ShapeName: bls_mouth.jawDrop75
+    ShapeIndex: 4
+  - SkinnedMesh: {fileID: 4195712851283468131}
+    ShapeName: bls_mouth.jawDrop50
+    ShapeIndex: 5
+  - SkinnedMesh: {fileID: 4195712851283468131}
+    ShapeName: bls_mouth.jawDrop25
+    ShapeIndex: 6
+  _debugDrawSourceSkeleton: 0
+  _debugDrawSourceSkeletonColor: {r: 1, g: 1, b: 1, a: 1}
+  _debugDrawTargetSkeleton: 0
+  _debugDrawTargetSkeletonColor: {r: 0, g: 1, b: 0, a: 1}
+  _skeletonRetargeter:
+    _retargetingBehavior: 0
+    _currentScale: 1
+    _applyScale: 1
+    _headScaleFactor: 0.95
+    _scaleRange: {x: 0.8, y: 1.2}
+  _validBodyTrackingDelay: 0.25
+  _sourceProcessorContainers: []
+  _targetProcessorContainers: []
+  _ownership: 0
+  _compressionType: 0
+  _useDeltaCompression: 1
+  _useSyncInterval: 1
+  _intervalToSendData: 0.08
+  _intervalToSyncData: 1
+  _positionThreshold: 0.001
+  _rotationAngleThreshold: 0.01
+  _shapeThreshold: 0.01
+  _bodyIndicesToSync: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f0000004000000041000000
+  _bodyIndicesToSend: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f0000004000000041000000
+  _faceIndicesToSend: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f000000700000007100000072000000730000007400000075000000760000007700000078000000790000007a0000007b0000007c0000007d0000007e0000007f000000800000008100000082000000830000008400000085000000860000008700000088000000890000008a0000008b0000008c0000008d0000008e0000008f000000900000009100000092000000930000009400000095000000960000009700000098000000990000009a0000009b0000009c0000009d0000009e0000009f000000a0000000a1000000a2000000a3000000a4000000a5000000a6000000a7000000a8000000a9000000aa000000ab000000ac000000ad000000ae000000af000000b0000000b1000000b2000000b3000000b4000000b5000000b6000000b7000000b8000000b9000000ba000000bb000000bc000000bd000000be000000bf000000c0000000c1000000c2000000c3000000c4000000c5000000c6000000c7000000c8000000c9000000ca000000cb000000cc000000cd000000ce000000cf000000d0000000d1000000d2000000d3000000d4000000d5000000d6000000d7000000d8000000d9000000da000000db000000dc000000dd000000de000000df000000e0000000e1000000e2000000e3000000e4000000e5000000e6000000e7000000e8000000e9000000ea000000eb000000ec000000ed000000ee000000ef000000f0000000f1000000f2000000f3000000f4000000f5000000f6000000f7000000f8000000f9000000fa000000fb000000fc000000fd000000fe000000ff000000000100000101000002010000030100000401000005010000060100000701000008010000090100000a0100000b0100000c0100000d0100000e0100000f010000100100001101000012010000130100001401000015010000160100001701000018010000190100001a0100001b0100001c0100001d0100001e0100001f010000200100002101000022010000230100002401000025010000260100002701000028010000290100002a0100002b0100002c0100002d0100002e0100002f010000300100003101000032010000330100003401000035010000360100003701000038010000390100003a0100003b0100003c0100003d0100003e0100003f0100004001000041010000420100004301000044010000
+  _useInterpolation: 1
+  _maxBufferSize: 5
+  _objectsToHideUntilValid: []
+--- !u!4 &8152745177123424748 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7828685463714015027, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8557474943092083987 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7729038321980531660, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8701377979619865358 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7296056057286974929, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8756912976748057323 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7207871069902552116, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8980328582005633186 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6999091056292863613, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9105378583322272298 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7196049531179830517, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+  m_PrefabInstance: {fileID: 2126065678368157407}
+  m_PrefabAsset: {fileID: 0}

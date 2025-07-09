@@ -4,7 +4,6 @@ using Fusion;
 using Oculus.Interaction;
 using UnityEngine;
 using RealityEditor;
-// using Normal.Realtime; 
 using TMPro;
 using TriLibCore.Dae.Schema;
 using Unity.VisualScripting;
@@ -95,14 +94,14 @@ public class RealityEditorManager : MonoBehaviour
 
         
         //OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
-        // if(OVRInput.GetUp(OVRInput.RawButton.A)){
-        //     createSpot(RightHand.position);
-        // }
-        // if(OVRInput.GetUp(OVRInput.RawButton.X)){
+        if(OVRInput.GetUp(OVRInput.RawButton.A)){
+            createSpot(RightHand.position);
+        }
+        if(OVRInput.GetUp(OVRInput.RawButton.X)){
           
-        //     createSpot(LeftHand.position);
+            createSpot(LeftHand.position);
             
-        // }
+        }
         if(Input.GetKeyDown(KeyCode.Space)){
             createSpot(new Vector3(0,0,0));
             
