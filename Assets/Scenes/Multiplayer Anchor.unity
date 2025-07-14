@@ -13141,9 +13141,9 @@ MonoBehaviour:
   LeftHand: {fileID: 544014882}
   RightHand: {fileID: 544014881}
   PlayerCamera: {fileID: 544014884}
-  uploadPort: 8080
+  uploadPort: 5000
   downloadPort: 8000
-  ServerURL: http://192.168.1.139
+  ServerURL: http://192.168.0.139
   SceneSaverTest: {fileID: 1378611036}
   selectedIDUrl: 
   IDs: 0

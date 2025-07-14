@@ -76,6 +76,10 @@ public class GenerateSpot : MonoBehaviour
     public GameObject TargetObject;
 
     public recordData RecordData;
+
+
+    public MeshCollider GeneratedmeshCollider;
+    public Rigidbody objectRigidbody;
     
     public Projector erasingProjector;
     
@@ -103,8 +107,10 @@ public class GenerateSpot : MonoBehaviour
     public Transform Player;
 
     public Toggle sculptMode,PositionisLock;
+    
+    public Toggle physicToggle;
 
-    public bool SculptingModeOn=false;
+    public bool SculptingModeOn = false;
     
     //Networking
     // public string DataSyncTestNumber; 
@@ -166,6 +172,35 @@ public class GenerateSpot : MonoBehaviour
 
         if(luaMonoBehavior!=null) initLuaMonoBehavior();
     }
+private bool lastToggleState = false;
+
+public void TogglePhysic()
+{
+    bool currentToggleState = physicToggle.isOn;
+
+    if (currentToggleState == lastToggleState) return; // No change, skip
+
+    lastToggleState = currentToggleState;
+
+    if (objectRigidbody == null) objectRigidbody = GetComponent<Rigidbody>();
+    if (GeneratedmeshCollider == null) return;
+
+        if (currentToggleState)
+        {
+            objectRigidbody.isKinematic = false;
+            GeneratedmeshCollider.enabled = true;
+            objectRigidbody.useGravity = true;
+            GeneratedmeshCollider.convex = true; // Ensure the collider is convex for physics interactions
+        }
+        else
+        {
+            objectRigidbody.isKinematic = true;
+            GeneratedmeshCollider.enabled = false;
+            objectRigidbody.useGravity = false;
+
+            GeneratedmeshCollider.convex = false; // Disable convex for non-physics interactions
+        }
+}
 
 
     void initLuaMonoBehavior()
@@ -443,6 +478,17 @@ public class GenerateSpot : MonoBehaviour
                 }
 
             }
+
+
+            if (GeneratedmeshCollider == null)
+            { 
+                GeneratedmeshCollider = ColliderUtils.AddMeshCollider(obj.gameObject, convex: true);
+                GeneratedmeshCollider.enabled = false;
+
+            }
+      
+
+
             
             return true;
             
@@ -532,98 +578,102 @@ public class GenerateSpot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         if (Prompt != oldPrompt)
         {
             _photonDataSync.UpdatePrompt(Prompt);
         }
-        oldPrompt = Prompt; 
+        oldPrompt = Prompt;
 
 
-        if(Input.GetKeyDown(KeyCode.F3))
+        if (Input.GetKeyDown(KeyCode.F3))
         {
 
-             ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + "20250221165209" + "_ShapE.zip"));
-          
+            ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + "20250221165209" + "_ShapE.zip"));
+
 
         }
 
-        
+
         // if (_realtimeView.isOwnedLocallySelf)
         // {
         //     dataSync.SetURLID(URLID); 
         //     dataSync.Setprompt(Prompt);
         // }
-        
-       // toLockthePosition();
 
-        
+        // toLockthePosition();
+
+
         // if (manager == null)
         // {
         //     FindObjectOfType<RealityEditorManager2>();  //this shouldnt be necessary
         // }
-        
+
         URLIDText.text = URLID; //commented this out while trying to figure out data syncing
-        
+
         if (isAcopy)
         {
             UiMenu.SetActive(false);
             return;
 
         }
-        
+
         updateTheTransform();
 
         switch (SpotType)
         {
 
             case GenerateType.Add:
-                setMaterialforGenrated(TargetObject.transform,VertexColor);
-               if(EraseBtn!=null) EraseBtn.gameObject.SetActive(false);
-               if(ColorBtn!=null) ColorBtn.SetActive(true);
+                setMaterialforGenrated(TargetObject.transform, VertexColor);
+                if (EraseBtn != null) EraseBtn.gameObject.SetActive(false);
+                if (ColorBtn != null) ColorBtn.SetActive(true);
 
                 break;
 
             case GenerateType.Instruction:
-                setMaterialforGenrated(TargetObject.transform,UnlitShader);
+                setMaterialforGenrated(TargetObject.transform, UnlitShader);
                 // TargetObject.transform.localEulerAngles=new Vector3(0,-90,90);
                 // TargetObject.transform.localScale=new Vector3(5,5,5);
 
-            break;
+                break;
 
             case GenerateType.Reconstruction:
-                setMaterialforGenrated(TargetObject.transform,UnlitShader);
-                TargetObject.transform.localEulerAngles=new Vector3(0,-90,90);
-                TargetObject.transform.localScale=new Vector3(8,8,8);
-                 //EraseBtn.SetActive(true);
-                 ColorBtn.SetActive(false);
-                 EraseBtn.gameObject.SetActive(true);
+                setMaterialforGenrated(TargetObject.transform, UnlitShader);
+                TargetObject.transform.localEulerAngles = new Vector3(0, -90, 90);
+                TargetObject.transform.localScale = new Vector3(8, 8, 8);
+                //EraseBtn.SetActive(true);
+                ColorBtn.SetActive(false);
+                EraseBtn.gameObject.SetActive(true);
 
-                 isErasing=EraseBtn.isOn;
+                isErasing = EraseBtn.isOn;
 
-                 PreviewWindow.gameObject.SetActive(isselsected);
+                PreviewWindow.gameObject.SetActive(isselsected);
 
-                 erasingProjector.gameObject.SetActive(isErasing);
+                erasingProjector.gameObject.SetActive(isErasing);
 
-                EraseQuad.SetActive(false); 
-             if(isErasing){
+                EraseQuad.SetActive(false);
+                if (isErasing)
+                {
 
 
-                if(!PanelLock){
-                    PanelLock=true;
-                  if(ErasingPanel!=null) ErasingPanel.SetActive(true);
+                    if (!PanelLock)
+                    {
+                        PanelLock = true;
+                        if (ErasingPanel != null) ErasingPanel.SetActive(true);
+                    }
+
+                    TargetMaterial.SetTexture("_MainTex", WhiteTex);
+                    ProjectorMeterial.SetFloat("_Amt", Britheness.value);
+
                 }
-
-                   TargetMaterial.SetTexture("_MainTex", WhiteTex);
-                   ProjectorMeterial.SetFloat("_Amt",Britheness.value);
-
-                }else{
-                    PanelLock=false;
+                else
+                {
+                    PanelLock = false;
                     ErasingPanel.SetActive(false);
                     TargetMaterial.SetTexture("_MainTex", OriginTex);
                 }
 
-                
+
 
 
 
@@ -643,18 +693,18 @@ public class GenerateSpot : MonoBehaviour
 
 
         //  BoundingBoxColorAlhpaDinstance();
-         
+
 
 
 
 
         // if (isselsected) PromtText.text = Prompt;
-        PromtText.text = Prompt; 
+        PromtText.text = Prompt;
 
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-                DebugLoadModel();
+            DebugGenrateModel();
 
 
         }
@@ -666,7 +716,7 @@ public class GenerateSpot : MonoBehaviour
 
             //_inpainting.jpg
 
-          ChecktheFile=   StartCoroutine(CheckURLPeriodically(downloadURL + "20240325024513_inpainting.jpg"));
+            ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + "20240325024513_inpainting.jpg"));
 
         }
 
@@ -678,6 +728,8 @@ public class GenerateSpot : MonoBehaviour
             StartCoroutine(CleartheObjinTarget());
 
         }
+
+        TogglePhysic();
 
         //Text_Instruction.text = RecordData.instruction;
 
@@ -767,11 +819,27 @@ public class GenerateSpot : MonoBehaviour
 
     public void DebugGenrateModel()
     {
-        manager.promtGenerateModel(id, "Apple", URLID);
-        URLIDText.text = URLID;
+        //manager.promtGenerateModel(id, "Apple", URLID);
+        manager.selectedIDUrl = URLID;
+        Prompt = "Apple";
+         manager.sendCommand("ShapeE");
+        
+
+          ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
         // PreViewQuad.SetActive(true);
-        loadingIcon.SetActive(true);
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+
+        DremmeshPrompt=Prompt;
+
+
+        
+
+        // PreViewQuad.SetActive(true);
+        // loadingIcon.SetActive(true);
         Prompt = "";
+
 
     }
 
@@ -796,8 +864,8 @@ public class GenerateSpot : MonoBehaviour
     public void GenrateModel()
     {
         manager.promtGenerateModel(id, Prompt, URLID);
-        //manager.sendCommand("ShapeE");
-        manager.sendCommand("DynamicCoding");
+        manager.sendCommand("ShapeE");
+       // manager.sendCommand("DynamicCoding");
         ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
         if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
         
