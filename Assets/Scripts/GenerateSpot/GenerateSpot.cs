@@ -170,7 +170,9 @@ public class GenerateSpot : MonoBehaviour
 
         }
 
-        if(luaMonoBehavior!=null) initLuaMonoBehavior();
+        luaMonoBehavior = GetComponent<LuaMonoBehavior>();
+
+        if (luaMonoBehavior != null) initLuaMonoBehavior();
     }
 private bool lastToggleState = false;
 
@@ -864,8 +866,8 @@ public void TogglePhysic()
     public void GenrateModel()
     {
         manager.promtGenerateModel(id, Prompt, URLID);
-        manager.sendCommand("ShapeE");
-       // manager.sendCommand("DynamicCoding");
+        // manager.sendCommand("ShapeE");
+        manager.sendCommand("DynamicCoding");
         ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
         if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
         

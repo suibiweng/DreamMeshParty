@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using LuaProxies; // ✅ Import the namespace
 using UnityEngine.UI;
+using RealityEditor;
 
 [System.Serializable]
 public class ParticleEffectConfig
@@ -41,6 +42,8 @@ public class LuaMonoBehavior : MonoBehaviour
     public float checkInterval = 10f;
     public Material defaultParticleMaterial; // Set this in the inspector
     public event Action<bool> OnURLResponse = delegate { };
+
+    public RealityEditorManager manager;
 
     private Script luaScript;
     private UnityEngine.Coroutine fileCheckCoroutine;
@@ -81,6 +84,11 @@ public class LuaMonoBehavior : MonoBehaviour
 
         // (Default Lua script can be set here if needed)
         // Now, for dynamic objects we'll fetch our JSON file
+
+        manager = FindAnyObjectByType<RealityEditorManager>();
+
+
+        serverURL = manager.ServerURL;
     }
 
     // Fetch and process JSON from server
@@ -88,7 +96,7 @@ public class LuaMonoBehavior : MonoBehaviour
     {
         if (fileCheckCoroutine == null)
         {
-            string urlToCheck = downloadURL + downloadID + "_DynamicCoding.json";
+            string urlToCheck = downloadURL +"/objects/"+downloadID+"/"+ downloadID+"_DynamicCoding.json";
             fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
         }
     }

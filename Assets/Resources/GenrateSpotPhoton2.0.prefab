@@ -17008,6 +17008,7 @@ GameObject:
   - component: {fileID: 5138956602677483770}
   - component: {fileID: 1355934269708619727}
   - component: {fileID: -1234750653806247155}
+  - component: {fileID: 7541909544671404846}
   m_Layer: 0
   m_Name: GenrateSpotPhoton2.0
   m_TagString: GenerateSpot
@@ -17568,7 +17569,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3767765152069255675}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 396d9dad4bfea474ca470ac07b315aba, type: 3}
   m_Name: 
@@ -17585,13 +17586,35 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3767765152069255675}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7ac86efc87e4884d9e97c32adce1457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fireSpot: {fileID: 1355934269708619727}
   __fireLife: 0
+--- !u!114 &7541909544671404846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3767765152069255675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 505bcb10b9d8ac24bbf9d210ec84da15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpwanPoint: {fileID: 0}
+  ID: 
+  serverURL: http://yourserver.com/
+  uiText: {fileID: 0}
+  uiButton: {fileID: 0}
+  rb: {fileID: 0}
+  luaScriptText: 
+  checkInterval: 10
+  defaultParticleMaterial: {fileID: 0}
+  manager: {fileID: 0}
 --- !u!1 &3780615758997034928
 GameObject:
   m_ObjectHideFlags: 0

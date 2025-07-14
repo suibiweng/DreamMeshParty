@@ -7199,6 +7199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 279a660b2e7a5ed498e3d4aa7db03e4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 1
+  rotateSpeed: 45
 --- !u!1 &795261853
 GameObject:
   m_ObjectHideFlags: 0
@@ -10212,6 +10214,83 @@ Transform:
   - {fileID: 2129170627}
   m_Father: {fileID: 1557231348}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1120771610
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.40328825
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3146124083825041642, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3767765152069255675, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_Name
+      value: GenrateSpotPhoton2.0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3767765152069255675, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4935458136808322787, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: SortKey
+      value: 1875458173
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541909544671404846, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      propertyPath: SpwanPoint
+      value: 
+      objectReference: {fileID: 1120771611}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 771027922132782827, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+--- !u!4 &1120771611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4356020446535747207, guid: c06a19882b83b65479e32e8989abe4b1, type: 3}
+  m_PrefabInstance: {fileID: 1120771610}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1121565759
 GameObject:
   m_ObjectHideFlags: 0
@@ -12313,6 +12392,7 @@ MonoBehaviour:
     minKeepAliveTimeInSeconds: 2
     minTranscriptionKeepAliveTimeInSeconds: 1
     maxRecordingTime: 20
+    overrideTimeoutMs: 0
     soundWakeThreshold: 0.0005
     sampleLengthInMs: 10
     micBufferLengthInSeconds: 1
@@ -20295,3 +20375,4 @@ SceneRoots:
   - {fileID: 1875164078}
   - {fileID: 795053689}
   - {fileID: 1285300370}
+  - {fileID: 1120771610}

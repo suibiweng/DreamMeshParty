@@ -1,4 +1,4 @@
-Library: D:\SuibiUnityProject\DreamMeshParty\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
+Library: /Users/suibi/UnityProjects/DreamMeshParty/Temp/BurstOutput/tempburstlibs/arm64-v8a/lib_burst_generated
 --platform=Android
 --backend=burst-llvm-16
 --target=ARMV8A_AARCH64
@@ -7,11 +7,11 @@ Library: D:\SuibiUnityProject\DreamMeshParty\Temp\BurstOutput\tempburstlibs\arm6
 --dump=Function
 --float-precision=Standard
 --target-framework=NetFramework
---generate-link-xml=Temp\burst.link.xml
---temp-folder=D:\SuibiUnityProject\DreamMeshParty\Temp\Burst
---key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.35f1/Editor/Data/PlaybackEngines/AndroidPlayer
---decode-folder=D:\SuibiUnityProject\DreamMeshParty\Library\Burst
---output=D:\SuibiUnityProject\DreamMeshParty\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
+--generate-link-xml=Temp/burst.link.xml
+--temp-folder=/Users/suibi/UnityProjects/DreamMeshParty/Temp/Burst
+--key-folder=/Applications/Unity/Hub/Editor/2022.3.35f1/PlaybackEngines/AndroidPlayer
+--decode-folder=/Users/suibi/UnityProjects/DreamMeshParty/Library/Burst
+--output=/Users/suibi/UnityProjects/DreamMeshParty/Temp/BurstOutput/tempburstlibs/arm64-v8a/lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=Unity.Jobs.IJobExtensions+JobStruct`1[[Meta.XR.Movement.Retargeting.SkeletonJobs+ConvertWorldToLocalPoseJob, Meta.XR.Movement, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(Meta.XR.Movement.Retargeting.SkeletonJobs+ConvertWorldToLocalPoseJob&, Meta.XR.Movement, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--823b1e5b25c5e10e4de73b60f1644532

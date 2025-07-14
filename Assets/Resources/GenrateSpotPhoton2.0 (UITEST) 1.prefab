@@ -35715,6 +35715,8 @@ MonoBehaviour:
   Britheness: {fileID: 0}
   TargetObject: {fileID: 3468140169159128835}
   RecordData: {fileID: 0}
+  GeneratedmeshCollider: {fileID: 0}
+  objectRigidbody: {fileID: 0}
   erasingProjector: {fileID: 4181639309478204476}
   Outlinebox: {fileID: 6639973942926814588}
   _grabbable: {fileID: 7821475916984307016}
@@ -35730,6 +35732,7 @@ MonoBehaviour:
   Player: {fileID: 0}
   sculptMode: {fileID: 0}
   PositionisLock: {fileID: 0}
+  physicToggle: {fileID: 0}
   SculptingModeOn: 0
   luaMonoBehavior: {fileID: 7417036898871245724}
   grabInteractable: {fileID: 0}
@@ -36066,6 +36069,7 @@ MonoBehaviour:
   luaScriptText: 
   checkInterval: 10
   defaultParticleMaterial: {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  manager: {fileID: 0}
 --- !u!1 &5064020556461686479
 GameObject:
   m_ObjectHideFlags: 0
