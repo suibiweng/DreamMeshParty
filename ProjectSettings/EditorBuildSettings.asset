@@ -38,12 +38,15 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/RoomMesh.unity
     guid: 35c3dd24104b3514e822c7bc1244f3c7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Multiplayer Anchor.unity
     guid: 895bd73ff0894104499bc7d8cf2d4db9
   - enabled: 0
     path: Assets/Scenes/SharedRoomMesh.unity
     guid: 48e8e1f28061ab24daad7f2bd9868620
+  - enabled: 1
+    path: Assets/Scenes/DreamProtalTestScene.unity
+    guid: c135a9373984e6a4a829ef9d4bb47aa9
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7dafe5f8db58eca40b1d44174dc3d078, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ad7b311f2f55bc45b379fc5b93a9d20, type: 2}
