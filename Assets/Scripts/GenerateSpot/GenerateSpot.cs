@@ -531,7 +531,7 @@ public void TogglePhysic()
       if(LitseningText!=null)  Prompt = LitseningText.text;
 
 
-      Prompt=Text_Litsening.text;
+      // Prompt=Text_Litsening.text;
         
 
     }

@@ -4035,7 +4035,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 949723860489877570}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d6b7f41315d58e4b84dde7885b2f192, type: 3}
   m_Name: 
@@ -17184,7 +17184,7 @@ MonoBehaviour:
   URLIDText: {fileID: 3555927815040261800}
   PromtText: {fileID: 7256612248453183466}
   LitseningText: {fileID: 2588221508605813463}
-  Text_Litsening: {fileID: 0}
+  Text_Litsening: {fileID: 7348666441950249346}
   UiMenu: {fileID: 7926898677739198859}
   controlPanels:
   - {fileID: 0}
