@@ -40,9 +40,7 @@ public class SceneSessionManager : MonoBehaviour
     [Serializable]
     public class GenerateSpotData
     {
-        public string name;
-        public Vector3 position;
-        public Vector3 rotation;
+        public string id;
         public string prompt;
     }
 
@@ -105,10 +103,11 @@ public class SceneSessionManager : MonoBehaviour
             sessionURLID = sessionURLID,
             premise = TheSessionPremise,
             prompt = MorePrompt,
-            timestamp = DateTime.UtcNow.ToString("s")
+            timestamp = DateTime.UtcNow.ToString("s"),
+            generateSpots = GatherGenerateSpots()
             // furniture = GatherFurnitureData(),
             // physics = CapturePhysicsData(),
-            // generateSpots = GatherGenerateSpots(),
+            // 
             // users = GetUsersInSession()
         };
 
@@ -161,7 +160,7 @@ public class SceneSessionManager : MonoBehaviour
     }
 
     // --- Gather GenerateSpots ---
-    private List<GenerateSpotData> GatherGenerateSpots()
+    public List<GenerateSpotData> GatherGenerateSpots()
     {
         List<GenerateSpotData> spots = new List<GenerateSpotData>();
         GenerateSpot[] allSpots = GameObject.FindObjectsOfType<GenerateSpot>();
@@ -170,9 +169,7 @@ public class SceneSessionManager : MonoBehaviour
         {
             spots.Add(new GenerateSpotData
             {
-                name = spot.name,
-                position = spot.transform.position,
-                rotation = spot.transform.eulerAngles,
+                id = spot.URLID,
                 prompt = spot.Prompt
             });
         }

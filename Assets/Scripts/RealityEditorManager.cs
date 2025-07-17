@@ -114,55 +114,65 @@ public class RealityEditorManager : MonoBehaviour
         }
     }
 
-    public void createReconstructionSpot(Vector3 pos,Vector3 scale){
-        
+    public void createReconstructionSpot(Vector3 pos, Vector3 scale)
+    {
+
         GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity);
-        gcube.GetComponent<GenerateSpot>().id=IDs;
-        string urlid=TimestampGenerator.GetTimestamp(); 
-        gcube.GetComponent<GenerateSpot>().URLID=urlid;
+        gcube.GetComponent<GenerateSpot>().id = IDs;
+        string urlid = TimestampGenerator.GetTimestamp();
+        gcube.GetComponent<GenerateSpot>().URLID = urlid;
         gcube.transform.localScale = scale;
         Debug.Log("The new Cube's URLID is: " + urlid);
         // gcube.GetComponent<DataSync2>().SetURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
         Debug.Log("Setting the network urlid to be: " + urlid);
-        GenCubesDic.Add(urlid,gcube); //think about this: Are we adding the cube to the other players dictionaries? 
-        selectedIDUrl=urlid;  
+        GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
+        selectedIDUrl = urlid;
         IDs++;
+           gcube.name =""+ urlid;
+        
         
 
     }
 
 
 
-        public void createSpotOnMenu()
+    public void createSpotOnMenu()
     {
         // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
-        GameObject gcube = SpawnNetworkObject(LeftHand.position, Quaternion.identity, GenerateSpotPrefab); 
-       // gcube.GetComponent<GenerateSpot>().id=IDs;
-        string urlid=TimestampGenerator.GetTimestamp(); 
-        gcube.GetComponent<GenerateSpot>().URLID=urlid;
+        GameObject gcube = SpawnNetworkObject(LeftHand.position, Quaternion.identity, GenerateSpotPrefab);
+        // gcube.GetComponent<GenerateSpot>().id=IDs;
+        string urlid = TimestampGenerator.GetTimestamp();
+        gcube.GetComponent<GenerateSpot>().URLID = urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
         gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
         Debug.Log("Setting the network urlid to be: " + urlid);
         GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
-        selectedIDUrl=urlid;  
+        selectedIDUrl = urlid;
         IDs++;
+           gcube.name =""+ urlid;
+        
     }
 
 
-    
+
     public void createSpot(Vector3 pos)
     {
         // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
-        GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab); 
-        gcube.GetComponent<GenerateSpot>().id=IDs;
-        string urlid=TimestampGenerator.GetTimestamp(); 
-        gcube.GetComponent<GenerateSpot>().URLID=urlid;
+        GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
+        gcube.GetComponent<GenerateSpot>().id = IDs;
+        string urlid = TimestampGenerator.GetTimestamp();
+        gcube.GetComponent<GenerateSpot>().URLID = urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
         gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
         Debug.Log("Setting the network urlid to be: " + urlid);
         GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
-        selectedIDUrl=urlid;  
+        selectedIDUrl = urlid;
         IDs++;
+
+
+        gcube.name =""+ urlid;
+        
+
     }
 
 

@@ -91,15 +91,32 @@ public class LuaMonoBehavior : MonoBehaviour
         serverURL = manager.ServerURL;
     }
 
+    string urlToCheck = "";
+
     // Fetch and process JSON from server
     public void StartFetchingCode(string downloadURL, string downloadID)
     {
         if (fileCheckCoroutine == null)
         {
-            string urlToCheck = downloadURL +"/objects/"+downloadID+"/"+ downloadID+"_DynamicCoding.json";
+            urlToCheck = downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json";
             fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
         }
     }
+
+
+    public void Fetchingforupdate()
+    { 
+
+        if (fileCheckCoroutine == null)
+        {
+          
+            fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
+        }
+        
+
+    }
+
+    
 
     private IEnumerator CheckFileAvailability(string url)
     {
