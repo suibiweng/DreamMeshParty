@@ -67,7 +67,7 @@ public class SceneSessionManager : MonoBehaviour
         public List<GenerateSpotData> generateSpots;
         public List<UserData> users;
     }
-    public List<SceneObjectData> SceneObjects;
+    public List<SceneObjectData> SceneObjectsList;
 
     // --- Settings ---
     private string serverUrl = "http://localhost:5000/submit_session";
@@ -79,7 +79,7 @@ public class SceneSessionManager : MonoBehaviour
         manager = FindObjectOfType<RealityEditorManager>();
 
         serverUrl = manager.ServerURL + ":" + manager.uploadPort + "/submit_session";
-        SceneObjects = new List<SceneObjectData>();
+        SceneObjectsList = new List<SceneObjectData>();
 
 
 
@@ -88,7 +88,7 @@ public class SceneSessionManager : MonoBehaviour
 
     public void addSceneObject(SceneObjectData objData)
     {
-        SceneObjects.Add(objData);
+        SceneObjectsList.Add(objData);
 
     }
 
@@ -113,8 +113,8 @@ public class SceneSessionManager : MonoBehaviour
             premise = TheSessionPremise,
             prompt = MorePrompt,
             timestamp = DateTime.UtcNow.ToString("s"),
-            generateSpots = GatherGenerateSpots()
-            // furniture = GatherFurnitureData(),
+            generateSpots = GatherGenerateSpots(),
+            SceneObjects = SceneObjectsList
             // physics = CapturePhysicsData(),
             // 
             // users = GetUsersInSession()
@@ -176,11 +176,16 @@ public class SceneSessionManager : MonoBehaviour
 
         foreach (GenerateSpot spot in allSpots)
         {
-            spots.Add(new GenerateSpotData
+            if (spot.gameObject.tag!="RealObject") { 
+                spots.Add(new GenerateSpotData
             {
                 id = spot.URLID,
                 prompt = spot.Prompt
             });
+
+
+            }
+            
         }
 
         return spots;

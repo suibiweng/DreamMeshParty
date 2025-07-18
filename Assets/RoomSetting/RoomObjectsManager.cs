@@ -10,13 +10,15 @@ public class RoomObjectsManager : MonoBehaviour
 {
     public MRUKAnchor[] objectsinRoom;
     public RealityEditorManager manager;
+    public SceneSessionManager sceneSessionManager;
 
 
     private void Awake()
     {
         manager = GetComponent<RealityEditorManager>();
-       
- 
+        sceneSessionManager = FindAnyObjectByType<SceneSessionManager>();
+
+
     }
 
     public void InitRoomSession()
@@ -46,9 +48,28 @@ public class RoomObjectsManager : MonoBehaviour
 
         foreach (MRUKAnchor anchor in objectsinRoom)
         {
+
             // Setup each anchor as needed
             GameObject gc = manager.createSpot(anchor.transform.position);
             gc.GetComponent<GenerateSpot>().Prompt = anchor.gameObject.name;
+            gc.tag = "RealObject";
+
+            if (sceneSessionManager != null)
+            {
+
+                sceneSessionManager.addSceneObject(new SceneSessionManager.SceneObjectData
+                {
+                    id = gc.GetComponent<GenerateSpot>().URLID,
+                    name = anchor.gameObject.name,
+                    position = anchor.transform.position,
+                    rotation = anchor.transform.rotation.eulerAngles
+
+                }
+                  );
+
+
+            }
+
 
         }
 
