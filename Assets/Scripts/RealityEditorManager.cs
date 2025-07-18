@@ -141,7 +141,7 @@ public class RealityEditorManager : MonoBehaviour
         // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
         GameObject gcube = SpawnNetworkObject(LeftHand.position, Quaternion.identity, GenerateSpotPrefab);
         // gcube.GetComponent<GenerateSpot>().id=IDs;
-        string urlid = TimestampGenerator.GetTimestamp();
+        string urlid = IDGenerator.GenerateID();
         gcube.GetComponent<GenerateSpot>().URLID = urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
         gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
@@ -155,12 +155,12 @@ public class RealityEditorManager : MonoBehaviour
 
 
 
-    public void createSpot(Vector3 pos)
+    public GameObject createSpot(Vector3 pos)
     {
         // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
         GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
         gcube.GetComponent<GenerateSpot>().id = IDs;
-        string urlid = TimestampGenerator.GetTimestamp();
+        string urlid = IDGenerator.GenerateID();
         gcube.GetComponent<GenerateSpot>().URLID = urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
         gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
@@ -170,8 +170,9 @@ public class RealityEditorManager : MonoBehaviour
         IDs++;
 
 
-        gcube.name =""+ urlid;
+        gcube.name = "" + urlid;
         
+        return gcube;
 
     }
 
@@ -183,7 +184,7 @@ public class RealityEditorManager : MonoBehaviour
         // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
         GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab); 
         gcube.GetComponent<GenerateSpot>().id=IDs;
-        string urlid=TimestampGenerator.GetTimestamp(); 
+        string urlid=IDGenerator.GenerateID();
         gcube.GetComponent<GenerateSpot>().URLID=urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
         gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.

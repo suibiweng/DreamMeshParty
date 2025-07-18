@@ -23,8 +23,9 @@ public class SceneSessionManager : MonoBehaviour
     // --- Serializable Classes ---
 
     [Serializable]
-    public class FurnitureData
+    public class SceneObjectData
     {
+        public string id;
         public string name;
         public Vector3 position;
         public Vector3 rotation;
@@ -61,11 +62,12 @@ public class SceneSessionManager : MonoBehaviour
         public string prompt;
         public string created_by = "Suibi";
         public string timestamp;
-        public List<FurnitureData> furniture;
+        public List<SceneObjectData> SceneObjects;
         public PhysicsData physics;
         public List<GenerateSpotData> generateSpots;
         public List<UserData> users;
     }
+    public List<SceneObjectData> SceneObjects;
 
     // --- Settings ---
     private string serverUrl = "http://localhost:5000/submit_session";
@@ -77,9 +79,16 @@ public class SceneSessionManager : MonoBehaviour
         manager = FindObjectOfType<RealityEditorManager>();
 
         serverUrl = manager.ServerURL + ":" + manager.uploadPort + "/submit_session";
+        SceneObjects = new List<SceneObjectData>();
 
 
 
+
+    }
+
+    public void addSceneObject(SceneObjectData objData)
+    {
+        SceneObjects.Add(objData);
 
     }
 
@@ -94,8 +103,8 @@ public class SceneSessionManager : MonoBehaviour
         TheSessionPremise = TheSessionPremiseText.text;
         MorePrompt = MorePromptText.text;
 
-        if(sessionURLID == "")
-        sessionURLID = TimestampGenerator.GetTimestamp();
+        if (sessionURLID == "")
+            sessionURLID = TimestampGenerator.GetTimestamp();
 
 
         SessionData data = new SessionData
@@ -131,14 +140,14 @@ public class SceneSessionManager : MonoBehaviour
     }
 
     // --- Gather Furniture ---
-    private List<FurnitureData> GatherFurnitureData()
+    private List<SceneObjectData> GatherFurnitureData()
     {
-        List<FurnitureData> furnitureList = new List<FurnitureData>();
+        List<SceneObjectData> furnitureList = new List<SceneObjectData>();
         GameObject[] allFurniture = GameObject.FindGameObjectsWithTag("Furniture");
 
         foreach (GameObject obj in allFurniture)
         {
-            furnitureList.Add(new FurnitureData
+            furnitureList.Add(new SceneObjectData
             {
                 name = obj.name,
                 position = obj.transform.position,

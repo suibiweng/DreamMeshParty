@@ -9447,10 +9447,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SceneLoadedEvent>k__BackingField:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1378611043}
+        m_TargetAssemblyTypeName: RoomObjectsManager, Assembly-CSharp
+        m_MethodName: InitRoomSession
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   <RoomCreatedEvent>k__BackingField:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1378611043}
+        m_TargetAssemblyTypeName: RoomObjectsManager, Assembly-CSharp
+        m_MethodName: SetuptheSpots
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   <RoomUpdatedEvent>k__BackingField:
     m_PersistentCalls:
       m_Calls: []
@@ -15485,6 +15509,7 @@ GameObject:
   - component: {fileID: 1378611040}
   - component: {fileID: 1378611041}
   - component: {fileID: 1378611042}
+  - component: {fileID: 1378611043}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -15695,6 +15720,20 @@ MonoBehaviour:
   inPort: 1337
   outIP: 192.168.1.139
   outPort: 6161
+--- !u!114 &1378611043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378611033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdbd1a8a22b4bdf46a1677afb22d8def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectsinRoom: []
+  manager: {fileID: 0}
 --- !u!1 &1379906730
 GameObject:
   m_ObjectHideFlags: 0
@@ -20271,7 +20310,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1875164076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20286,10 +20325,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnOnStart: 1
   MeshMaterial: {fileID: 2100000, guid: 599b01c5f1d17436c89b88cc04257314, type: 2}
-  Colliders: 0
+  Colliders: 1
   CutHoles: 0
-  castShadows: 1
-  hideMesh: 0
+  castShadows: 0
+  hideMesh: 1
   Layer: 0
   textureCoordinateModes:
   - WallU: 5
