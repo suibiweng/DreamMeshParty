@@ -1825,6 +1825,14 @@ PrefabInstance:
       propertyPath: SortKey
       value: 2350776102
       objectReference: {fileID: 0}
+    - target: {fileID: 5677664495437138859, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
+      propertyPath: NetworkedBehaviours.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5677664495437138859, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
+      propertyPath: NetworkedBehaviours.Array.data[2]
+      value: 
+      objectReference: {fileID: 132688418}
     - target: {fileID: 5972945856088344826, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1991,6 +1999,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3191651285109885349, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
       insertIndex: -1
       addedObject: {fileID: 132688409}
+    - targetCorrespondingSourceObject: {fileID: 3191651285109885349, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 132688418}
   m_SourcePrefab: {fileID: 100100000, guid: fdd0bf800f8e4b54a988cfca9715f023, type: 3}
 --- !u!1 &132688406 stripped
 GameObject:
@@ -2019,6 +2030,21 @@ MonoBehaviour:
   MorePromptText: {fileID: 1469556459}
   TheSessionPremise: 
   MorePrompt: 
+  SceneObjectsList: []
+--- !u!114 &132688418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132688406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2703a060770dcc4f8817ea26b855401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NetworkedUrlID: 
+  _NetworkedPrompt: 
 --- !u!1 &162089001
 GameObject:
   m_ObjectHideFlags: 0
@@ -5960,6 +5986,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 930191867}
+    - targetCorrespondingSourceObject: {fileID: 100004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 930191871}
     - targetCorrespondingSourceObject: {fileID: 109308, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 544014887}
@@ -10503,6 +10532,22 @@ MonoBehaviour:
   installationRoutineCheckpoint:
     _installationRoutineId: 
     _installationVariants: []
+--- !u!114 &930191871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544014877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b10d478189f1f4a88333aec8b89636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 544014879}
+  headTransform: {fileID: 544014884}
+  leftHandTransform: {fileID: 544014882}
+  rightHandTransform: {fileID: 544014881}
 --- !u!1 &931601510
 GameObject:
   m_ObjectHideFlags: 0
@@ -14403,6 +14448,7 @@ GameObject:
   - component: {fileID: 1306085068}
   - component: {fileID: 1306085067}
   - component: {fileID: 1306085066}
+  - component: {fileID: 1306085071}
   m_Layer: 0
   m_Name: '[BuildingBlock] Network Manager'
   m_TagString: Untagged
@@ -14551,6 +14597,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1306085071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306085064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bafeec08dde04b49b6a679d98abadf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab:
+    RawGuidValue: c6272d8861d826345b902a9922de2b7d
 --- !u!1 &1309183282
 GameObject:
   m_ObjectHideFlags: 0
@@ -15727,13 +15787,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1378611033}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fdbd1a8a22b4bdf46a1677afb22d8def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectsinRoom: []
   manager: {fileID: 0}
+  sceneSessionManager: {fileID: 0}
 --- !u!1 &1379906730
 GameObject:
   m_ObjectHideFlags: 0
@@ -24135,10 +24196,10 @@ SceneRoots:
   - {fileID: 2089414732}
   - {fileID: 1281387713}
   - {fileID: 1357391652}
-  - {fileID: 132688405}
   - {fileID: 108990245}
   - {fileID: 931601511}
   - {fileID: 870013320}
   - {fileID: 1875164078}
   - {fileID: 795053689}
   - {fileID: 1285300370}
+  - {fileID: 132688405}

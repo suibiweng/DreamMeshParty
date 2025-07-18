@@ -12,6 +12,7 @@ TagManager:
   - USBCamera
   - Hat
   - RealObject
+  - playerBody
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - CameraPreView
   - particle
   - keyboard
-  - 
+  - playerBody
   - 
   - 
   - 

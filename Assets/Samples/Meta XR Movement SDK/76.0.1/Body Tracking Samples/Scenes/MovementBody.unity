@@ -859,6 +859,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HighFidelityCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 7904580889813928459, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7936667094983723285, guid: 8f60065df164ffa40b77cad3c7dc805e, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2592,7 +2596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 4
+  _meshType: 0
 --- !u!114 &382529568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2623,7 +2627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 4
+  _skeletonType: 0
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -8746,7 +8750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5c234723e3a54d8dd09b131117743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshType: 5
+  _meshType: 1
 --- !u!114 &1474670429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8777,7 +8781,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skeletonType: 5
+  _skeletonType: 1
   _updateRootPose: 0
   _updateRootScale: 1
   _enablePhysicsCapsules: 0
@@ -8909,8 +8913,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ovrCameraRig: {fileID: 2122458644}
-  _leftHand: {fileID: 382529570}
-  _rightHand: {fileID: 1474670431}
   _requireOvrHands: 1
 --- !u!114 &1497249964
 MonoBehaviour:
@@ -12961,15 +12963,7 @@ MonoBehaviour:
   resetHmdPoseOnRelease: 1
   resetHmdPoseByMiddleMouseButton: 1
   activateKeys: 3201000031010000
-  activateKeyBindings:
-  - <Keyboard>/leftCtrl
-  - <Keyboard>/rightCtrl
-  - <Keyboard>/f1
   pitchKeys: 3401000033010000
-  pitchKeyBindings:
-  - <Keyboard>/leftAlt
-  - <Keyboard>/rightAlt
-  - <Keyboard>/f2
 --- !u!114 &2122458643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12982,6 +12976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e933e81d3c20c74ea6fdc708a67e3a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useRecommendedMSAALevel: 1
   _monoscopic: 0
   _sharpenType: 0
   _enableDynamicResolution: 0
@@ -13031,32 +13026,6 @@ MonoBehaviour:
   launchSimultaneousHandsControllersOnStartup: 0
   isInsightPassthroughEnabled: 0
   shouldBoundaryVisibilityBeSuppressed: 0
-  isImmersiveDebuggerEnabled: 0
-  expandFeatureFidelitySystemPropertySheet: 1
-  featureFidelitySystemActivated: 0
-  handTrackingFeatureFidelityGroup:
-    targetFeatureEnabled: -1
-    targetFeatureFidelity: -1
-  keyboardTrackingFeatureFidelityGroup:
-    targetFeatureEnabled: -1
-    targetFeatureFidelity: -1
-  eyeTrackingFeatureFidelityGroup:
-    targetFeatureEnabled: -1
-    targetFeatureFidelity: -1
-  faceTrackingFeatureFidelityGroup:
-    targetFeatureEnabled: -1
-    targetFeatureFidelity: -1
-  bodyTrackingFeatureFidelityGroup:
-    targetFeatureEnabled: -1
-    targetFeatureFidelity: -1
-  passthroughFeatureFidelityGroup:
-    targetFeatureEnabled: -1
-    targetFeatureFidelity: -1
-  gaseBasedFoveatedRenderingFeatureFidelityGroup:
-    targetFeatureEnabled: -1
-    targetFeatureFidelity: -1
-  handTrackingFeatureEnabled: 0
-  handTrackingFeatureFidelity: 0
   requestBodyTrackingPermissionOnStartup: 1
   requestFaceTrackingPermissionOnStartup: 1
   requestEyeTrackingPermissionOnStartup: 1
@@ -13075,8 +13044,6 @@ MonoBehaviour:
   SimultaneousHandsAndControllersEnabled: 0
   _readOnlyWideMotionModeHandPosesEnabled: 0
   wideMotionModeHandPosesEnabled: 0
-  _readOnlyBodyFusionHandPosesEnabled: 0
-  bodyFusionHandPosesEnabled: 0
   dynamicResolutionVersion: 1
 --- !u!114 &2122458644
 MonoBehaviour:

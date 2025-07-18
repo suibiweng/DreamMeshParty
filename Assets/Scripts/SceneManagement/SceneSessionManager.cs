@@ -20,6 +20,8 @@ public class SceneSessionManager : MonoBehaviour
     public string TheSessionPremise = "";
     public string MorePrompt = "";
 
+    private SceneDataSync SceneDataSync; 
+
     // --- Serializable Classes ---
 
     [Serializable]
@@ -80,7 +82,7 @@ public class SceneSessionManager : MonoBehaviour
 
         serverUrl = manager.ServerURL + ":" + manager.uploadPort + "/submit_session";
         SceneObjectsList = new List<SceneObjectData>();
-
+        SceneDataSync = GetComponent<SceneDataSync>(); 
 
 
 
@@ -106,7 +108,8 @@ public class SceneSessionManager : MonoBehaviour
         if (sessionURLID == "")
             sessionURLID = TimestampGenerator.GetTimestamp();
 
-
+        SceneDataSync.UpdateURLID(sessionURLID);
+        
         SessionData data = new SessionData
         {
             sessionURLID = sessionURLID,
