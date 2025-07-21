@@ -11,7 +11,7 @@ using TMPro;
 public class SceneSessionManager : MonoBehaviour
 {
 
-    public string sessionURLID="";
+    public string sessionURLID = "";
 
     public TMP_InputField TheSessionPremiseText;
     public TMP_InputField MorePromptText;
@@ -20,7 +20,7 @@ public class SceneSessionManager : MonoBehaviour
     public string TheSessionPremise = "";
     public string MorePrompt = "";
 
-    private SceneDataSync SceneDataSync; 
+    private SceneDataSync SceneDataSync;
 
     // --- Serializable Classes ---
 
@@ -82,7 +82,7 @@ public class SceneSessionManager : MonoBehaviour
 
         serverUrl = manager.ServerURL + ":" + manager.uploadPort + "/submit_session";
         SceneObjectsList = new List<SceneObjectData>();
-        SceneDataSync = GetComponent<SceneDataSync>(); 
+        SceneDataSync = GetComponent<SceneDataSync>();
 
 
 
@@ -109,7 +109,7 @@ public class SceneSessionManager : MonoBehaviour
             sessionURLID = TimestampGenerator.GetTimestamp();
 
         SceneDataSync.UpdateURLID(sessionURLID);
-        
+
         SessionData data = new SessionData
         {
             sessionURLID = sessionURLID,
@@ -125,17 +125,7 @@ public class SceneSessionManager : MonoBehaviour
 
 
 
-        //       SessionData data = new SessionData
-        // {
-        //     sessionURLID = sessionURLID,
-        //     premise = TheSessionPremise,
-        //     prompt = MorePrompt,
-        //     timestamp = DateTime.UtcNow.ToString("s"),
-        //     furniture = GatherFurnitureData(),
-        //     physics = CapturePhysicsData(),
-        //     generateSpots = GatherGenerateSpots(),
-        //     users = GetUsersInSession()
-        // };
+
 
         string json = JsonUtility.ToJson(data, true);  // pretty print for debug
         Debug.Log(json);  // log it for inspection
@@ -179,16 +169,17 @@ public class SceneSessionManager : MonoBehaviour
 
         foreach (GenerateSpot spot in allSpots)
         {
-            if (spot.gameObject.tag!="RealObject") { 
-                spots.Add(new GenerateSpotData
+            if (spot.gameObject.tag != "RealObject")
             {
-                id = spot.URLID,
-                prompt = spot.Prompt
-            });
+                spots.Add(new GenerateSpotData
+                {
+                    id = spot.URLID,
+                    prompt = spot.Prompt
+                });
 
 
             }
-            
+
         }
 
         return spots;
@@ -232,32 +223,43 @@ public class SceneSessionManager : MonoBehaviour
         else
             Debug.LogError("❌ Submission failed: " + request.error);
     }
-    
 
 
-public void FetchSession(string sessionURLID)
-{
-    string url = $"http://localhost:5000/get_session/{sessionURLID}";
-    StartCoroutine(FetchSessionCoroutine(url));
-}
 
-IEnumerator FetchSessionCoroutine(string url)
-{
-    UnityWebRequest request = UnityWebRequest.Get(url);
-    yield return request.SendWebRequest();
-
-    if (request.result == UnityWebRequest.Result.Success)
+    public void FetchSession(string sessionURLID)
     {
-        string json = request.downloadHandler.text;
-        Debug.Log("✅ Session fetched:\n" + json);
+        string url = $"http://localhost:5000/get_session/{sessionURLID}";
+        StartCoroutine(FetchSessionCoroutine(url));
+    }
 
-        SessionData session = JsonUtility.FromJson<SessionData>(json);
-        Debug.Log($"Session: {session.premise} / {session.prompt}");
-    }
-    else
+    IEnumerator FetchSessionCoroutine(string url)
     {
-        Debug.LogError("❌ Failed to fetch session: " + request.error);
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            string json = request.downloadHandler.text;
+            Debug.Log("✅ Session fetched:\n" + json);
+
+            SessionData session = JsonUtility.FromJson<SessionData>(json);
+            Debug.Log($"Session: {session.premise} / {session.prompt}");
+        }
+        else
+        {
+            Debug.LogError("❌ Failed to fetch session: " + request.error);
+        }
     }
-}
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            SubmmiSession();
+            
+
+
+        }
+    }
 
 }

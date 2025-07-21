@@ -15730,6 +15730,7 @@ MonoBehaviour:
   uploadPort: 5000
   downloadPort: 8000
   ServerURL: http://192.168.0.139
+  sceneSessionManager: {fileID: 0}
   SceneSaverTest: {fileID: 1378611036}
   selectedIDUrl: 
   IDs: 0
@@ -15787,7 +15788,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1378611033}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fdbd1a8a22b4bdf46a1677afb22d8def, type: 3}
   m_Name: 

@@ -8,6 +8,9 @@ using TMPro;
 using TriLibCore.Dae.Schema;
 using Unity.VisualScripting;
 using UnityEngine.Networking;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
+using Klak.Ndi.Interop;
 
 
 public class RealityEditorManager : MonoBehaviour
@@ -23,8 +26,10 @@ public class RealityEditorManager : MonoBehaviour
     public string uploadPort,downloadPort;
     public string ServerURL;
     private string comandURL;
+
+    public SceneSessionManager sceneSessionManager;
     
-    public Dictionary<string,GameObject> GenCubesDic;
+    public Dictionary<string, GameObject> GenCubesDic;
 
     public SceneSaverTest SceneSaverTest; 
    // public List<GameObject> GenCubes;
@@ -37,25 +42,27 @@ public class RealityEditorManager : MonoBehaviour
     
     public GameObject sculptingMenu,scuptingBrush;
     public OSC osc;
-    private int colorcubeMover; 
+    private int colorcubeMover;
     void Start()
     {
 
         osc = FindObjectOfType<OSC>();
-        _runner = FindObjectOfType<NetworkRunner>(); 
-        comandURL=ServerURL+":"+uploadPort+"/";
-        ServerURL+=":"+downloadPort+"/";
+        _runner = FindObjectOfType<NetworkRunner>();
+        comandURL = ServerURL + ":" + uploadPort + "/";
+        ServerURL += ":" + downloadPort + "/";
         //comandURL+=":"+uploadPort+"/";
         //GenCubes= new List<GameObject>();
-        GenCubesDic=new Dictionary<string,GameObject>();
+        GenCubesDic = new Dictionary<string, GameObject>();
+        sceneSessionManager = FindObjectOfType<SceneSessionManager>();
+        
         // IDs=GenCubes.Count;
-         // osc.SetAllMessageHandler(ReciveFromOSC);
-         
-         //tested adding all the cubes already in the scene.
-         // GameObject InitialGenCube = FindObjectOfType<GenerateSpot>().GameObject();
-         // Debug.Log("Found the initial cube");
-         // GenCubesDic.Add(InitialGenCube.GetComponent<GenerateSpot>().URLID, InitialGenCube); //think about this: Are we adding the cube to the other players dictionaries? 
-         // Debug.Log("The Initial Cubes URLID is: " + InitialGenCube.GetComponent<GenerateSpot>().URLID);
+        // osc.SetAllMessageHandler(ReciveFromOSC);
+
+        //tested adding all the cubes already in the scene.
+        // GameObject InitialGenCube = FindObjectOfType<GenerateSpot>().GameObject();
+        // Debug.Log("Found the initial cube");
+        // GenCubesDic.Add(InitialGenCube.GetComponent<GenerateSpot>().URLID, InitialGenCube); //think about this: Are we adding the cube to the other players dictionaries? 
+        // Debug.Log("The Initial Cubes URLID is: " + InitialGenCube.GetComponent<GenerateSpot>().URLID);
 
     } 
     
@@ -149,7 +156,8 @@ public class RealityEditorManager : MonoBehaviour
         GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
         selectedIDUrl = urlid;
         IDs++;
-           gcube.name =""+ urlid;
+        gcube.name = "" + urlid;
+        sceneSessionManager.SubmmiSession();
         
     }
 
@@ -171,6 +179,7 @@ public class RealityEditorManager : MonoBehaviour
 
 
         gcube.name = "" + urlid;
+        sceneSessionManager.SubmmiSession();
         
         return gcube;
 
@@ -192,6 +201,7 @@ public class RealityEditorManager : MonoBehaviour
         GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
         selectedIDUrl=urlid;  
         IDs++;
+        sceneSessionManager.SubmmiSession();
 
         return gcube;
     }
@@ -216,6 +226,7 @@ public class RealityEditorManager : MonoBehaviour
         }
         selectedIDUrl=urlid;
         IDs++;
+        sceneSessionManager.SubmmiSession();
         return gcube; 
 
     }
@@ -235,6 +246,7 @@ public class RealityEditorManager : MonoBehaviour
                 Debug.LogError("Failed to spawn the network object.");
                 return null; 
             }
+            
  
             return networkObject.gameObject; 
         }
