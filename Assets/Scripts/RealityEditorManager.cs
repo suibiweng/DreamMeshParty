@@ -15,6 +15,7 @@ using Klak.Ndi.Interop;
 
 public class RealityEditorManager : MonoBehaviour
 {
+   
     public bool isFireScene;
 
     public bool isPhysics;
@@ -161,6 +162,27 @@ public class RealityEditorManager : MonoBehaviour
         
     }
 
+    public GameObject createRealobjectSpot(Vector3 pos)
+    {
+        GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
+        gcube.GetComponent<GenerateSpot>().id = IDs;
+        gcube.GetComponent<GenerateSpot>().isRealObject = true; // Mark this as a real object spot
+        string urlid = IDGenerator.GenerateID();
+        gcube.GetComponent<GenerateSpot>().URLID = urlid;
+        Debug.Log("The new Cube's URLID is: " + urlid);
+        gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
+ 
+        GenCubesDic.Add(urlid, gcube);
+        
+        selectedIDUrl = urlid;
+        IDs++;
+        // sceneSessionManager.SubmmiSession();
+        
+        return gcube;
+    }
+
+
+
 
 
     public GameObject createSpot(Vector3 pos)
@@ -180,7 +202,7 @@ public class RealityEditorManager : MonoBehaviour
 
         gcube.name = "" + urlid;
         sceneSessionManager.SubmmiSession();
-        
+
         return gcube;
 
     }

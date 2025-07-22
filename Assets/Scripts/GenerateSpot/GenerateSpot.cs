@@ -12,11 +12,12 @@ using ExitGames.Client.Photon.StructWrapping;
 using Oculus.Interaction;
 using Fusion;
 using Meta.XR.MultiplayerBlocks.Fusion;
-using Unity.VisualScripting;
+
 
 
 public class GenerateSpot : MonoBehaviour
 {
+    public bool isRealObject;
     public bool isAcopy = false;
     private NetworkRunner _runner;
 
@@ -402,7 +403,7 @@ public void TogglePhysic()
     {
         if (!manager.GenCubesDic.ContainsKey(URLID))
         {
-            manager.GenCubesDic.Add(URLID,this.GameObject()); //This should be adding it to other peoples dictionaries once the URLID is synced
+            manager.GenCubesDic.Add(URLID,this.gameObject); //This should be adding it to other peoples dictionaries once the URLID is synced
             manager.IDs++; 
             manager.selectedIDUrl = URLID;
         }
@@ -588,14 +589,6 @@ public void TogglePhysic()
         oldPrompt = Prompt;
 
 
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-
-            ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + "20250221165209" + "_ShapE.zip"));
-
-
-        }
-
 
         // if (_realtimeView.isOwnedLocallySelf)
         // {
@@ -704,8 +697,9 @@ public void TogglePhysic()
         PromtText.text = Prompt;
 
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) && !isRealObject)
         {
+            OnSelect();
             DebugGenrateModel();
 
 
@@ -818,25 +812,28 @@ public void TogglePhysic()
 
     }
 
+    public string debugPromt = "Apple";
+
 
     public void DebugGenrateModel()
     {
         //manager.promtGenerateModel(id, "Apple", URLID);
         manager.selectedIDUrl = URLID;
-        Prompt = "Apple";
-         manager.sendCommand("ShapeE");
-        
+        Prompt = debugPromt;
+        manager.sendCommand("DynamicCoding");
 
-          ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+
+        ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
         // PreViewQuad.SetActive(true);
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
 
-        DremmeshPrompt=Prompt;
+        DremmeshPrompt = Prompt;
 
 
-        
+
 
         // PreViewQuad.SetActive(true);
         // loadingIcon.SetActive(true);

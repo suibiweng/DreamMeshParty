@@ -50,7 +50,7 @@ public class RoomObjectsManager : MonoBehaviour
         {
 
             // Setup each anchor as needed
-            GameObject gc = manager.createSpot(anchor.transform.position);
+            GameObject gc = manager.createRealobjectSpot(anchor.transform.position);
             gc.GetComponent<GenerateSpot>().Prompt = anchor.gameObject.name;
             gc.tag = "RealObject";
 
