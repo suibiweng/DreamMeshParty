@@ -110,6 +110,8 @@ public class GenerateSpot : MonoBehaviour
     public Toggle sculptMode,PositionisLock;
     
     public Toggle physicToggle;
+    public Toggle modifyCodeToggle;
+    public GameObject CodeEditPrompt;
 
     public bool SculptingModeOn = false;
     
@@ -582,6 +584,12 @@ public void TogglePhysic()
     void Update()
     {
 
+        if (modifyCodeToggle != null)
+        { 
+            
+            CodeEditPrompt.SetActive(modifyCodeToggle.isOn);
+        }
+
         if (Prompt != oldPrompt)
         {
             _photonDataSync.UpdatePrompt(Prompt);
@@ -589,20 +597,6 @@ public void TogglePhysic()
         oldPrompt = Prompt;
 
 
-
-        // if (_realtimeView.isOwnedLocallySelf)
-        // {
-        //     dataSync.SetURLID(URLID); 
-        //     dataSync.Setprompt(Prompt);
-        // }
-
-        // toLockthePosition();
-
-
-        // if (manager == null)
-        // {
-        //     FindObjectOfType<RealityEditorManager2>();  //this shouldnt be necessary
-        // }
 
         URLIDText.text = URLID; //commented this out while trying to figure out data syncing
 
@@ -732,6 +726,10 @@ public void TogglePhysic()
 
 
     }
+
+
+
+
 
     public void updateTheTransform()
     {
@@ -875,14 +873,44 @@ public void TogglePhysic()
 
         DremmeshPrompt=Prompt;
 
-
-        
-
-        // PreViewQuad.SetActive(true);
-        // loadingIcon.SetActive(true);
         Prompt = "";
 
     }
+    
+
+        public void RPCEditCode()
+    {
+        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        
+        
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+    }
+    
+
+    public void EditCode()
+    {
+        manager.promtGenerateModel(id, Prompt, URLID);
+        // manager.sendCommand("ShapeE");
+        manager.sendCommand("ModifyDynamicCoding");
+        // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+
+
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+
+        DremmeshPrompt = Prompt;
+
+        Prompt = "";
+
+    }
+
+
+
 
 
 
@@ -893,7 +921,7 @@ public void TogglePhysic()
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
 
-        DremmeshPrompt=Prompt;
+        DremmeshPrompt = Prompt;
 
         _generateSpotRPC.CallConfirmGenerationRPC();
 

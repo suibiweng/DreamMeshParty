@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using LuaProxies;
 using UnityEngine.UI;
 using RealityEditor;
+using TMPro;
 
 [System.Serializable]
 public class ParticleEffectConfig
@@ -28,6 +29,8 @@ public class DynamicObjectData
     public string objectName;
     public string lua_code;
     public List<ParticleEffectConfig> particle_json;
+
+    public string comment;
 }
 
 public class LuaMonoBehavior : MonoBehaviour
@@ -90,7 +93,7 @@ public class LuaMonoBehavior : MonoBehaviour
         luaScript = new Script();
 
         manager = FindAnyObjectByType<RealityEditorManager>();
-     //   serverURL = manager.ServerURL;
+        //   serverURL = manager.ServerURL;
     }
 
     string urlToCheck = "";
@@ -145,6 +148,10 @@ public class LuaMonoBehavior : MonoBehaviour
     {
         DynamicObjectData data = JsonUtility.FromJson<DynamicObjectData>(json);
         luaScriptText = data.lua_code;
+
+        if (CodeInfo != null) CodeInfo.text = data.lua_code;
+        if (ExplanationsInfo != null) ExplanationsInfo.text = data.comment;
+
         InitializeLuaScript(data.lua_code);
 
         foreach (var effect in data.particle_json)
@@ -242,6 +249,13 @@ public class LuaMonoBehavior : MonoBehaviour
 
     void Update()
     {
+
+
+        if (informationToggle != null)
+        { InfoTab.SetActive(informationToggle.isOn); 
+            
+
+        }
         if (Input.GetKeyDown(KeyCode.F3))
         {
             luaScriptText = "function start()\n    print(\"Baseball initialized\")\nend\n\nfunction update(deltaTime)\n    -- optional animation\nend\n\nfunction onCollisionEnter(other)\n    print(\"Collided with \" .. other)\n    activateEffect(\"collisionSpark\")\n    if rigidbodyProxy then\n        rigidbodyProxy:SetUseGravity(true)\n        rigidbodyProxy:AddForce(Vector3(0, 300, 500))\n    end\nend\n\nfunction trigger()\n    print(\"Trigger called — no action needed for baseball.\")\nend";
@@ -301,4 +315,33 @@ public class LuaMonoBehavior : MonoBehaviour
             ps.Stop();
         }
     }
+
+    public Toggle informationToggle;
+    public Toggle[] tabsToggles;
+    public GameObject[] Tabs;
+
+    public GameObject InfoTab;
+
+    public TMP_Text CodeInfo, ExplanationsInfo;
+
+
+    public void InformationTabmanager()
+    {
+
+
+        for (int i = 0; i < Tabs.Length; i++)
+        {
+            Tabs[i].SetActive(tabsToggles[i].isOn);
+
+        }
+
+
+
+
+
+    }
+    
+
+
+
 }
