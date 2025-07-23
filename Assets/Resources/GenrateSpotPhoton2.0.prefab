@@ -17254,7 +17254,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
@@ -17612,7 +17612,7 @@ MonoBehaviour:
   serverURL: http://yourserver.com/
   uiText: {fileID: 0}
   uiButton: {fileID: 0}
-  rb: {fileID: 0}
+  rb: {fileID: 8846791424638022533}
   luaScriptText: 
   checkInterval: 10
   defaultParticleMaterial: {fileID: 0}

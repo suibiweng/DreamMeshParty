@@ -4,7 +4,7 @@ using MoonSharp.Interpreter;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using LuaProxies; // ✅ Import the namespace
+using LuaProxies;
 using UnityEngine.UI;
 using RealityEditor;
 
@@ -33,14 +33,14 @@ public class DynamicObjectData
 public class LuaMonoBehavior : MonoBehaviour
 {
     public Transform SpwanPoint;
-    public string ID; // Object ID to fetch JSON (e.g., "Campfire")
-    public string serverURL = "http://yourserver.com/"; // Set your server URL here
+    public string ID;
+    public string serverURL = "http://yourserver.com/";
     public Text uiText;
     public Button uiButton;
     public Rigidbody rb;
     public string luaScriptText;
     public float checkInterval = 10f;
-    public Material defaultParticleMaterial; // Set this in the inspector
+    public Material defaultParticleMaterial;
     public event Action<bool> OnURLResponse = delegate { };
 
     public RealityEditorManager manager;
@@ -49,51 +49,52 @@ public class LuaMonoBehavior : MonoBehaviour
     private UnityEngine.Coroutine fileCheckCoroutine;
     private bool isDownloading = false;
 
-    // Lua function handles
-    private DynValue startFunction;
-    private DynValue updateFunction;
-    private DynValue fixedUpdateFunction;
-    private DynValue lateUpdateFunction;
-    private DynValue onTriggerEnterFunction;
-    private DynValue onTriggerExitFunction;
-    private DynValue onCollisionEnterFunction;
-    private DynValue onCollisionExitFunction;
+    private DynValue startFunction, updateFunction, fixedUpdateFunction, lateUpdateFunction;
+    private DynValue onTriggerEnterFunction, onTriggerExitFunction;
+    private DynValue onCollisionEnterFunction, onCollisionExitFunction;
     private DynValue onButtonClickFunction;
 
-    // Proxies for Unity components available in Lua
     TransformProxy transformProxy;
     GameObjectProxy gameObjectProxy;
+    RigidbodyProxy rigidbodyProxy;
+    AudioSourceProxy audioSourceProxy;
+    TextProxy textProxy;
+    ButtonProxy buttonProxy;
+    ParticleSystemProxy particleSystemProxy;
+    AnimatorProxy animatorProxy;
 
-    // Dictionary to store ParticleSystems for each effect
-    private Dictionary<string, ParticleSystem> effectSystems = new Dictionary<string, ParticleSystem>();
+    private Dictionary<string, ParticleSystem> effectSystems = new();
 
     void Start()
     {
-        // Register Lua types
         UserData.RegisterType<GameObject>();
         UserData.RegisterType<Vector3>();
-        UserData.RegisterType<TransformProxy>(); // from LuaProxies namespace
-        UserData.RegisterType<GameObjectProxy>();  // from LuaProxies namespace
+        UserData.RegisterType<TransformProxy>();
+        UserData.RegisterType<GameObjectProxy>();
+        UserData.RegisterType<RigidbodyProxy>();
+        UserData.RegisterType<AudioSourceProxy>();
+        UserData.RegisterType<TextProxy>();
+        UserData.RegisterType<ButtonProxy>();
+        UserData.RegisterType<ParticleSystemProxy>();
+        UserData.RegisterType<AnimatorProxy>();
 
-        // Initialize proxies
         transformProxy = new TransformProxy(transform);
         gameObjectProxy = new GameObjectProxy(gameObject);
+        if (rb != null) rigidbodyProxy = new RigidbodyProxy(rb);
+        if (GetComponent<AudioSource>() != null) audioSourceProxy = new AudioSourceProxy(GetComponent<AudioSource>());
+        if (uiText != null) textProxy = new TextProxy(uiText);
+        if (uiButton != null) buttonProxy = new ButtonProxy(uiButton);
+        if (GetComponent<ParticleSystem>() != null) particleSystemProxy = new ParticleSystemProxy(GetComponent<ParticleSystem>());
+        if (GetComponent<Animator>() != null) animatorProxy = new AnimatorProxy(GetComponent<Animator>());
 
-        // Initialize Lua
         luaScript = new Script();
 
-        // (Default Lua script can be set here if needed)
-        // Now, for dynamic objects we'll fetch our JSON file
-
         manager = FindAnyObjectByType<RealityEditorManager>();
-
-
-        serverURL = manager.ServerURL;
+     //   serverURL = manager.ServerURL;
     }
 
     string urlToCheck = "";
 
-    // Fetch and process JSON from server
     public void StartFetchingCode(string downloadURL, string downloadID)
     {
         if (fileCheckCoroutine == null)
@@ -103,20 +104,13 @@ public class LuaMonoBehavior : MonoBehaviour
         }
     }
 
-
     public void Fetchingforupdate()
-    { 
-
+    {
         if (fileCheckCoroutine == null)
         {
-          
             fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
         }
-        
-
     }
-
-    
 
     private IEnumerator CheckFileAvailability(string url)
     {
@@ -130,7 +124,6 @@ public class LuaMonoBehavior : MonoBehaviour
 
                 if (www.result == UnityWebRequest.Result.Success)
                 {
-                    Debug.Log("✅ JSON file is available! Downloading...");
                     isDownloading = true;
                     ProcessJsonData(www.downloadHandler.text);
                     OnURLResponse(true);
@@ -140,33 +133,26 @@ public class LuaMonoBehavior : MonoBehaviour
                     OnURLResponse(false);
                 }
             }
+
             if (!isDownloading)
-            {
                 yield return new WaitForSeconds(checkInterval);
-            }
         }
+
         fileCheckCoroutine = null;
     }
 
-    // Process JSON data from a file hosted on the server
     void ProcessJsonData(string json)
     {
         DynamicObjectData data = JsonUtility.FromJson<DynamicObjectData>(json);
-
-        luaScriptText= data.lua_code;
-        
-
-        // Load Lua code from JSON
+        luaScriptText = data.lua_code;
         InitializeLuaScript(data.lua_code);
 
-        // Create or update ParticleSystems for each effect in the JSON
-        foreach (ParticleEffectConfig effect in data.particle_json)
+        foreach (var effect in data.particle_json)
         {
             CreateOrUpdateParticleSystem(effect);
         }
     }
 
-    // Create or update a ParticleSystem for a given effect config
     void CreateOrUpdateParticleSystem(ParticleEffectConfig config)
     {
         ParticleSystem ps;
@@ -176,27 +162,18 @@ public class LuaMonoBehavior : MonoBehaviour
         }
         else
         {
-            // Create a new child GameObject to hold the ParticleSystem
             GameObject psObject = new GameObject(config.effectName + "_Effect");
             psObject.transform.parent = SpwanPoint;
             psObject.transform.localPosition = Vector3.zero;
-            psObject.transform.rotation = Quaternion.Euler(new Vector3(-90, 0, 0));
+            psObject.transform.rotation = Quaternion.Euler(-90, 0, 0);
             psObject.transform.localScale = Vector3.one;
 
-
             ps = psObject.AddComponent<ParticleSystem>();
-
-            // Set up the ParticleSystemRenderer with a default material
             ParticleSystemRenderer renderer = ps.GetComponent<ParticleSystemRenderer>();
-            if (defaultParticleMaterial != null)
-                renderer.material = defaultParticleMaterial;
-            else
-                renderer.material = new Material(Shader.Find("Particles/Standard Unlit"));
-
+            renderer.material = defaultParticleMaterial ?? new Material(Shader.Find("Particles/Standard Unlit"));
             effectSystems[config.effectName] = ps;
         }
 
-        // Configure the main module
         var main = ps.main;
         main.startColor = config.startColor;
         main.startSize = config.startSize;
@@ -205,38 +182,38 @@ public class LuaMonoBehavior : MonoBehaviour
         main.startLifetime = config.lifetime;
         main.scalingMode = ParticleSystemScalingMode.Hierarchy;
 
-        // Configure the emission module
         var emission = ps.emission;
         emission.rateOverTime = config.emissionRate;
 
-        ps.Stop(); // Ensure it's not playing automatically
-        Debug.Log($"✨ Created/Updated Particle Effect: {config.effectName}");
-        ps.Play(); // Ensure it's not playing automatically
+        ps.Stop();
+        ps.Play();
     }
 
-    // Initialize Lua script and bind Unity proxies and functions
     public void InitializeLuaScript(string code)
     {
         try
         {
             luaScript = new Script();
 
-            // Bind proxies for Lua to access Unity components
             luaScript.Globals["transformProxy"] = UserData.Create(transformProxy);
             luaScript.Globals["gameObjectProxy"] = UserData.Create(gameObjectProxy);
+            if (rigidbodyProxy != null) luaScript.Globals["rigidbodyProxy"] = UserData.Create(rigidbodyProxy);
+            if (audioSourceProxy != null) luaScript.Globals["audioSourceProxy"] = UserData.Create(audioSourceProxy);
+            if (textProxy != null) luaScript.Globals["textProxy"] = UserData.Create(textProxy);
+            if (buttonProxy != null) luaScript.Globals["buttonProxy"] = UserData.Create(buttonProxy);
+            if (particleSystemProxy != null) luaScript.Globals["particleSystemProxy"] = UserData.Create(particleSystemProxy);
+            if (animatorProxy != null) luaScript.Globals["animatorProxy"] = UserData.Create(animatorProxy);
+
+            luaScript.Globals["activateEffect"] = (Action<string>)ActivateEffect;
+            luaScript.Globals["deactivateEffect"] = (Action)DeactivateEffect;
+
             luaScript.Globals["Vector3"] = (Func<float, float, float, Vector3>)((x, y, z) => new Vector3(x, y, z));
+            luaScript.Globals["Color"] = (Func<float, float, float, float, Color>)((r, g, b, a) => new Color(r, g, b, a));
             luaScript.Globals["Vector2"] = (Func<float, float, Vector2>)((x, y) => new Vector2(x, y));
             luaScript.Globals["Quaternion"] = (Func<float, float, float, float, Quaternion>)((x, y, z, w) => new Quaternion(x, y, z, w));
-            luaScript.Globals["Color"] = (Func<float, float, float, float, Color>)((r, g, b, a) => new Color(r, g, b, a));
 
-            // Execute the Lua code
             luaScript.DoString(code);
 
-            // Bind trigger events to C# functions
-            luaScript.Globals["onTriggerPress"] = (Action)OnTriggerPress;
-            luaScript.Globals["onTriggerRelease"] = (Action)OnTriggerRelease;
-
-            // Fetch Lua functions
             startFunction = luaScript.Globals.Get("start");
             updateFunction = luaScript.Globals.Get("update");
             fixedUpdateFunction = luaScript.Globals.Get("fixedUpdate");
@@ -247,14 +224,11 @@ public class LuaMonoBehavior : MonoBehaviour
             onCollisionExitFunction = luaScript.Globals.Get("onCollisionExit");
             onButtonClickFunction = luaScript.Globals.Get("onButtonClick");
 
-            // Call the start function if available
             if (startFunction != null && startFunction.Type == DataType.Function)
             {
-                Debug.Log("✅ Lua Start() function found! Calling it...");
                 luaScript.Call(startFunction);
             }
 
-            // Bind button click if a UI button is provided
             if (uiButton != null && onButtonClickFunction != null)
             {
                 uiButton.onClick.AddListener(() => luaScript.Call(onButtonClickFunction));
@@ -266,25 +240,21 @@ public class LuaMonoBehavior : MonoBehaviour
         }
     }
 
-    // Update is called once per frame; calls Lua's update(deltaTime) function
     void Update()
     {
-        // Debug: Press F3 to manually reinitialize Lua script
         if (Input.GetKeyDown(KeyCode.F3))
         {
+            luaScriptText = "function start()\n    print(\"Baseball initialized\")\nend\n\nfunction update(deltaTime)\n    -- optional animation\nend\n\nfunction onCollisionEnter(other)\n    print(\"Collided with \" .. other)\n    activateEffect(\"collisionSpark\")\n    if rigidbodyProxy then\n        rigidbodyProxy:SetUseGravity(true)\n        rigidbodyProxy:AddForce(Vector3(0, 300, 500))\n    end\nend\n\nfunction trigger()\n    print(\"Trigger called — no action needed for baseball.\")\nend";
             InitializeLuaScript(luaScriptText);
+            Debug.Log("Lua script reloaded.");
         }
 
-        if (updateFunction == null || updateFunction.Type != DataType.Function)
+        if (updateFunction != null && updateFunction.Type == DataType.Function)
         {
-            Debug.LogWarning("⚠️ Lua update function is missing or not properly registered!");
-            return;
+            luaScript.Call(updateFunction, Time.deltaTime);
         }
-
-        luaScript.Call(updateFunction, Time.deltaTime);
     }
 
-    // Collision handling: forward collision events to Lua
     void OnCollisionEnter(Collision collision)
     {
         string otherObjectName = collision.gameObject.name;
@@ -303,33 +273,20 @@ public class LuaMonoBehavior : MonoBehaviour
         }
     }
 
-    // Trigger events: forward trigger events to Lua
-    void OnTriggerPress()
+    public void Trigger()
     {
-        DynValue func = luaScript.Globals.Get("onTriggerPress");
+        var func = luaScript.Globals.Get("trigger");
         if (func != null && func.Type == DataType.Function)
         {
             luaScript.Call(func);
         }
     }
 
-    void OnTriggerRelease()
-    {
-        DynValue func = luaScript.Globals.Get("onTriggerRelease");
-        if (func != null && func.Type == DataType.Function)
-        {
-            luaScript.Call(func);
-        }
-    }
-
-    // Activate an effect by name: play the corresponding ParticleSystem
     void ActivateEffect(string effectName)
     {
-        if (effectSystems.ContainsKey(effectName))
+        if (effectSystems.TryGetValue(effectName, out var ps))
         {
-            ParticleSystem ps = effectSystems[effectName];
             ps.Play();
-            Debug.Log($"✨ Effect Activated: {effectName}");
         }
         else
         {
@@ -337,13 +294,11 @@ public class LuaMonoBehavior : MonoBehaviour
         }
     }
 
-    // Deactivate all effects (or a specific one if desired)
     void DeactivateEffect()
     {
         foreach (var ps in effectSystems.Values)
         {
             ps.Stop();
         }
-        Debug.Log("✨ All effects deactivated!");
     }
 }

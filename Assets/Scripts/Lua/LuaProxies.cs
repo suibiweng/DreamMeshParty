@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using MoonSharp.Interpreter;
 
 namespace LuaProxies
@@ -6,82 +7,112 @@ namespace LuaProxies
     [MoonSharpUserData]
     public class TransformProxy
     {
-        private Transform _transform;
+        private readonly Transform _transform;
+        public TransformProxy(Transform transform) => _transform = transform;
 
-        public TransformProxy(Transform transform)
-        {
-            _transform = transform;
-        }
+        public Vector3 GetPosition() => _transform.position;
+        public void SetPosition(Vector3 position) => _transform.position = position;
+        public Vector3 GetRotation() => _transform.eulerAngles;
+        public void SetRotation(Vector3 rotation) => _transform.eulerAngles = rotation;
+        public Vector3 GetScale() => _transform.localScale;
+        public void SetScale(Vector3 scale) => _transform.localScale = scale;
+        public void Translate(Vector3 delta) => _transform.Translate(delta);
+        public void Rotate(Vector3 rotation) => _transform.Rotate(rotation);
+    }
 
-        public Vector3 GetPosition()
-        {
-            return _transform.position;
-        }
+    [MoonSharpUserData]
+    public class GameObjectProxy
+    {
+        private readonly GameObject _gameObject;
+        public GameObjectProxy(GameObject gameObject) => _gameObject = gameObject;
 
-        public void SetPosition(Vector3 position)
-        {
-            _transform.position = position;
-        }
+        public string GetName() => _gameObject.name;
+        public void SetName(string name) => _gameObject.name = name;
+        public bool IsActive() => _gameObject.activeSelf;
+        public void SetActive(bool active) => _gameObject.SetActive(active);
+    }
 
-        public Vector3 GetRotation()
-        {
-            return _transform.eulerAngles;
-        }
+    [MoonSharpUserData]
+    public class RigidbodyProxy
+    {
+        private readonly Rigidbody _rb;
+        public RigidbodyProxy(Rigidbody rb) => _rb = rb;
 
-        public void SetRotation(Vector3 rotation)
-        {
-            _transform.eulerAngles = rotation;
-        }
+        public void AddForce(Vector3 force) => _rb.AddForce(force);
+        public void SetVelocity(Vector3 velocity) => _rb.velocity = velocity;
+        public Vector3 GetVelocity() => _rb.velocity;
+        public void SetUseGravity(bool useGravity) => _rb.useGravity = useGravity;
+    }
 
-        public void Translate(Vector3 translation)
-        {
-            _transform.Translate(translation);
-        }
+    [MoonSharpUserData]
+    public class AudioSourceProxy
+    {
+        private readonly AudioSource _src;
+        public AudioSourceProxy(AudioSource src) => _src = src;
 
-        public void Rotate(Vector3 rotation)
-        {
-            _transform.Rotate(rotation);
-        }
+        public void Play() => _src.Play();
+        public void Stop() => _src.Stop();
+        public void Pause() => _src.Pause();
+        public void SetVolume(float volume) => _src.volume = volume;
+        public void SetLoop(bool loop) => _src.loop = loop;
+    }
 
-        public Vector3 GetScale()
-        {
-            return _transform.localScale;
-        }
+    [MoonSharpUserData]
+    public class TextProxy
+    {
+        private readonly Text _text;
+        public TextProxy(Text text) => _text = text;
 
-        public void SetScale(Vector3 scale)
+        public void SetText(string text) => _text.text = text;
+        public string GetText() => _text.text;
+        public void SetColor(Color color) => _text.color = color;
+    }
+
+    [MoonSharpUserData]
+    public class ButtonProxy
+    {
+        private readonly Button _btn;
+        public ButtonProxy(Button button) => _btn = button;
+
+        public void SetInteractable(bool state) => _btn.interactable = state;
+        public bool IsInteractable() => _btn.interactable;
+    }
+
+    [MoonSharpUserData]
+    public class CollisionProxy
+    {
+        private readonly Collision _collision;
+        public CollisionProxy(Collision collision) => _collision = collision;
+
+        public GameObjectProxy GetGameObject() => new GameObjectProxy(_collision.gameObject);
+        public Vector3 GetContactPoint() => _collision.contacts.Length > 0 ? _collision.contacts[0].point : Vector3.zero;
+        public Vector3 GetRelativeVelocity() => _collision.relativeVelocity;
+    }
+
+    [MoonSharpUserData]
+    public class ParticleSystemProxy
+    {
+        private readonly ParticleSystem _ps;
+        public ParticleSystemProxy(ParticleSystem ps) => _ps = ps;
+
+        public void Play() => _ps.Play();
+        public void Stop() => _ps.Stop();
+        public bool IsPlaying() => _ps.isPlaying;
+        public void SetLooping(bool loop)
         {
-            _transform.localScale = scale;
+            var main = _ps.main;
+            main.loop = loop;
         }
     }
 
-  
-    public class GameObjectProxy
+    [MoonSharpUserData]
+    public class AnimatorProxy
     {
-        private GameObject _gameObject;
+        private readonly Animator _anim;
+        public AnimatorProxy(Animator anim) => _anim = anim;
 
-        public GameObjectProxy(GameObject gameObject)
-        {
-            _gameObject = gameObject;
-        }
-
-        public string GetName()
-        {
-            return _gameObject.name;
-        }
-
-        public void SetName(string name)
-        {
-            _gameObject.name = name;
-        }
-
-        public bool IsActive()
-        {
-            return _gameObject.activeSelf;
-        }
-
-        public void SetActive(bool active)
-        {
-            _gameObject.SetActive(active);
-        }
+        public void Play(string stateName) => _anim.Play(stateName);
+        public void SetBool(string name, bool value) => _anim.SetBool(name, value);
+        public void SetTrigger(string name) => _anim.SetTrigger(name);
     }
 }
