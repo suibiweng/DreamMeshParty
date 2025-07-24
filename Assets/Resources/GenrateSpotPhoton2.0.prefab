@@ -18253,6 +18253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290f3339bad966a4eabbba6ef1399b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _generateSpot: {fileID: 0}
+  _luaMonoBehavior: {fileID: 0}
 --- !u!114 &6378604827761282201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18369,6 +18371,7 @@ MonoBehaviour:
   checkInterval: 10
   defaultParticleMaterial: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   manager: {fileID: 0}
+  generateSpotRPC: {fileID: 0}
   informationToggle: {fileID: 9019280584731347403}
   tabsToggles:
   - {fileID: 2494539397665360270}

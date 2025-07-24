@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class GenerateSpotRPC : NetworkBehaviour
 {
-    private GenerateSpot _generateSpot;
+    public GenerateSpot _generateSpot;
+    public LuaMonoBehavior _luaMonoBehavior;
 
     private void Start()
     {
-        _generateSpot = GetComponent<GenerateSpot>(); 
+        _generateSpot = GetComponent<GenerateSpot>();
+        _luaMonoBehavior = GetComponent<LuaMonoBehavior>();
+    
+
     }
 
     // This method will be executed on all clients when invoked
@@ -22,6 +26,14 @@ public class GenerateSpotRPC : NetworkBehaviour
        _generateSpot.RPCGenrateModel();
         // Additional logic to handle the RPC
     }
+    public void RPCTrigger()
+    {
+        Debug.Log($"RPC received to Trigger");
+        _luaMonoBehavior.RPCTrigger();
+    }
+
+
+
 
     // Example of how to call an RPC
     public void CallConfirmGenerationRPC()
@@ -29,7 +41,14 @@ public class GenerateSpotRPC : NetworkBehaviour
         // Call the RPC on all clients
         RPC_ConfirmGeneration();
 
-        
+
+    }
+
+
+    public void CallTriggerRPC()
+    {
+        // Call the RPC on all clients
+        RPCTrigger();
     }
     
     //Remove spot from all player's dictionaries to properly delete a spot

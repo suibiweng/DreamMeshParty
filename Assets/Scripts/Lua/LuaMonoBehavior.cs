@@ -31,6 +31,7 @@ public class DynamicObjectData
     public List<ParticleEffectConfig> particle_json;
 
     public string comment;
+    public string created_at; 
 }
 
 public class LuaMonoBehavior : MonoBehaviour
@@ -68,6 +69,8 @@ public class LuaMonoBehavior : MonoBehaviour
 
     private Dictionary<string, ParticleSystem> effectSystems = new();
 
+    public GenerateSpotRPC generateSpotRPC;
+
     void Start()
     {
         UserData.RegisterType<GameObject>();
@@ -93,10 +96,12 @@ public class LuaMonoBehavior : MonoBehaviour
         luaScript = new Script();
 
         manager = FindAnyObjectByType<RealityEditorManager>();
+        generateSpotRPC=GetComponent<GenerateSpotRPC>();
         //   serverURL = manager.ServerURL;
     }
 
     string urlToCheck = "";
+
 
     public void StartFetchingCode(string downloadURL, string downloadID)
     {
@@ -144,21 +149,57 @@ public class LuaMonoBehavior : MonoBehaviour
         fileCheckCoroutine = null;
     }
 
+    private string lastLoadedTimestamp = "";
     void ProcessJsonData(string json)
     {
         DynamicObjectData data = JsonUtility.FromJson<DynamicObjectData>(json);
-        luaScriptText = data.lua_code;
 
-        if (CodeInfo != null) CodeInfo.text = data.lua_code;
-        if (ExplanationsInfo != null) ExplanationsInfo.text = data.comment;
-
-        InitializeLuaScript(data.lua_code);
-
-        foreach (var effect in data.particle_json)
+        // ✅ Only update if timestamp has changed
+        if (data.created_at != lastLoadedTimestamp)
         {
-            CreateOrUpdateParticleSystem(effect);
+            gameObject.name = data.objectName; 
+            lastLoadedTimestamp = data.created_at;
+            luaScriptText = data.lua_code;
+
+            if (CodeInfo != null) CodeInfo.text = data.lua_code;
+            if (ExplanationsInfo != null)
+            {
+                ExplanationsInfo.text = $"📝 {data.comment}\n🕒 Generated at: {data.created_at}";
+            }
+
+            InitializeLuaScript(data.lua_code);
+
+            foreach (var effect in data.particle_json)
+            {
+                CreateOrUpdateParticleSystem(effect);
+            }
+
+            Debug.Log("🔁 Lua updated from new DynamicCoding file.");
+        }
+        else
+        {
+            Debug.Log("⏸ Lua NOT updated — same timestamp.");
         }
     }
+
+
+
+
+    // void ProcessJsonData(string json)
+    // {
+    //     DynamicObjectData data = JsonUtility.FromJson<DynamicObjectData>(json);
+    //     luaScriptText = data.lua_code;
+
+    //     if (CodeInfo != null) CodeInfo.text = data.lua_code;
+    //     if (ExplanationsInfo != null) ExplanationsInfo.text = data.comment;
+
+    //     InitializeLuaScript(data.lua_code);
+
+    //     foreach (var effect in data.particle_json)
+    //     {
+    //         CreateOrUpdateParticleSystem(effect);
+    //     }
+    // }
 
     void CreateOrUpdateParticleSystem(ParticleEffectConfig config)
     {
@@ -252,8 +293,8 @@ public class LuaMonoBehavior : MonoBehaviour
 
 
         if (informationToggle != null)
-        { InfoTab.SetActive(informationToggle.isOn); 
-            
+        { InfoTab.SetActive(informationToggle.isOn);
+
 
         }
         if (Input.GetKeyDown(KeyCode.F3))
@@ -286,6 +327,22 @@ public class LuaMonoBehavior : MonoBehaviour
             luaScript.Call(onCollisionExitFunction, otherObjectName);
         }
     }
+
+
+    public void RPCTrigger()
+    {
+        generateSpotRPC.CallTriggerRPC();
+
+        var func = luaScript.Globals.Get("trigger");
+        if (func != null && func.Type == DataType.Function)
+        {
+            luaScript.Call(func);
+        }
+        
+
+
+    }
+
 
     public void Trigger()
     {
@@ -334,9 +391,6 @@ public class LuaMonoBehavior : MonoBehaviour
             Tabs[i].SetActive(tabsToggles[i].isOn);
 
         }
-
-
-
 
 
     }

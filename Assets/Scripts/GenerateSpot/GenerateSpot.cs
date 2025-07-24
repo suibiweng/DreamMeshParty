@@ -701,6 +701,17 @@ public void TogglePhysic()
 
 
 
+        if (Input.GetKeyDown(KeyCode.T) && !isRealObject)
+        {
+            OnSelect();
+            EditCode();
+
+
+        }
+
+
+
+
         if (Input.GetKeyDown(KeyCode.D))
         {
 
@@ -878,9 +889,9 @@ public void TogglePhysic()
     }
     
 
-        public void RPCEditCode()
+    public void RPCEditCode()
     {
-        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
         if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
         
         
