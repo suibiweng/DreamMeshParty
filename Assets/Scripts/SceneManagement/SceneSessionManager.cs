@@ -45,6 +45,7 @@ public class SceneSessionManager : MonoBehaviour
     {
         public string id;
         public string prompt;
+        public string gameObjectName;
     }
 
     [Serializable]
@@ -174,7 +175,8 @@ public class SceneSessionManager : MonoBehaviour
                 spots.Add(new GenerateSpotData
                 {
                     id = spot.URLID,
-                    prompt = spot.Prompt
+                    prompt = spot.Prompt,
+                    gameObjectName = spot.gameObject.name
                 });
 
 

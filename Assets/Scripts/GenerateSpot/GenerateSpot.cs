@@ -840,6 +840,7 @@ public void TogglePhysic()
         Outlinebox.wire_renderer = false;
 
         DremmeshPrompt = Prompt;
+        manager.updateSession();
 
 
 
@@ -883,18 +884,43 @@ public void TogglePhysic()
         Outlinebox.wire_renderer = false;
 
         DremmeshPrompt=Prompt;
+        manager.updateSession();
+        manager.UpdatealltheCode(URLID);
+
 
         Prompt = "";
 
     }
+
+    public void RPCFetchCode()
+    {
+        // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+    }
+  public void FetchCode()
+    {
+        // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+        if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+
+        loadingParticles.Play();
+        SmoothCubeRenderer.enabled = false;
+        Outlinebox.wire_renderer = false;
+    }
+
+    
+
     
 
     public void RPCEditCode()
     {
         // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
-        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
-        
-        
+        if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+
+
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
@@ -915,6 +941,9 @@ public void TogglePhysic()
         Outlinebox.wire_renderer = false;
 
         DremmeshPrompt = Prompt;
+        manager.updateSession();
+        manager.UpdatealltheCode(URLID);
+
 
         Prompt = "";
 

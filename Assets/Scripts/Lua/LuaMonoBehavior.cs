@@ -49,6 +49,8 @@ public class LuaMonoBehavior : MonoBehaviour
 
     public RealityEditorManager manager;
 
+    public bool hasluaScript = false;
+
     private Script luaScript;
     private UnityEngine.Coroutine fileCheckCoroutine;
     private bool isDownloading = false;
@@ -242,7 +244,7 @@ public class LuaMonoBehavior : MonoBehaviour
         try
         {
             luaScript = new Script();
-
+            hasluaScript = true;
             luaScript.Globals["transformProxy"] = UserData.Create(transformProxy);
             luaScript.Globals["gameObjectProxy"] = UserData.Create(gameObjectProxy);
             if (rigidbodyProxy != null) luaScript.Globals["rigidbodyProxy"] = UserData.Create(rigidbodyProxy);
