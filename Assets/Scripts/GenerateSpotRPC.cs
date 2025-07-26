@@ -23,9 +23,24 @@ public class GenerateSpotRPC : NetworkBehaviour
         // _generateSpot.initAdd();
         // _generateSpot.Outlinebox.wire_renderer = false;
         // _generateSpot.VoicePanel.SetActive(false);
-       _generateSpot.RPCGenrateModel();
+        _generateSpot.RPCGenrateModel();
+       _generateSpot.RPC_UpdateallLuaScripts();
         // Additional logic to handle the RPC
     }
+
+
+    public void RPC_ConFirmCodeditng()
+    {
+        Debug.Log($"RPC received to ConfirmGeneration");
+        // _generateSpot.initAdd();
+        // _generateSpot.Outlinebox.wire_renderer = false;
+        // _generateSpot.VoicePanel.SetActive(false);
+        _generateSpot.RPCEditCode();
+        _generateSpot.RPC_UpdateallLuaScripts();
+        // Additional logic to handle the RPC
+    }
+
+
     public void RPCTrigger()
     {
         Debug.Log($"RPC received to Trigger");
@@ -50,6 +65,15 @@ public class GenerateSpotRPC : NetworkBehaviour
         // Call the RPC on all clients
         RPCTrigger();
     }
+    public void CallConfirmCodeditngRPC()
+    {
+        // Call the RPC on all clients
+        RPC_ConFirmCodeditng();
+    }
+
+
+
+
     
     //Remove spot from all player's dictionaries to properly delete a spot
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]

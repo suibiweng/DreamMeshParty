@@ -16732,7 +16732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 434aa568-269c-48dc-8b7e-c45d1c507ac8
+  instanceId: 502b10eb-c467-4ff7-9066-cc40556e921d
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -18288,7 +18288,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3767765152069255675}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8729e40f6ca1f974c949a007db4f9801, type: 3}
   m_Name: 
@@ -18371,6 +18371,7 @@ MonoBehaviour:
   checkInterval: 10
   defaultParticleMaterial: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   manager: {fileID: 0}
+  hasluaScript: 0
   generateSpotRPC: {fileID: 0}
   informationToggle: {fileID: 9019280584731347403}
   tabsToggles:
@@ -44013,9 +44014,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 671377947109088935}
-        m_TargetAssemblyTypeName: GenerateSpot, Assembly-CSharp
-        m_MethodName: RPCEditCode
+      - m_Target: {fileID: 8015189774527831068}
+        m_TargetAssemblyTypeName: GenerateSpotRPC, Assembly-CSharp
+        m_MethodName: CallConfirmCodeditngRPC
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -69930,7 +69931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 97042a0e-dfac-4659-9bec-c1f79bb0054c
+  instanceId: 881dae04-a818-4406-a28c-6d5c2c9003fe
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 

@@ -885,22 +885,30 @@ public void TogglePhysic()
 
         DremmeshPrompt=Prompt;
         manager.updateSession();
-        manager.UpdatealltheCode(URLID);
+        manager.UpdatealltheCode();
 
 
         Prompt = "";
 
     }
 
-    public void RPCFetchCode()
+    public void RPC_UpdateallLuaScripts()
     {
-        // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
-        if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
-
-        loadingParticles.Play();
-        SmoothCubeRenderer.enabled = false;
-        Outlinebox.wire_renderer = false;
+        Debug.Log($"RPC received to ConfirmGeneration");
+        // _generateSpot.initAdd();
+        // _generateSpot.Outlinebox.wire_renderer = false;
+        // _generateSpot.VoicePanel.SetActive(false);
+        manager.UpdatealltheCode();
+        // Additional logic to handle the RPC
     }
+
+
+
+
+
+
+
+
   public void FetchCode()
     {
         // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
@@ -942,7 +950,7 @@ public void TogglePhysic()
 
         DremmeshPrompt = Prompt;
         manager.updateSession();
-        manager.UpdatealltheCode(URLID);
+        manager.UpdatealltheCode();
 
 
         Prompt = "";

@@ -213,14 +213,14 @@ public class RealityEditorManager : MonoBehaviour
     }
 
 
-    public void UpdatealltheCode(string urlid)
+    public void UpdatealltheCode()
     {
         foreach (var kvp in GenCubesDic)
         {
             var generateSpot = kvp.Value.GetComponent<GenerateSpot>();
             var luaMonoBehavior = kvp.Value.GetComponent<LuaMonoBehavior>();
 
-            if (generateSpot != null && kvp.Key != urlid && luaMonoBehavior.hasluaScript)
+            if (generateSpot != null && luaMonoBehavior.hasluaScript)
             {
                 generateSpot.FetchCode();
             }
