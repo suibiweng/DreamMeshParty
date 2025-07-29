@@ -9,6 +9,8 @@ using LuaProxies;
 using UnityEngine.UI;
 using RealityEditor;
 using TMPro;
+using System.Text.RegularExpressions;
+
 
 [System.Serializable]
 public class ParticleEffectConfig
@@ -94,6 +96,8 @@ public class LuaMonoBehavior : MonoBehaviour
     public GameObject InfoTab;
     public TMP_Text CodeInfo, ExplanationsInfo;
 
+    public LuaParamUIBuilder LuaParamUIBuilder;
+
     void Start()
     {
         UserData.RegisterType<GameObject>();
@@ -163,13 +167,15 @@ public class LuaMonoBehavior : MonoBehaviour
             lastLoadedTimestamp = data.created_at;
             luaScriptText = data.lua_code;
 
+            luaScriptText = Regex.Unescape(luaScriptText);
+
             if (CodeInfo != null) CodeInfo.text = data.lua_code;
             if (ExplanationsInfo != null)
             {
-                ExplanationsInfo.text = $"📝 {data.comment}\n🕒 Generated at: {data.created_at}";
+                ExplanationsInfo.text = $" {data.comment}\n Generated at: {data.created_at}";
             }
 
-            InitializeLuaScript(data.lua_code);
+            InitializeLuaScript(luaScriptText);
 
             foreach (var effect in data.particle_json)
             {
@@ -177,13 +183,18 @@ public class LuaMonoBehavior : MonoBehaviour
             }
 
             // ✅ NEW: Hook to generate UI from comment
-            var uiBuilder = GetComponent<LuaParamUIBuilder>();
-            if (uiBuilder != null)
+            // var uiBuilder = GetComponent<LuaParamUIBuilder>();
+            if (LuaParamUIBuilder != null)
             {
-                uiBuilder.targetBehavior = this;
-                uiBuilder.particleSystems = effectSystems;
-                uiBuilder.BuildUIFromComment(data.comment);
+                LuaParamUIBuilder.targetBehavior = this;
+                LuaParamUIBuilder.particleSystems = effectSystems;
+                LuaParamUIBuilder.BuildUIFromComment(data.comment);
+                Debug.Log("🔧 LuaParamUIBuilder initialized and UI built from comment.");
             }
+
+
+
+
 
             Debug.Log("🔁 Lua updated from new DynamicCoding file.");
         }
@@ -210,9 +221,11 @@ public class LuaMonoBehavior : MonoBehaviour
         }
 
         var main = ps.main;
+        ps.Stop();
         main.startColor = config.startColor;
         main.startSize = config.startSize;
         main.startSpeed = config.startSpeed;
+        
         main.duration = config.duration;
         main.startLifetime = config.lifetime;
         main.scalingMode = ParticleSystemScalingMode.Hierarchy;
@@ -246,7 +259,7 @@ public class LuaMonoBehavior : MonoBehaviour
             luaScript.Globals["Color"] = (Func<float, float, float, float, Color>)((r, g, b, a) => new Color(r, g, b, a));
             luaScript.Globals["Vector2"] = (Func<float, float, Vector2>)((x, y) => new Vector2(x, y));
             luaScript.Globals["Quaternion"] = (Func<float, float, float, float, Quaternion>)((x, y, z, w) => new Quaternion(x, y, z, w));
-
+            // code = Regex.Unescape(code); 
             luaScript.DoString(code);
 
             startFunction = luaScript.Globals.Get("start");

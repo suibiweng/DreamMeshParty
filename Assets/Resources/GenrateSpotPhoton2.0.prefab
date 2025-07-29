@@ -4718,6 +4718,37 @@ Transform:
   - {fileID: 2361712261719811832}
   m_Father: {fileID: 6654254838164385936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1072517952211915660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6774784050564882441}
+  m_Layer: 0
+  m_Name: ParticleSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6774784050564882441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072517952211915660}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4950111373723508357}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1090337814646731583
 GameObject:
   m_ObjectHideFlags: 0
@@ -16732,7 +16763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 502b10eb-c467-4ff7-9066-cc40556e921d
+  instanceId: 5d0c48dd-ab87-4ce9-a263-4bbb6ebc7dfc
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -17759,6 +17790,7 @@ GameObject:
   - component: {fileID: 1355934269708619727}
   - component: {fileID: -1234750653806247155}
   - component: {fileID: 7541909544671404846}
+  - component: {fileID: 3156632620986541110}
   m_Layer: 0
   m_Name: GenrateSpotPhoton2.0
   m_TagString: GenerateSpot
@@ -17980,7 +18012,7 @@ MonoBehaviour:
   luaMonoBehavior: {fileID: 0}
   grabInteractable: {fileID: 0}
   isGrabing: 0
-  debugPromt: Apple
+  debugPromt: Baseball
   DremmeshPrompt: 
   Text_Scanning_Btn: {fileID: 0}
   Text_Instruction: {fileID: 0}
@@ -18361,7 +18393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505bcb10b9d8ac24bbf9d210ec84da15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpwanPoint: {fileID: 0}
+  SpwanPoint: {fileID: 6774784050564882441}
   ID: 
   serverURL: http://yourserver.com/
   uiText: {fileID: 0}
@@ -18381,8 +18413,29 @@ MonoBehaviour:
   - {fileID: 9179076799401219580}
   - {fileID: 3841900590181357821}
   InfoTab: {fileID: 8300429091569598787}
-  CodeInfo: {fileID: 0}
-  ExplanationsInfo: {fileID: 0}
+  CodeInfo: {fileID: 1251328961947026519}
+  ExplanationsInfo: {fileID: 3338676421034078996}
+  LuaParamUIBuilder: {fileID: 3156632620986541110}
+--- !u!114 &3156632620986541110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3767765152069255675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3b506d992b83bf4282f180ee17590b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiParent: {fileID: 4168011724412394373}
+  sliderPrefab: {fileID: 912453385428342789, guid: 7c7e786e3774830459e92de6a6e4c3b0, type: 3}
+  togglePrefab: {fileID: 2481878282868426318, guid: bb9a3566e1eccbb408bb8516a29f5b41, type: 3}
+  dropdownPrefab: {fileID: 972766237713643539, guid: 146c851eceaef98468edc5baa5fbe6c7, type: 3}
+  inputFieldPrefab: {fileID: 5088534433027511142, guid: 997ff24a3aa78e94e90018693980bff9, type: 3}
+  buttonPrefab: {fileID: 2183617622728475315, guid: 59886ed6c2f3936498d7ca33979aeca0, type: 3}
+  textPrefab: {fileID: 2129331313107222521, guid: 2a259759500f8d84fb8c076dc06c866d, type: 3}
+  targetBehavior: {fileID: 7541909544671404846}
 --- !u!1 &3780615758997034928
 GameObject:
   m_ObjectHideFlags: 0
@@ -19145,13 +19198,14 @@ GameObject:
   - component: {fileID: 4168011724412394373}
   - component: {fileID: 3589174162917154902}
   - component: {fileID: 1079529754676522878}
+  - component: {fileID: 7855093314011316984}
   m_Layer: 0
   m_Name: Explnation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4168011724412394373
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19169,8 +19223,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 121.6, y: 0}
+  m_SizeDelta: {x: 243.3, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3589174162917154902
 CanvasRenderer:
@@ -19210,6 +19264,32 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7855093314011316984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3841900590181357821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &3900432067936418227
 GameObject:
   m_ObjectHideFlags: 0
@@ -36138,6 +36218,7 @@ Transform:
   - {fileID: 1801840170055670600}
   - {fileID: 5753204952258597743}
   - {fileID: 1382770401136748342}
+  - {fileID: 6774784050564882441}
   m_Father: {fileID: 3146124083825041642}
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
 --- !u!33 &5684560789081636234
@@ -49218,9 +49299,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4168011724412394373}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.82, y: -3.4044}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 222.5, y: -177.205}
   m_SizeDelta: {x: 445, y: 354.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2516340854991540198
@@ -69931,7 +70012,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: 881dae04-a818-4406-a28c-6d5c2c9003fe
+  instanceId: 55589745-b32c-40e9-b9eb-1bfe2e1d0037
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 

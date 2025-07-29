@@ -136,7 +136,7 @@ public class RealityEditorManager : MonoBehaviour
         GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
         selectedIDUrl = urlid;
         IDs++;
-           gcube.name =""+ urlid;
+        gcube.name =""+ urlid;
         
         
 
@@ -215,6 +215,7 @@ public class RealityEditorManager : MonoBehaviour
 
     public void UpdatealltheCode()
     {
+        return; // this is not needed anymore, we are using the fetch code in the generate spot.
         foreach (var kvp in GenCubesDic)
         {
             var generateSpot = kvp.Value.GetComponent<GenerateSpot>();
