@@ -215,15 +215,17 @@ public class RealityEditorManager : MonoBehaviour
 
     public void UpdatealltheCode()
     {
-        return; // this is not needed anymore, we are using the fetch code in the generate spot.
+         // this is not needed anymore, we are using the fetch code in the generate spot.
         foreach (var kvp in GenCubesDic)
         {
+            print("Updating code for: " + kvp.Key);
             var generateSpot = kvp.Value.GetComponent<GenerateSpot>();
             var luaMonoBehavior = kvp.Value.GetComponent<LuaMonoBehavior>();
 
             if (generateSpot != null && luaMonoBehavior.hasluaScript)
             {
                 generateSpot.FetchCode();
+                print("Updating code for: " + kvp.Key);
             }
         }
     }

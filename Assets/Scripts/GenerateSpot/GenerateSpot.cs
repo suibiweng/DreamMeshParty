@@ -822,10 +822,12 @@ public void TogglePhysic()
     }
 
     public string debugPromt = "Apple";
+    bool debugSent = false;
 
 
     public void DebugGenrateModel()
     {
+        if (debugSent) return; // Prevent multiple calls
         //manager.promtGenerateModel(id, "Apple", URLID);
         manager.selectedIDUrl = URLID;
         Prompt = debugPromt;
@@ -833,7 +835,11 @@ public void TogglePhysic()
 
 
         ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
-        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        // if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        if (luaMonoBehavior != null) luaMonoBehavior.hasluaScript = true;
+
+
+
         // PreViewQuad.SetActive(true);
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
@@ -841,6 +847,9 @@ public void TogglePhysic()
 
         DremmeshPrompt = Prompt;
         manager.updateSession();
+        manager.UpdatealltheCode();
+
+        debugSent = true; // Set to true to prevent further calls
 
 
 
@@ -876,7 +885,8 @@ public void TogglePhysic()
         // manager.sendCommand("ShapeE");
         manager.sendCommand("DynamicCoding");
         ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
-        if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+        // if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
+                if (luaMonoBehavior != null) luaMonoBehavior.hasluaScript = true;
         
         
         loadingParticles.Play();
@@ -911,12 +921,13 @@ public void TogglePhysic()
 
   public void FetchCode()
     {
+        print("Fetching code for: " + URLID);
         // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
         if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
 
-        loadingParticles.Play();
-        SmoothCubeRenderer.enabled = false;
-        Outlinebox.wire_renderer = false;
+        // loadingParticles.Play();
+        // SmoothCubeRenderer.enabled = false;
+        // Outlinebox.wire_renderer = false;
     }
 
     

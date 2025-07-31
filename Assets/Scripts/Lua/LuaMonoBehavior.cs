@@ -42,7 +42,7 @@ public class ParamUIDef
 [System.Serializable]
 public class DynamicObjectData
 {
-    public string objectName;
+    public string object_name;
     public string lua_code;
     public List<ParticleEffectConfig> particle_json;
     public List<ParamUIDef> param_ui_particle;
@@ -70,7 +70,7 @@ public class LuaMonoBehavior : MonoBehaviour
     private Script luaScript;
     private UnityEngine.Coroutine fileCheckCoroutine;
     private bool isDownloading = false;
-    private string lastLoadedTimestamp = "";
+    public string lastLoadedTimestamp = "";
 
     private DynValue startFunction, updateFunction, fixedUpdateFunction, lateUpdateFunction;
     private DynValue onTriggerEnterFunction, onTriggerExitFunction;
@@ -123,47 +123,67 @@ public class LuaMonoBehavior : MonoBehaviour
         luaScript = new Script();
         manager = FindAnyObjectByType<RealityEditorManager>();
         generateSpotRPC = GetComponent<GenerateSpotRPC>();
+        fileCheckCoroutine = null;
     }
 
     public void StartFetchingCode(string downloadURL, string downloadID)
     {
         if (fileCheckCoroutine == null)
         {
+            print("Starting to check for file: " + downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json");
             string urlToCheck = downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json";
             fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
         }
+        else return;
     }
 
-    private IEnumerator CheckFileAvailability(string url)
+private IEnumerator CheckFileAvailability(string url)
+{
+    yield return new WaitForSeconds(10f);
+
+    while (true)
     {
-        yield return new WaitForSeconds(10f);
-        while (!isDownloading)
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
-            using (UnityWebRequest www = UnityWebRequest.Get(url))
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.Success)
             {
-                yield return www.SendWebRequest();
-                if (www.result == UnityWebRequest.Result.Success)
+                DynamicObjectData tempData = JsonUtility.FromJson<DynamicObjectData>(www.downloadHandler.text);
+
+                if (tempData.created_at != lastLoadedTimestamp)
                 {
                     isDownloading = true;
                     ProcessJsonData(www.downloadHandler.text);
                     OnURLResponse(true);
+                    break; // ✅ Stop polling once new data is found
                 }
                 else
                 {
+                    Debug.Log("⏳ JSON file found but timestamp unchanged, continuing to check...");
                     OnURLResponse(false);
                 }
             }
-            if (!isDownloading) yield return new WaitForSeconds(checkInterval);
+            else
+            {
+                Debug.LogWarning("❌ Failed to fetch file. Retrying...");
+                OnURLResponse(false);
+            }
         }
-        fileCheckCoroutine = null;
+
+        yield return new WaitForSeconds(checkInterval);
     }
 
-    void ProcessJsonData(string json)
+    fileCheckCoroutine = null;
+}
+
+
+void ProcessJsonData(string json)
     {
         DynamicObjectData data = JsonUtility.FromJson<DynamicObjectData>(json);
         if (data.created_at != lastLoadedTimestamp)
         {
-            gameObject.name = data.objectName;
+           
             lastLoadedTimestamp = data.created_at;
             luaScriptText = data.lua_code;
 
@@ -192,11 +212,22 @@ public class LuaMonoBehavior : MonoBehaviour
                 Debug.Log("🔧 LuaParamUIBuilder initialized and UI built from comment.");
             }
 
+            gameObject.name = data.object_name;
+
 
 
 
 
             Debug.Log("🔁 Lua updated from new DynamicCoding file.");
+
+
+           
+
+            fileCheckCoroutine = null;
+
+
+
+
         }
         else
         {

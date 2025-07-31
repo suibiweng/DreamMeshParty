@@ -53,6 +53,7 @@ public class RoomObjectsManager : MonoBehaviour
             GameObject gc = manager.createRealobjectSpot(anchor.transform.position);
             gc.GetComponent<GenerateSpot>().Prompt = anchor.gameObject.name;
             gc.tag = "RealObject";
+            gc.name = anchor.gameObject.name;
 
             if (sceneSessionManager != null)
             {
