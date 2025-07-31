@@ -167,15 +167,16 @@ public class SceneSaverTest : MonoBehaviour
    public void LoadSceneFromServer()
    {
        // Request to load the selected scene from the server
-       if (TestLoadSceneName.Length == 0)
-       {
+       // if (TestLoadSceneName.Length != 0)
+       // {
            string selectedSceneName = ScenesDropDown.options[ScenesDropDown.value].text;
            StartCoroutine(DownloadSceneData(selectedSceneName));
-       }
-       else
-       {
-           StartCoroutine(DownloadSceneData(TestLoadSceneName));
-       }
+       // }
+       // else
+       // {
+           // StartCoroutine(DownloadSceneData(TestLoadSceneName));
+           
+       // }
    }
    
    IEnumerator UploadJsonFile(string jsonData)
@@ -235,7 +236,7 @@ public class SceneSaverTest : MonoBehaviour
    {
        Debug.Log("Should be populating the dropdown");
        // Clear existing options
-       // ScenesDropDown.ClearOptions();
+       ScenesDropDown.ClearOptions();
 
        // Start coroutine to get filenames from the server
        StartCoroutine(FetchSceneFileNames());
