@@ -1892,7 +1892,6 @@ MonoBehaviour:
   MorePromptText: {fileID: 1469556459}
   TheSessionPremise: 
   MorePrompt: 
-  SceneObjectsList: []
 --- !u!114 &132688418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15929,6 +15928,7 @@ MonoBehaviour:
   ScenesDropDown: {fileID: 1399445644}
   ScenePromptTMP: {fileID: 2129898140}
   SessionPremiseText: {fileID: 2032844305}
+  SceneObjectsList: []
 --- !u!82 &1378611037
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16111,8 +16111,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectsinRoom: []
-  manager: {fileID: 0}
-  SceneSaverTest: {fileID: 0}
+  manager: {fileID: 1378611038}
+  SceneSaverTest: {fileID: 1378611036}
 --- !u!1 &1379906730
 GameObject:
   m_ObjectHideFlags: 0
@@ -20396,7 +20396,6 @@ MonoBehaviour:
   MorePromptText: {fileID: 0}
   TheSessionPremise: 
   MorePrompt: 
-  SceneObjectsList: []
 --- !u!1 &1760529115
 GameObject:
   m_ObjectHideFlags: 0

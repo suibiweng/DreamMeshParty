@@ -48,11 +48,13 @@ public class SceneSaverTest : MonoBehaviour
        public string prompt;
        public string gameObjectName;
    }
+   [System.Serializable]
    public class PhysicsData
    {
        public float timeScale;
        public Vector3 gravity;
    }
+   [System.Serializable]
    public class SceneObjectData
    {
        public string id;
@@ -148,12 +150,13 @@ public class SceneSaverTest : MonoBehaviour
        SavedSceneData allData = new SavedSceneData();
        
        allData.sceneName = ScenePromptTMP.text;
+       if (sessionURLID == "")
+           sessionURLID = TimestampGenerator.GetTimestamp();
        allData.premise = SessionPremiseText.text;
        allData.SceneObjectDataList = SceneObjectsList; 
        allData.generateSpotDataList = generateSpotDataList;
        allData.PhysicsData = CapturePhysicsData();
-       if (sessionURLID == "")
-           sessionURLID = TimestampGenerator.GetTimestamp();
+       
        
        string json = JsonUtility.ToJson(allData);
        // Save to PlayerPrefs
@@ -186,7 +189,7 @@ public class SceneSaverTest : MonoBehaviour
 
        // Create a UnityWebRequest for POST
        UnityWebRequest www = new UnityWebRequest(uploadURL, "POST");
-
+        Debug.Log(jsonToSend);
        www.uploadHandler = new UploadHandlerRaw(jsonToSend);
        www.downloadHandler = new DownloadHandlerBuffer();
 

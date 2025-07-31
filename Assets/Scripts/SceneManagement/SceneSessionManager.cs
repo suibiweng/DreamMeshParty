@@ -24,7 +24,7 @@ public class SceneSessionManager : MonoBehaviour
 
     // --- Serializable Classes ---
 
-    [Serializable]
+    // [Serializable]
     public class SceneObjectData
     {
         public string id;
