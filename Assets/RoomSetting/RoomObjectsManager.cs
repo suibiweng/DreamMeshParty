@@ -10,13 +10,13 @@ public class RoomObjectsManager : MonoBehaviour
 {
     public MRUKAnchor[] objectsinRoom;
     public RealityEditorManager manager;
-    public SceneSessionManager sceneSessionManager;
-
+    // public SceneSessionManager sceneSessionManager;
+    public SceneSaverTest SceneSaverTest; //I'm Taking over this code, MUHAHAHA
 
     private void Awake()
     {
         manager = GetComponent<RealityEditorManager>();
-        sceneSessionManager = FindAnyObjectByType<SceneSessionManager>();
+        SceneSaverTest = FindAnyObjectByType<SceneSaverTest>();
 
 
     }
@@ -55,10 +55,10 @@ public class RoomObjectsManager : MonoBehaviour
             gc.tag = "RealObject";
             gc.name = anchor.gameObject.name;
 
-            if (sceneSessionManager != null)
+            if (SceneSaverTest != null)
             {
 
-                sceneSessionManager.addSceneObject(new SceneSessionManager.SceneObjectData
+                SceneSaverTest.addSceneObject(new SceneSaverTest.SceneObjectData
                 {
                     id = gc.GetComponent<GenerateSpot>().URLID,
                     name = anchor.gameObject.name,

@@ -12,32 +12,69 @@ using UnityEngine.UIElements;
 
 public class SceneSaverTest : MonoBehaviour
 {
+    public string sessionURLID = "";
+
    public AudioSource source;
    public AudioClip savingSound, loadingSound;
    public RealityEditorManager RealityEditorManager; 
    private string uploadURL;
+   // private string downloadURL;
    public string TestLoadSceneName;
 
    public TMP_Dropdown ScenesDropDown;
-   public TMP_Text ScenePromptTMP; 
+   public TMP_InputField ScenePromptTMP;
+   public TMP_InputField SessionPremiseText;
+
+   public class SessionData
+   {
+       public string sessionURLID;
+       public string premise;
+       public string prompt;
+       // public string created_by = "Suibi";
+       // public string timestamp;
+       public List<SceneObjectData> SceneObjects;
+       public PhysicsData physics;
+       public List<GenerateSpotData> generateSpots;
+       // public List<UserData> users;
+   }
+   
    [System.Serializable]
    public class GenerateSpotData
    {
        public Vector3 position;
        public Quaternion rotation;
        public Vector3 scale;
-       public string urlid; 
+       public string urlid;
+       public string prompt;
+       public string gameObjectName;
    }
+   public class PhysicsData
+   {
+       public float timeScale;
+       public Vector3 gravity;
+   }
+   public class SceneObjectData
+   {
+       public string id;
+       public string name;
+       public Vector3 position;
+       public Vector3 rotation;
+   }
+   public List<SceneObjectData> SceneObjectsList;
 
 
    [System.Serializable]
    public class SavedSceneData
    {
-       public string sceneName; 
+       public string sceneName;
+       public string sessionURLID;
+       public string premise;
+       public List<SceneObjectData> SceneObjectDataList;
+       public PhysicsData  PhysicsData;
        public List<GenerateSpotData> generateSpotDataList;
    }
    
-   [System.Serializable]
+   [Serializable]
    public class StringArrayWrapper
    {
        public List<string> fileNames;
@@ -47,6 +84,7 @@ public class SceneSaverTest : MonoBehaviour
    private void Start()
    {
        uploadURL = RealityEditorManager.ServerURL+":8000";
+       // downloadURL = RealityEditorManager.ServerURL+":8000";
        PopulateDropdown();
    }
 
@@ -64,11 +102,31 @@ public class SceneSaverTest : MonoBehaviour
            Debug.Log("Load Button Has Been Pressed. Loading Scene...");
            LoadSceneFromServer();
        }
-       if(Input.GetKeyDown(KeyCode.D)){
+       if(Input.GetKeyDown(KeyCode.F7)){
            PopulateDropdown();
+       }
+       if(Input.GetKeyDown(KeyCode.F8)){
+           SaveSceneToServer();
+       }
+       if(Input.GetKeyDown(KeyCode.F9)){
+           LoadSceneFromServer();
        }
    }
    
+    public void addSceneObject(SceneObjectData objData)
+    {
+        SceneObjectsList.Add(objData);
+    }
+    private PhysicsData CapturePhysicsData()
+    {
+        return new PhysicsData
+        {
+            timeScale = Time.timeScale,
+            gravity = Physics.gravity
+        };
+    }
+   
+   [ContextMenu("Save The Scene To Server")]
    public void SaveSceneToServer()
    {
        // Find all objects of type GenerateSpot
@@ -88,8 +146,15 @@ public class SceneSaverTest : MonoBehaviour
        }
        // Serialize data to JSON
        SavedSceneData allData = new SavedSceneData();
+       
+       allData.sceneName = ScenePromptTMP.text;
+       allData.premise = SessionPremiseText.text;
+       allData.SceneObjectDataList = SceneObjectsList; 
        allData.generateSpotDataList = generateSpotDataList;
-       allData.sceneName = ScenePromptTMP.text; 
+       allData.PhysicsData = CapturePhysicsData();
+       if (sessionURLID == "")
+           sessionURLID = TimestampGenerator.GetTimestamp();
+       
        string json = JsonUtility.ToJson(allData);
        // Save to PlayerPrefs
        Debug.Log("Saving the JsonString: " + json);
@@ -151,6 +216,7 @@ public class SceneSaverTest : MonoBehaviour
            SavedSceneData allData = JsonUtility.FromJson<SavedSceneData>(json);
            Debug.Log("Loading Scene: " + allData.sceneName);
            Debug.Log("Loading scene with " + allData.generateSpotDataList.Count + " Cubes");
+           Debug.Log(allData.PhysicsData); 
 
            foreach (var data in allData.generateSpotDataList)
            {
@@ -188,7 +254,9 @@ public class SceneSaverTest : MonoBehaviour
    IEnumerator FetchSceneFileNames()
    {
        Debug.Log("dropdown asking for all the scene names");
-       UnityWebRequest www = UnityWebRequest.Get($"{uploadURL}/list-files");
+       string fetchUrl = $"{uploadURL}/list-files"; 
+       Debug.Log(fetchUrl);
+       UnityWebRequest www = UnityWebRequest.Get(fetchUrl);
        yield return www.SendWebRequest();
         
        if (www.result == UnityWebRequest.Result.Success)

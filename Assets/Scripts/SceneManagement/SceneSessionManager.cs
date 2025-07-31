@@ -124,10 +124,7 @@ public class SceneSessionManager : MonoBehaviour
             // users = GetUsersInSession()
         };
 
-
-
-
-
+        
         string json = JsonUtility.ToJson(data, true);  // pretty print for debug
         Debug.Log(json);  // log it for inspection
         StartCoroutine(PostSessionData(json));
