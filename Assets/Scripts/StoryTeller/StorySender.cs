@@ -11,11 +11,20 @@ public class StorySender : MonoBehaviour
 
     public DreamTellerRemoteReader dreamTellerRemoteReader;
 
+    RealityEditorManager realityEditorManager;
+
     public InputField storyText;
     
     public string ModelType;
 
     public Toggle modelType;
+
+    void Start()
+    {
+        realityEditorManager = FindObjectOfType<RealityEditorManager>();
+        serverUrl = realityEditorManager.ServerURL + ":" + realityEditorManager.uploadPort + "/StoryGenerator";
+
+    }
 
 
 

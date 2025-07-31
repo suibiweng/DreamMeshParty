@@ -14183,10 +14183,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aad0c20bc14f684488258bed098e7c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonURL: http://localhost:8000/unity_connection.json
+  jsonURL: http://localhost:8000/GazingDemo/unity_connection.json
   buttonPrefab: {fileID: 5142305328842526074, guid: 445fd7e7faf1bbd439340aeae9853d4e, type: 3}
   buttonParent: {fileID: 132688407}
-  storySender: {fileID: 0}
+  StoryCube: {fileID: 0}
+  storySender: {fileID: 1738338738}
 --- !u!1 &1727013378
 GameObject:
   m_ObjectHideFlags: 0
@@ -14578,10 +14579,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f4c59b3f64d4cd44b785729127e26b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverIP: 192.168.0.25
+  serverIP: 
   port: 8000
   sessionName: StoryTest
-  GenObj: {fileID: 0}
+  GenObj: {fileID: 7737787641741966572, guid: 7f4d6a95ecf031146b332aa127ab57e8, type: 3}
   retryInterval: 2
 --- !u!1 &1741068191
 GameObject:

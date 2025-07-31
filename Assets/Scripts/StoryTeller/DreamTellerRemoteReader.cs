@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using RealityEditor;
 
 public class Vector3Data
 {
@@ -28,8 +29,10 @@ public class DreamTellerRemoteReader : MonoBehaviour
 {
     [Header("Server Settings")]
     public string serverIP = "192.168.0.25";
-    public int port = 8000;
+    public string port = "8000";
     public string sessionName = "StoryTest";
+
+    RealityEditorManager realityEditorManager;  
 
 
     public GameObject GenObj; 
@@ -39,6 +42,10 @@ public class DreamTellerRemoteReader : MonoBehaviour
 
     void Start()
     {
+
+        realityEditorManager = FindObjectOfType<RealityEditorManager>();
+        serverIP = realityEditorManager.ServerURL;
+        port = realityEditorManager.downloadPort;
         // StartCoroutine(PollUntilReady(sessionName));
     }
 
