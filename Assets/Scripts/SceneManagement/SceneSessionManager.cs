@@ -5,26 +5,25 @@ using UnityEngine;
 using UnityEngine.Networking;
 using RealityEditor;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
-using OVR.OpenVR;
 using TMPro;
+
 public class SceneSessionManager : MonoBehaviour
 {
-
     public string sessionURLID = "";
-
     public TMP_InputField TheSessionPremiseText;
     public TMP_InputField MorePromptText;
-
-
     public string TheSessionPremise = "";
     public string MorePrompt = "";
 
     private SceneDataSync SceneDataSync;
+    private RealityEditorManager manager;
 
-    // --- Serializable Classes ---
+    // UI Control Panel
+    public Transform uiPanelRoot; // Assign to VerticalLayoutGroup
+    public GameObject controlItemPrefab; // Prefab with TMP_Text + Play/Stop/Param Buttons
 
-    // [Serializable]
+    // --- Serializable Data Classes ---
+    [Serializable]
     public class SceneObjectData
     {
         public string id;
@@ -70,35 +69,23 @@ public class SceneSessionManager : MonoBehaviour
         public List<GenerateSpotData> generateSpots;
         public List<UserData> users;
     }
+
     public List<SceneObjectData> SceneObjectsList;
-
-    // --- Settings ---
     private string serverUrl = "http://localhost:5000/submit_session";
-
-    RealityEditorManager manager;
 
     void Start()
     {
         manager = FindObjectOfType<RealityEditorManager>();
-
         serverUrl = manager.ServerURL + ":" + manager.uploadPort + "/submit_session";
         SceneObjectsList = new List<SceneObjectData>();
         SceneDataSync = GetComponent<SceneDataSync>();
-
-
-
     }
 
     public void addSceneObject(SceneObjectData objData)
     {
         SceneObjectsList.Add(objData);
-
     }
 
-
-
-
-    // --- Entry Point ---
     public void SubmmiSession()
     {
         Debug.Log("📦 Preparing session data...");
@@ -119,18 +106,16 @@ public class SceneSessionManager : MonoBehaviour
             timestamp = DateTime.UtcNow.ToString("s"),
             generateSpots = GatherGenerateSpots(),
             SceneObjects = SceneObjectsList
-            // physics = CapturePhysicsData(),
-            // 
-            // users = GetUsersInSession()
         };
 
-        
-        string json = JsonUtility.ToJson(data, true);  // pretty print for debug
-        Debug.Log(json);  // log it for inspection
+        string json = JsonUtility.ToJson(data, true);
+        Debug.Log(json);
         StartCoroutine(PostSessionData(json));
+
+        // Update UI after submission
+        BuildUIControlMenu();
     }
 
-    // --- Gather Furniture ---
     private List<SceneObjectData> GatherFurnitureData()
     {
         List<SceneObjectData> furnitureList = new List<SceneObjectData>();
@@ -149,7 +134,6 @@ public class SceneSessionManager : MonoBehaviour
         return furnitureList;
     }
 
-    // --- Gather Physics ---
     private PhysicsData CapturePhysicsData()
     {
         return new PhysicsData
@@ -159,7 +143,6 @@ public class SceneSessionManager : MonoBehaviour
         };
     }
 
-    // --- Gather GenerateSpots ---
     public List<GenerateSpotData> GatherGenerateSpots()
     {
         List<GenerateSpotData> spots = new List<GenerateSpotData>();
@@ -175,16 +158,12 @@ public class SceneSessionManager : MonoBehaviour
                     prompt = spot.Prompt,
                     gameObjectName = spot.gameObject.name
                 });
-
-
             }
-
         }
 
         return spots;
     }
 
-    // --- Gather Users ---
     private List<UserData> GetUsersInSession()
     {
         return new List<UserData>
@@ -206,7 +185,6 @@ public class SceneSessionManager : MonoBehaviour
         };
     }
 
-    // --- Send to Server ---
     IEnumerator PostSessionData(string json)
     {
         UnityWebRequest request = new UnityWebRequest(serverUrl, "POST");
@@ -222,8 +200,6 @@ public class SceneSessionManager : MonoBehaviour
         else
             Debug.LogError("❌ Submission failed: " + request.error);
     }
-
-
 
     public void FetchSession(string sessionURLID)
     {
@@ -243,6 +219,8 @@ public class SceneSessionManager : MonoBehaviour
 
             SessionData session = JsonUtility.FromJson<SessionData>(json);
             Debug.Log($"Session: {session.premise} / {session.prompt}");
+
+            BuildUIControlMenu();
         }
         else
         {
@@ -255,10 +233,68 @@ public class SceneSessionManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F5))
         {
             SubmmiSession();
-            
+        }
 
-
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            BuildUIControlMenu();
         }
     }
 
+    // === UI CONTROL PANEL ===
+
+    public void BuildUIControlMenu()
+    {
+        foreach (Transform child in uiPanelRoot)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var objData in SceneObjectsList)
+        {
+            CreateUIItem(objData.name);
+        }
+
+        var generateSpots = GatherGenerateSpots();
+        foreach (var spot in generateSpots)
+        {
+            CreateUIItem(spot.gameObjectName);
+        }
+    }
+
+    private void CreateUIItem(string objectName)
+    {
+        GameObject uiItem = Instantiate(controlItemPrefab, uiPanelRoot);
+
+        TMP_Text label = uiItem.transform.Find("NameText").GetComponent<TMP_Text>();
+        Button playBtn = uiItem.transform.Find("PlayButton").GetComponent<Button>();
+        Button stopBtn = uiItem.transform.Find("StopButton").GetComponent<Button>();
+        Button paramBtn = uiItem.transform.Find("ParamUIButton").GetComponent<Button>(); // NEW
+
+        label.text = objectName;
+
+        GameObject target = GameObject.Find(objectName);
+        if (target == null)
+        {
+            Debug.LogWarning($"❌ GameObject '{objectName}' not found.");
+            playBtn.interactable = false;
+            stopBtn.interactable = false;
+            paramBtn.interactable = false;
+            return;
+        }
+
+        LuaMonoBehavior lua = target.GetComponent<LuaMonoBehavior>();
+        if (lua == null)
+        {
+            Debug.LogWarning($"ℹ️ No LuaMonoBehavior on '{objectName}'. Disabling buttons.");
+            playBtn.interactable = false;
+            stopBtn.interactable = false;
+            paramBtn.interactable = false;
+            return;
+        }
+
+        playBtn.onClick.AddListener(() => lua.Play());
+        stopBtn.onClick.AddListener(() => lua.Stop());
+       // paramBtn.onClick.AddListener(() => lua.ShowParameterUI()); // NEW
+    }
 }

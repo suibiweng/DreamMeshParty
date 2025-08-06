@@ -1,3 +1,4 @@
+
 // LuaMonoBehavior.cs (UPDATED with UI Builder Hook)
 using UnityEngine;
 using UnityEngine.Networking;
@@ -53,6 +54,10 @@ public class DynamicObjectData
 
 public class LuaMonoBehavior : MonoBehaviour
 {
+    private bool isRunning = false;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
+    private Vector3 initialVelocity;
     public Transform SpwanPoint;
     public string ID;
     public string serverURL = "http://yourserver.com/";
@@ -100,6 +105,9 @@ public class LuaMonoBehavior : MonoBehaviour
 
     void Start()
     {
+        initialPosition = transform.position;
+        initialRotation = transform.rotation;
+        if (rb != null) initialVelocity = rb.velocity;
         UserData.RegisterType<GameObject>();
         UserData.RegisterType<Vector3>();
         UserData.RegisterType<TransformProxy>();
@@ -317,6 +325,7 @@ void ProcessJsonData(string json)
 
     void Update()
     {
+        if (!isRunning) return;
         if (informationToggle != null)
             InfoTab.SetActive(informationToggle.isOn);
 
@@ -332,6 +341,7 @@ void ProcessJsonData(string json)
 
     void OnCollisionEnter(Collision collision)
     {
+        if (!isRunning) return;
         string otherObjectName = collision.gameObject.name;
         if (onCollisionEnterFunction != null && onCollisionEnterFunction.Type == DataType.Function)
             luaScript.Call(onCollisionEnterFunction, otherObjectName);
@@ -339,6 +349,7 @@ void ProcessJsonData(string json)
 
     void OnCollisionExit(Collision collision)
     {
+        if (!isRunning) return;
         string otherObjectName = collision.gameObject.name;
         if (onCollisionExitFunction != null && onCollisionExitFunction.Type == DataType.Function)
             luaScript.Call(onCollisionExitFunction, otherObjectName);
@@ -346,6 +357,7 @@ void ProcessJsonData(string json)
 
     public void RPCTrigger()
     {
+        if (!isRunning) return;
         generateSpotRPC.CallTriggerRPC();
         var func = luaScript.Globals.Get("trigger");
         if (func != null && func.Type == DataType.Function)
@@ -354,6 +366,7 @@ void ProcessJsonData(string json)
 
     public void Trigger()
     {
+        if (!isRunning) return;
         var func = luaScript.Globals.Get("trigger");
         if (func != null && func.Type == DataType.Function)
             luaScript.Call(func);
@@ -374,4 +387,37 @@ void ProcessJsonData(string json)
     }
 
     public Script Script => luaScript;
+
+    public void Play()
+    {
+        if (!hasluaScript)
+        {
+            Debug.LogWarning("No Lua script loaded.");
+            return;
+        }
+
+        if (startFunction != null && startFunction.Type == DataType.Function)
+            luaScript.Call(startFunction);
+
+        isRunning = true;
+        Debug.Log("▶ Lua execution started.");
+    }
+
+    public void Stop()
+    {
+        isRunning = false;
+
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.MovePosition(initialPosition);
+            rb.MoveRotation(initialRotation);
+        }
+
+        DeactivateEffect();
+        Debug.Log("⏹ Lua execution stopped and object reset.");
+    }
 }
