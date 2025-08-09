@@ -241,6 +241,42 @@ public class SceneSessionManager : MonoBehaviour
         }
     }
 
+    public bool isPlaying;
+
+    public void PlayAll()
+    {
+
+
+        if (isPlaying) return; // Prevent multiple plays
+        isPlaying = true;
+    
+
+        foreach (GameObject child in manager.GenCubesDic.Values)
+        {
+            LuaMonoBehavior lua = child.GetComponent<LuaMonoBehavior>();
+            if (lua != null)
+            {
+                lua.Play();
+            }
+        }
+    }
+
+
+    public void StopAll()
+    {
+        if (!isPlaying) return; // Prevent multiple stops
+        isPlaying = false;
+
+        foreach (GameObject child in manager.GenCubesDic.Values)
+        {
+            LuaMonoBehavior lua = child.GetComponent<LuaMonoBehavior>();
+            if (lua != null)
+            {
+                lua.Stop();
+            }
+        }
+    }
+
     // === UI CONTROL PANEL ===
 
     public void BuildUIControlMenu()

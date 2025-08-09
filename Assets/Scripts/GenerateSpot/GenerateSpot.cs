@@ -245,6 +245,10 @@ public void TogglePhysic()
 
     }
 
+    
+
+
+
     public GrabInteractable grabInteractable;
 
     public void toLockthePosition(bool toLock)
@@ -327,6 +331,12 @@ public void TogglePhysic()
                 SpotType = GenerateType.Reconstruction;
                 initReconstruction();
                 break;
+            case 3:
+                SpotType = GenerateType.Sketch;
+                initSketch();
+                // OpenEditMenu();
+                // initReconstruction();
+                break;
 
         }
         
@@ -338,9 +348,9 @@ public void TogglePhysic()
     public void initAdd()
     {
         //ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
-        loadingParticles.Play();
+      //  loadingParticles.Play();
         isMaterialChanging = false;
-        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+     //   ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
        
         // VoicePanel.SetActive(true);
     }
@@ -348,6 +358,17 @@ public void TogglePhysic()
     void initReconstruction()
     {
         if(ScanningPanel!=null)  ScanningPanel.SetActive(true);
+    }
+
+    bool isSketching = false;
+
+    void initSketch()
+    {
+
+        isSketching = true;
+
+
+
     }
 
 
@@ -862,6 +883,31 @@ public void TogglePhysic()
     }
 
 
+        public void DrawTo3D(){
+            var fast3DFunctions = FindObjectOfType<Fast3dFunctions>();
+
+           string Drawingto3DURL = manager.ServerURL + "/DrawToModel";
+
+        //fast3DFunctions.UploadDrawing("http://192.168.0.139:5000/DrawToModel",URLID+"@"+Version+"_Darwing3D.png",prompt,ObjectScreenPosition(),URLID+"@"+Version);
+        fast3DFunctions.UploadDrawing(Drawingto3DURL,URLID+"_Darwing3D.png",Prompt,new Vector2(0,0),URLID);
+
+        // if(FileCheck==null)
+        //     FileCheck= StartCoroutine(CheckURLPeriodically(DownloadURL+"/" + URLID+"@"+Version + "_Drawing.zip"));
+        RPCGenrateModel(); //Doing the file checking by sending it to the RPC, then it executes the function on all clients.
+
+        loadingParticles.Play();
+
+
+
+
+
+
+
+
+    }
+
+
+
 
 
     public string DremmeshPrompt;
@@ -882,13 +928,40 @@ public void TogglePhysic()
     public void GenrateModel()
     {
         manager.promtGenerateModel(id, Prompt, URLID);
-        // manager.sendCommand("ShapeE");
-        manager.sendCommand("DynamicCoding");
-        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+
+        if (isSketching)
+        {
+
+             manager.sendCommand("DynamicCodingwithDrawing");
+            DrawTo3D();
+       
+            ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + URLID+"_Drawing.zip"));
+
+        }
+        else
+        {
+
+            //manager.sendCommand("ShapeE");
+            manager.sendCommand("DynamicCoding");
+            ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+
+
+
+
+        }
+
+
+        
+
+
+
+
+
         // if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
-                if (luaMonoBehavior != null) luaMonoBehavior.hasluaScript = true;
-        
-        
+
+        //if (luaMonoBehavior != null) luaMonoBehavior.hasluaScript = true;
+
+
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
@@ -959,12 +1032,12 @@ public void TogglePhysic()
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
 
-        DremmeshPrompt = Prompt;
+        // DremmeshPrompt = Prompt;
         manager.updateSession();
         manager.UpdatealltheCode();
 
 
-        Prompt = "";
+        // Prompt = "";
 
     }
 
