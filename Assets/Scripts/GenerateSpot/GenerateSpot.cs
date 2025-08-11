@@ -1021,6 +1021,14 @@ public void TogglePhysic()
 
     public void EditCode()
     {
+        if (isRealObject)
+        {
+
+            Prompt = "[This is a real object in the space]" + Prompt;
+
+        }
+
+
         manager.promtGenerateModel(id, Prompt, URLID);
         // manager.sendCommand("ShapeE");
         manager.sendCommand("ModifyDynamicCoding");
@@ -1040,10 +1048,6 @@ public void TogglePhysic()
         // Prompt = "";
 
     }
-
-
-
-
 
 
     public void GenrateModelPrompt(string prompt)

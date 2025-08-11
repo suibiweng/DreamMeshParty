@@ -38,8 +38,14 @@ namespace LuaProxies
         private readonly Rigidbody _rb;
         public RigidbodyProxy(Rigidbody rb) => _rb = rb;
 
+        // Existing Vector3 APIs
         public void AddForce(Vector3 force) => _rb.AddForce(force);
         public void SetVelocity(Vector3 velocity) => _rb.velocity = velocity;
+
+        // New numeric overloads for Lua (avoid needing Vector3 constructors)
+        public void AddForce(float x, float y, float z) => _rb.AddForce(new Vector3(x, y, z));
+        public void SetVelocity(float x, float y, float z) => _rb.velocity = new Vector3(x, y, z);
+
         public Vector3 GetVelocity() => _rb.velocity;
         public void SetUseGravity(bool useGravity) => _rb.useGravity = useGravity;
     }
@@ -87,6 +93,9 @@ namespace LuaProxies
         public GameObjectProxy GetGameObject() => new GameObjectProxy(_collision.gameObject);
         public Vector3 GetContactPoint() => _collision.contacts.Length > 0 ? _collision.contacts[0].point : Vector3.zero;
         public Vector3 GetRelativeVelocity() => _collision.relativeVelocity;
+
+        // New convenience: unify name access for collisions
+        public string GetName() => _collision.gameObject != null ? _collision.gameObject.name : null;
     }
 
     [MoonSharpUserData]

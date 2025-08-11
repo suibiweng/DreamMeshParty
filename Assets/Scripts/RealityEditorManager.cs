@@ -162,11 +162,12 @@ public class RealityEditorManager : MonoBehaviour
         
     }
 
-    public GameObject createRealobjectSpot(Vector3 pos)
+    public GameObject createRealobjectSpot(Vector3 pos,Vector3 scale)
     {
         GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
         gcube.GetComponent<GenerateSpot>().id = IDs;
         gcube.GetComponent<GenerateSpot>().isRealObject = true; // Mark this as a real object spot
+        gcube.transform.localScale = scale;
         string urlid = IDGenerator.GenerateID();
         gcube.GetComponent<GenerateSpot>().URLID = urlid;
         Debug.Log("The new Cube's URLID is: " + urlid);
@@ -377,10 +378,20 @@ public class RealityEditorManager : MonoBehaviour
 
     }
 
-public void sendCommand(string command){
 
-    StartCoroutine(SendtheCommand(comandURL+"command",command,selectedIDUrl,GenCubesDic[selectedIDUrl].GetComponent<GenerateSpot>().Prompt));
-}
+
+
+    public void sendCommandwithPrompt(string command,string urlid,string prompt)
+    {
+
+        StartCoroutine(SendtheCommand(comandURL + "command", command, urlid, prompt));
+    }
+
+public void sendCommand(string command)
+    {
+
+        StartCoroutine(SendtheCommand(comandURL + "command", command, selectedIDUrl, GenCubesDic[selectedIDUrl].GetComponent<GenerateSpot>().Prompt));
+    }
 
 
 public IEnumerator SendtheCommand( string url,string command ,string urlid,string Prompt)

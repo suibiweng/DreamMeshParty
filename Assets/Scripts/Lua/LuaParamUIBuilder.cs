@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System;
+using TMPro;
 
 public class LuaParamUIBuilder : MonoBehaviour
 {
@@ -143,7 +144,7 @@ public class LuaParamUIBuilder : MonoBehaviour
 
             case "dropdown":
                 element = Instantiate(dropdownPrefab, uiParent);
-                var dropdown = element.GetComponentInChildren<Dropdown>();
+                var dropdown = element.GetComponentInChildren<TMP_Dropdown>();
                 dropdown.ClearOptions();
                 dropdown.AddOptions(param.options);
                 dropdown.value = 0;

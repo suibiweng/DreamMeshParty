@@ -1978,7 +1978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 3cd26d3c-093f-4254-b583-0eb83c77c863
+  instanceId: 4b72e5e8-c26a-4307-af6d-ad94d7b77a31
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -13241,7 +13241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: a6d04e89-276e-4418-a4dc-0aabe8b48c0e
+  instanceId: cabcf770-f170-42d0-8913-04b482a2f769
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -54377,6 +54377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505bcb10b9d8ac24bbf9d210ec84da15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRunning: 0
   SpwanPoint: {fileID: 7255127024270057173}
   ID: 
   serverURL: http://yourserver.com/
@@ -59278,7 +59279,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: 'do noting '
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -66790,7 +66791,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: If bat hit this. it will bounce off
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -73220,7 +73221,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: Active the hit particle
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0

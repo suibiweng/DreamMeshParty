@@ -25,6 +25,11 @@ public class PromptRestructure : MonoBehaviour
 
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            OnEdit();
+        }
         // Optional: live updating
         combinedPrompt = FormatPrompt();
     }

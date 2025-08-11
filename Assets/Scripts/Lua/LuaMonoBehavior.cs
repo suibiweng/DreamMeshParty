@@ -54,7 +54,7 @@ public class DynamicObjectData
 
 public class LuaMonoBehavior : MonoBehaviour
 {
-    private bool isRunning = false;
+    public bool isRunning = false;
     private Vector3 initialPosition;
     private Quaternion initialRotation;
     private Vector3 initialVelocity;
@@ -134,56 +134,77 @@ public class LuaMonoBehavior : MonoBehaviour
         fileCheckCoroutine = null;
     }
 
+    public string urlToCheck;
+
+
     public void StartFetchingCode(string downloadURL, string downloadID)
     {
         if (fileCheckCoroutine == null)
         {
             print("Starting to check for file: " + downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json");
-            string urlToCheck = downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json";
+            urlToCheck = downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json";
+            fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
+        }
+        else return;
+
+
+    }
+
+
+    public void FetchAgain()
+    {
+        if (fileCheckCoroutine == null)
+        {
+            print("Starting to check for file: " + urlToCheck);
             fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
         }
         else return;
     }
 
+
+
+
 private IEnumerator CheckFileAvailability(string url)
-{
-    yield return new WaitForSeconds(10f);
-
-    while (true)
     {
-        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        yield return new WaitForSeconds(10f);
+
+        while (true)
         {
-            yield return www.SendWebRequest();
-
-            if (www.result == UnityWebRequest.Result.Success)
+            using (UnityWebRequest www = UnityWebRequest.Get(url))
             {
-                DynamicObjectData tempData = JsonUtility.FromJson<DynamicObjectData>(www.downloadHandler.text);
+                yield return www.SendWebRequest();
 
-                if (tempData.created_at != lastLoadedTimestamp)
+                if (www.result == UnityWebRequest.Result.Success)
                 {
-                    isDownloading = true;
-                    ProcessJsonData(www.downloadHandler.text);
-                    OnURLResponse(true);
-                    break; // ✅ Stop polling once new data is found
+                    DynamicObjectData tempData = JsonUtility.FromJson<DynamicObjectData>(www.downloadHandler.text);
+
+                    if (tempData.created_at != lastLoadedTimestamp)
+                    {
+                        isDownloading = true;
+                        ProcessJsonData(www.downloadHandler.text);
+                        OnURLResponse(true);
+                        break; // ✅ Stop polling once new data is found
+                    }
+                    else
+                    {
+                        Debug.Log("⏳ JSON file found but timestamp unchanged, continuing to check...");
+                        OnURLResponse(false);
+                    }
                 }
                 else
                 {
-                    Debug.Log("⏳ JSON file found but timestamp unchanged, continuing to check...");
+                    Debug.LogWarning("❌ Failed to fetch file. Retrying...");
+
+
                     OnURLResponse(false);
                 }
             }
-            else
-            {
-                Debug.LogWarning("❌ Failed to fetch file. Retrying...");
-                OnURLResponse(false);
-            }
+
+            yield return new WaitForSeconds(checkInterval);
         }
 
-        yield return new WaitForSeconds(checkInterval);
+        fileCheckCoroutine = null;
     }
-
-    fileCheckCoroutine = null;
-}
 
 
 void ProcessJsonData(string json)
@@ -320,8 +341,19 @@ void ProcessJsonData(string json)
         catch (Exception ex)
         {
             Debug.LogError($"❌ Lua Script Error: {ex.Message}");
+            LuaErrorReporting(ex.Message);
         }
     }
+
+
+    public void LuaErrorReporting(string errormsg)
+    {
+        manager.sendCommandwithPrompt("Luagoterror", ID, errormsg);
+        FetchAgain();
+    
+
+    }
+
 
     void Update()
     {
