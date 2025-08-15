@@ -18393,6 +18393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505bcb10b9d8ac24bbf9d210ec84da15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRunning: 0
   SpwanPoint: {fileID: 6774784050564882441}
   ID: 
   serverURL: http://yourserver.com/
@@ -18417,6 +18418,7 @@ MonoBehaviour:
   CodeInfo: {fileID: 1251328961947026519}
   ExplanationsInfo: {fileID: 3338676421034078996}
   LuaParamUIBuilder: {fileID: 3156632620986541110}
+  urlToCheck: 
 --- !u!114 &3156632620986541110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18429,13 +18431,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3b506d992b83bf4282f180ee17590b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiParent: {fileID: 4168011724412394373}
+  descriptionText: {fileID: 0}
+  luaPanel: {fileID: 0}
+  particlePanel: {fileID: 0}
+  luaTabHeader: {fileID: 0}
+  particleTabHeader: {fileID: 0}
   sliderPrefab: {fileID: 912453385428342789, guid: 7c7e786e3774830459e92de6a6e4c3b0, type: 3}
   togglePrefab: {fileID: 2481878282868426318, guid: bb9a3566e1eccbb408bb8516a29f5b41, type: 3}
   dropdownPrefab: {fileID: 972766237713643539, guid: 146c851eceaef98468edc5baa5fbe6c7, type: 3}
   inputFieldPrefab: {fileID: 5088534433027511142, guid: 997ff24a3aa78e94e90018693980bff9, type: 3}
   buttonPrefab: {fileID: 2183617622728475315, guid: 59886ed6c2f3936498d7ca33979aeca0, type: 3}
   textPrefab: {fileID: 2129331313107222521, guid: 2a259759500f8d84fb8c076dc06c866d, type: 3}
+  luaChangedColor: {r: 0.18, g: 0.6, b: 1, a: 1}
+  particleChangedColor: {r: 1, g: 0.5, b: 0.15, a: 1}
+  showBothPanels: 1
+  dualColorDuplicateToken: 1
+  requireDropdownEvenSingleOption: 1
+  singleOptionFallback: (only choice)
   targetBehavior: {fileID: 7541909544671404846}
 --- !u!1 &3780615758997034928
 GameObject:

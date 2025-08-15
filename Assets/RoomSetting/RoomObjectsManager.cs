@@ -4,6 +4,7 @@ using UnityEngine;
 using Meta.XR.MRUtilityKit;
 using RealityEditor;
 using Oculus.Platform;
+using Collada141;
 
 
 public class RoomObjectsManager : MonoBehaviour
@@ -68,6 +69,16 @@ public class RoomObjectsManager : MonoBehaviour
             gc.GetComponent<GenerateSpot>().isRealObject = true; // Mark this as a real object spot
 
             col.transform.parent = gc.transform;
+
+            var collider = col.GetComponent<Collider>();
+            gc.GetComponent<LuaMonoBehavior>().innerCollider = collider;
+            var boxCollider= gc.GetComponent<GenerateSpot>().boxCollider;
+            boxCollider.enabled = false; // Disable the box collider for the generated spot 
+            collider.gameObject.layer = LayerMask.NameToLayer("GeneratedObject");
+
+
+
+            
 
             // Add any additional setup for the generated spot here
 

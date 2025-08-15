@@ -8,7 +8,7 @@ using TMPro;
 using TriLibCore.Dae.Schema;
 using Unity.VisualScripting;
 using UnityEngine.Networking;
-using UnityEditor.SearchService;
+
 using UnityEngine.SceneManagement;
 using Klak.Ndi.Interop;
 
@@ -96,9 +96,9 @@ public class RealityEditorManager : MonoBehaviour
         if(isFireScene) return;
 
 
-        if(Input.GetKeyDown(KeyCode.F1)){
-           createSpotOnMenu();
-        }
+        // if(Input.GetKeyDown(KeyCode.F1)){
+        //    createSpotOnMenu();
+        // }
 
         
         //OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);

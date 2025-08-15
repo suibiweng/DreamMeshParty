@@ -12,6 +12,7 @@ using ExitGames.Client.Photon.StructWrapping;
 using Oculus.Interaction;
 using Fusion;
 using Meta.XR.MultiplayerBlocks.Fusion;
+using Collada141;
 
 
 
@@ -24,7 +25,9 @@ public class GenerateSpot : MonoBehaviour
     public int id;
     public string downloadURL = "http://34.106.250.143/upload/";
 
-    public string URLID; 
+    public string URLID;
+
+    public Collider boxCollider;
 
 
     //Manager
@@ -115,10 +118,6 @@ public class GenerateSpot : MonoBehaviour
 
     public bool SculptingModeOn = false;
     
-    //Networking
-    // public string DataSyncTestNumber; 
-    // public RealtimeTransform _realtimeTransform;
-    // public RealtimeView _realtimeView;
     private NetworkObject _networkObject;
     private PhotonDataSync _photonDataSync;
     private GenerateSpotRPC _generateSpotRPC;
@@ -182,28 +181,63 @@ private bool lastToggleState = false;
 public void TogglePhysic()
 {
     bool currentToggleState = physicToggle.isOn;
-
-    if (currentToggleState == lastToggleState) return; // No change, skip
-
+    if (currentToggleState == lastToggleState) return;
     lastToggleState = currentToggleState;
 
     if (objectRigidbody == null) objectRigidbody = GetComponent<Rigidbody>();
-    if (GeneratedmeshCollider == null) return;
+    // if (GeneratedmeshCollider == null) return;
+
+    // // If it's a TerrainCollider or similar, bail out — cannot be dynamic
+    // if (GeneratedmeshCollider is TerrainCollider)
+    // {
+    //     Debug.LogWarning("Terrain/heightfield colliders can't be dynamic. Use a child with a primitive/convex collider.");
+    //     return;
+    // }
+
+    var meshCol = GeneratedmeshCollider as MeshCollider;
 
         if (currentToggleState)
         {
+            // -> turn physics ON (dynamic)
+            if (meshCol != null)
+            {
+                // Make it convex BEFORE going dynamic
+                if (!meshCol.convex) meshCol.convex = true;
+            }
+
+            // Now safe to go dynamic
             objectRigidbody.isKinematic = false;
-            GeneratedmeshCollider.enabled = true;
             objectRigidbody.useGravity = true;
-            GeneratedmeshCollider.convex = true; // Ensure the collider is convex for physics interactions
+
+
+
+
+            // Finally enable collider
+            GeneratedmeshCollider.enabled = true;
+            
+         
+
+
+
+
+
         }
         else
         {
-            objectRigidbody.isKinematic = true;
-            GeneratedmeshCollider.enabled = false;
+            // -> turn physics OFF (kinematic)
+            objectRigidbody.isKinematic = true;      // make it kinematic FIRST
             objectRigidbody.useGravity = false;
 
-            GeneratedmeshCollider.convex = false; // Disable convex for non-physics interactions
+            // You can disable collider if desired
+            GeneratedmeshCollider.enabled = false;
+
+            if (meshCol != null)
+            {
+                // Non-convex is fine when kinematic
+                if (meshCol.convex) meshCol.convex = false;
+            }
+
+
         }
 }
 
@@ -507,9 +541,12 @@ public void TogglePhysic()
 
 
             if (GeneratedmeshCollider == null)
-            { 
+            {
                 GeneratedmeshCollider = ColliderUtils.AddMeshCollider(obj.gameObject, convex: true);
                 GeneratedmeshCollider.enabled = false;
+                luaMonoBehavior.innerCollider = GeneratedmeshCollider;
+                GeneratedmeshCollider.gameObject.name = gameObject.name;
+               // GeneratedmeshCollider.gameObject.layer = LayerMask.NameToLayer("GeneratedObject");
 
             }
       
@@ -700,14 +737,7 @@ public void TogglePhysic()
 
 
         }
-
-
         //  BoundingBoxColorAlhpaDinstance();
-
-
-
-
-
         // if (isselsected) PromtText.text = Prompt;
         PromtText.text = Prompt;
 
@@ -753,9 +783,7 @@ public void TogglePhysic()
 
         TogglePhysic();
 
-        //Text_Instruction.text = RecordData.instruction;
-
-
+     
 
     }
 

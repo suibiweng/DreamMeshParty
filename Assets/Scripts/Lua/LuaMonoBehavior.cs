@@ -1,5 +1,3 @@
-
-// LuaMonoBehavior.cs (UPDATED with UI Builder Hook)
 using UnityEngine;
 using UnityEngine.Networking;
 using MoonSharp.Interpreter;
@@ -11,7 +9,7 @@ using UnityEngine.UI;
 using RealityEditor;
 using TMPro;
 using System.Text.RegularExpressions;
-
+using System.Globalization;
 
 [System.Serializable]
 public class ParticleEffectConfig
@@ -21,43 +19,77 @@ public class ParticleEffectConfig
     public Color startColor;
     public float startSize;
     public float startSpeed;
-    public int maxParticles;
-    public string shape;
     public float emissionRate;
     public float lifetime;
+    public int maxParticles;
+    public string shape;
 }
 
+[Serializable]
+public class RawParamUIDef
+{
+    public string name;      // optional: display or fallback key
+    public string variable;  // optional: Lua global (preferred if present)
+    public string key;       // supports JSON that uses "key"
+    public string type;      // slider/toggle/dropdown/inputfield/button
+    public float min;
+    public float max;
+    public float @default;
+    public List<string> options;
+    public string label;     // optional pretty label if you have it
+}
 
-[System.Serializable]
+[Serializable]
+public class ParticleEffectConfigRaw
+{
+    public string effectName;
+    public string duration;
+    public string startColor;   // "Color(r, g, b, a)" or "r,g,b,a"
+    public string startSize;
+    public string startSpeed;
+    public string emissionRate;
+    public string lifetime;
+    public string maxParticles;
+    public string shape;
+}
+
+[Serializable]
 public class ParamUIDef
 {
-    public string effectName; // only used for particle parameters
-    public string type;       // "Slider", "Toggle", "Dropdown", "InputField", "Button"
+    public string effectName;
+    public string type;
     public string label;
     public string key;
     public float min;
     public float max;
     public List<string> options;
+    public float @default;
 }
 
-[System.Serializable]
+[Serializable]
 public class DynamicObjectData
 {
     public string object_name;
     public string lua_code;
-    public List<ParticleEffectConfig> particle_json;
-    public List<ParamUIDef> param_ui_particle;
-    public List<ParamUIDef> param_ui_lua;
+    public List<ParticleEffectConfigRaw> particle_json; // accept raw and parse
+    public List<RawParamUIDef> param_ui_particle;       // raw
+    public List<RawParamUIDef> param_ui_lua;            // raw
     public string comment;
     public string created_at;
 }
 
 public class LuaMonoBehavior : MonoBehaviour
 {
+    public TMP_Text object_name_text;
     public bool isRunning = false;
+
+    [Header("Collision Filter")]
+    public Collider innerCollider; // Assign in Inspector
+
     private Vector3 initialPosition;
     private Quaternion initialRotation;
     private Vector3 initialVelocity;
+
     public Transform SpwanPoint;
     public string ID;
     public string serverURL = "http://yourserver.com/";
@@ -71,6 +103,8 @@ public class LuaMonoBehavior : MonoBehaviour
 
     public RealityEditorManager manager;
     public bool hasluaScript = false;
+
+    public GameObject controlPanel;
 
     private Script luaScript;
     private UnityEngine.Coroutine fileCheckCoroutine;
@@ -91,8 +125,7 @@ public class LuaMonoBehavior : MonoBehaviour
     ParticleSystemProxy particleSystemProxy;
     AnimatorProxy animatorProxy;
 
-    private Dictionary<string, ParticleSystem> effectSystems = new();
-
+    private readonly Dictionary<string, ParticleSystem> effectSystems = new Dictionary<string, ParticleSystem>();
     public GenerateSpotRPC generateSpotRPC;
 
     public Toggle informationToggle;
@@ -103,11 +136,30 @@ public class LuaMonoBehavior : MonoBehaviour
 
     public LuaParamUIBuilder LuaParamUIBuilder;
 
+    private string _lastJsonSnapshot = "";
+
+    // --- Object name robustness ---
+    private string _lastObjectNameFromJson = null;
+    private UnityEngine.Coroutine _applyNameCo = null;
+
+    // Helpers for robust particle name handling and diagnostics
+    private static string NormalizeEffectKey(string name)
+    {
+        return string.IsNullOrEmpty(name) ? "" : name.Trim().ToLowerInvariant();
+    }
+
+    private void LogAvailableEffects(string context = "")
+    {
+        var names = string.Join(", ", effectSystems.Keys);
+        Debug.Log($"[Particles] {context} Available effects (normalized keys): [{names}]");
+    }
+
     void Start()
     {
         initialPosition = transform.position;
         initialRotation = transform.rotation;
         if (rb != null) initialVelocity = rb.velocity;
+
         UserData.RegisterType<GameObject>();
         UserData.RegisterType<Vector3>();
         UserData.RegisterType<TransformProxy>();
@@ -132,39 +184,55 @@ public class LuaMonoBehavior : MonoBehaviour
         manager = FindAnyObjectByType<RealityEditorManager>();
         generateSpotRPC = GetComponent<GenerateSpotRPC>();
         fileCheckCoroutine = null;
+
+        // Initialize name stickiness at boot (if it already has a name)
+        if (!string.IsNullOrEmpty(gameObject.name))
+            ApplyObjectName(gameObject.name, force: false);
+    }
+
+    // Debug JSON injection (Editor/Runtime)
+    [Header("Debug JSON (Editor)")]
+    [TextArea(5, 20)] public string debugJson = "";
+    public bool debugSelect = false;
+
+    // Add this method to run a full DynamicCoding JSON string
+    public void DebugRunJson(string jsonString)
+    {
+        if (string.IsNullOrEmpty(jsonString))
+        {
+            Debug.LogWarning("DebugRunJson: Provided JSON string is empty.");
+            return;
+        }
+
+        try
+        {
+            Debug.Log("DebugRunJson: Executing provided JSON...");
+            _lastJsonSnapshot = jsonString; // store snapshot for debugging
+            ProcessJsonData(jsonString);    // reuse existing pipeline
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("DebugRunJson: Failed to process provided JSON. " + ex.Message);
+        }
     }
 
     public string urlToCheck;
 
-
     public void StartFetchingCode(string downloadURL, string downloadID)
     {
-        if (fileCheckCoroutine == null)
-        {
-            print("Starting to check for file: " + downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json");
-            urlToCheck = downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json";
-            fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
-        }
-        else return;
+        if (fileCheckCoroutine != null) return;
 
-
+        urlToCheck = downloadURL + "/objects/" + downloadID + "/" + downloadID + "_DynamicCoding.json";
+        fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
     }
-
 
     public void FetchAgain()
     {
-        if (fileCheckCoroutine == null)
-        {
-            print("Starting to check for file: " + urlToCheck);
-            fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
-        }
-        else return;
+        if (fileCheckCoroutine != null || string.IsNullOrEmpty(urlToCheck)) return;
+        fileCheckCoroutine = StartCoroutine(CheckFileAvailability(urlToCheck));
     }
 
-
-
-
-private IEnumerator CheckFileAvailability(string url)
+    private IEnumerator CheckFileAvailability(string url)
     {
         yield return new WaitForSeconds(10f);
 
@@ -176,26 +244,39 @@ private IEnumerator CheckFileAvailability(string url)
 
                 if (www.result == UnityWebRequest.Result.Success)
                 {
-                    DynamicObjectData tempData = JsonUtility.FromJson<DynamicObjectData>(www.downloadHandler.text);
+                    try
+                    {
+                        DynamicObjectData tempData = JsonUtility.FromJson<DynamicObjectData>(www.downloadHandler.text);
+                        if (tempData == null)
+                        {
+                            Debug.LogWarning("JSON parse returned null DynamicObjectData.");
+                            OnURLResponse(false);
+                        }
+                        else if (tempData.created_at != lastLoadedTimestamp)
+                        {
+                            isDownloading = true;
+                            _lastJsonSnapshot = www.downloadHandler.text;
+                            ProcessJsonData(_lastJsonSnapshot); // has its own try/catch
 
-                    if (tempData.created_at != lastLoadedTimestamp)
-                    {
-                        isDownloading = true;
-                        ProcessJsonData(www.downloadHandler.text);
-                        OnURLResponse(true);
-                        break; // ✅ Stop polling once new data is found
+                            OnURLResponse(true);
+                            break; // stop polling on new data
+                        }
+                        else
+                        {
+                            OnURLResponse(false);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Debug.Log("⏳ JSON file found but timestamp unchanged, continuing to check...");
+                        Debug.LogError("Error parsing JSON in poller: " + ex.Message);
+                        Debug.LogError("Raw JSON snapshot:\n" + www.downloadHandler.text);
+                        LuaErrorReporting(ex.Message);
                         OnURLResponse(false);
                     }
                 }
                 else
                 {
-                    Debug.LogWarning("❌ Failed to fetch file. Retrying...");
-
-
+                    Debug.LogWarning("Failed to fetch JSON. Retrying...");
                     OnURLResponse(false);
                 }
             }
@@ -206,95 +287,275 @@ private IEnumerator CheckFileAvailability(string url)
         fileCheckCoroutine = null;
     }
 
-
-void ProcessJsonData(string json)
+    private void ProcessJsonData(string json)
     {
-        DynamicObjectData data = JsonUtility.FromJson<DynamicObjectData>(json);
-        if (data.created_at != lastLoadedTimestamp)
+        try
         {
-           
-            lastLoadedTimestamp = data.created_at;
-            luaScriptText = data.lua_code;
-
-            luaScriptText = Regex.Unescape(luaScriptText);
-
-            if (CodeInfo != null) CodeInfo.text = data.lua_code;
-            if (ExplanationsInfo != null)
+            DynamicObjectData data = JsonUtility.FromJson<DynamicObjectData>(json);
+            if (data == null)
             {
-                ExplanationsInfo.text = $" {data.comment}\n Generated at: {data.created_at}";
+                Debug.LogError("ProcessJsonData: Parsed data is null.");
+                return;
             }
+
+            if (data.created_at == lastLoadedTimestamp)
+            {
+                Debug.Log("ProcessJsonData: Timestamp unchanged. Skipping update.");
+                return;
+            }
+
+            lastLoadedTimestamp = data.created_at;
+            luaScriptText = Regex.Unescape(data.lua_code ?? "");
+
+            if (CodeInfo != null) CodeInfo.text = data.lua_code ?? "";
+            if (ExplanationsInfo != null)
+                ExplanationsInfo.text = $" {data.comment}\n Generated at: {data.created_at}";
 
             InitializeLuaScript(luaScriptText);
 
-            foreach (var effect in data.particle_json)
+            // Build or update particle systems from raw
+            var typedEffects = new List<ParticleEffectConfig>();
+            if (data.particle_json != null)
             {
-                CreateOrUpdateParticleSystem(effect);
+                foreach (var raw in data.particle_json)
+                {
+                    var cfg = ParseParticleConfig(raw);
+                    typedEffects.Add(cfg);
+                    CreateOrUpdateParticleSystem(cfg);
+                }
             }
 
-            // ✅ NEW: Hook to generate UI from comment
-            // var uiBuilder = GetComponent<LuaParamUIBuilder>();
+            // Build split UI with both panels visible (JSON-first; comment fallback)
             if (LuaParamUIBuilder != null)
             {
                 LuaParamUIBuilder.targetBehavior = this;
-                LuaParamUIBuilder.particleSystems = effectSystems;
-                LuaParamUIBuilder.BuildUIFromComment(data.comment);
-                Debug.Log("🔧 LuaParamUIBuilder initialized and UI built from comment.");
+
+                LuaParamUIBuilder.particleSystems.Clear();
+                foreach (var kv in effectSystems) LuaParamUIBuilder.particleSystems[kv.Key] = kv.Value;
+
+                LuaParamUIBuilder.SetDescription(data.comment ?? "");
+
+                var luaParams = ConvertLuaParams(data.param_ui_lua);
+                var particleParams = ConvertParticleParams(data.param_ui_particle, typedEffects);
+
+                if ((luaParams != null && luaParams.Count > 0) || (particleParams != null && particleParams.Count > 0))
+                    LuaParamUIBuilder.BuildFromJSON(luaParams, particleParams);
+                else
+                    LuaParamUIBuilder.BuildUIFromComment(data.comment ?? "");
+
+                if (LuaParamUIBuilder.showBothPanels)
+                    LuaParamUIBuilder.ShowBothPanels();
             }
 
-            gameObject.name = data.object_name;
+            if (!string.IsNullOrEmpty(data.object_name))
+            {
+                ApplyObjectName(data.object_name, force: true);
+            }
 
+            LogAvailableEffects("After ProcessJsonData");
 
-
-
-
-            Debug.Log("🔁 Lua updated from new DynamicCoding file.");
-
-
-           
-
-            fileCheckCoroutine = null;
-
-
-
-
+            isDownloading = false;
         }
-        else
+        catch (Exception ex)
         {
-            Debug.Log("⏸ Lua NOT updated — same timestamp.");
+            Debug.LogError("ProcessJsonData: Exception while reading JSON: " + ex.Message);
+            Debug.LogError("Last JSON snapshot:\n" + json);
+            LuaErrorReporting(ex.Message);
         }
     }
 
-    void CreateOrUpdateParticleSystem(ParticleEffectConfig config)
+    private ParticleEffectConfig ParseParticleConfig(ParticleEffectConfigRaw raw)
     {
+        float F(string s, float fallback = 0f)
+        {
+            if (string.IsNullOrEmpty(s)) return fallback;
+            if (float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var v)) return v;
+            return fallback;
+        }
+
+        Color ParseColor(string s, Color fallback)
+        {
+            if (string.IsNullOrEmpty(s)) return fallback;
+            try
+            {
+                string inner = s;
+                int lp = s.IndexOf('(');
+                int rp = s.IndexOf(')');
+                if (lp >= 0 && rp > lp) inner = s.Substring(lp + 1, rp - lp - 1);
+                var parts = inner.Split(',');
+                float r = float.Parse(parts[0], CultureInfo.InvariantCulture);
+                float g = float.Parse(parts[1], CultureInfo.InvariantCulture);
+                float b = float.Parse(parts[2], CultureInfo.InvariantCulture);
+                float a = parts.Length > 3 ? float.Parse(parts[3], CultureInfo.InvariantCulture) : 1f;
+                return new Color(r, g, b, a);
+            }
+            catch { return fallback; }
+        }
+
+        return new ParticleEffectConfig
+        {
+            effectName   = raw.effectName,
+            duration     = F(raw.duration, 1f),
+            startColor   = ParseColor(raw.startColor, Color.white),
+            startSize    = F(raw.startSize, 1f),
+            startSpeed   = F(raw.startSpeed, 5f),
+            emissionRate = F(raw.emissionRate, 10f),
+            lifetime     = F(raw.lifetime, 2f),
+            maxParticles = Mathf.RoundToInt(F(raw.maxParticles, 100f)),
+            shape        = raw.shape
+        };
+    }
+
+    private List<LuaParamUIBuilder.ParamUIDef> ConvertLuaParams(List<RawParamUIDef> raw)
+    {
+        if (raw == null) return null;
+
+        var list = new List<LuaParamUIBuilder.ParamUIDef>();
+        foreach (var r in raw)
+        {
+            // Resolve Lua global: prefer 'variable', then 'name', then 'key'
+            string resolvedKey =
+                !string.IsNullOrEmpty(r.variable) ? r.variable :
+                !string.IsNullOrEmpty(r.name)     ? r.name     :
+                r.key;
+
+            if (string.IsNullOrEmpty(resolvedKey))
+            {
+                Debug.LogWarning("[LuaMonoBehavior] Skipping a Lua param: missing 'variable'/'name'/'key'.");
+                continue;
+            }
+
+            // Label (label > name > key > resolvedKey)
+            string uiLabel =
+                !string.IsNullOrEmpty(r.label) ? r.label :
+                !string.IsNullOrEmpty(r.name)  ? r.name  :
+                !string.IsNullOrEmpty(r.key)   ? r.key   :
+                resolvedKey;
+
+            list.Add(new LuaParamUIBuilder.ParamUIDef
+            {
+                effectName = null,
+                label = uiLabel,
+                key = resolvedKey,
+                type = NormalizeType(r.type),
+                min = r.min,
+                max = r.max,
+                @default = r.@default,
+                options = r.options
+            });
+        }
+
+        Debug.Log($"[LuaMonoBehavior] ConvertLuaParams -> {list.Count} Lua controls resolved.");
+        foreach (var p in list) Debug.Log($"  - {p.key} ({p.type}) label='{p.label}'");
+        return list;
+    }
+
+    // label shows "EffectName: property" (or just property if effectName unknown)
+    private List<LuaParamUIBuilder.ParamUIDef> ConvertParticleParams(List<RawParamUIDef> raw, List<ParticleEffectConfig> effects)
+    {
+        if (raw == null) return null;
+
+        string defaultEffect = (effects != null && effects.Count == 1) ? effects[0].effectName : null;
+
+        var list = new List<LuaParamUIBuilder.ParamUIDef>();
+        foreach (var r in raw)
+        {
+            // Which particle system to target (prefer explicit effectName; fallback to default if only one)
+            string effectName = !string.IsNullOrEmpty(r.name) ? r.name : defaultEffect; // legacy: if generator used 'name' to carry effectName
+            if (string.IsNullOrEmpty(effectName) && !string.IsNullOrEmpty(r.label))
+                effectName = r.label; // secondary legacy path if needed
+
+            // Property key (duration/startSpeed/startSize/lifetime/etc.)
+            string propKey = !string.IsNullOrEmpty(r.key) ? r.key : r.variable; // prefer 'key'; fallback 'variable'
+
+            if (string.IsNullOrEmpty(propKey))
+            {
+                Debug.LogWarning("[LuaMonoBehavior] Skipping particle param: missing 'key'.");
+                continue;
+            }
+
+            string displayLabel = string.IsNullOrEmpty(effectName) ? propKey : $"{effectName}: {propKey}";
+
+            list.Add(new LuaParamUIBuilder.ParamUIDef
+            {
+                effectName = effectName,
+                label = displayLabel,
+                key = propKey,
+                type = NormalizeType(r.type),
+                min = r.min,
+                max = r.max,
+                @default = r.@default,
+                options = r.options
+            });
+        }
+        return list;
+    }
+
+    private string NormalizeType(string t)
+    {
+        if (string.IsNullOrEmpty(t)) return "InputField";
+        t = t.Trim().ToLower();
+        switch (t)
+        {
+            case "slider": return "Slider";
+            case "toggle": return "Toggle";
+            case "dropdown": return "Dropdown";
+            case "input":
+            case "inputfield":
+            case "input field": return "InputField";
+            case "button": return "Button";
+            default: return "InputField";
+        }
+    }
+
+    private void CreateOrUpdateParticleSystem(ParticleEffectConfig config)
+    {
+        if (config == null || string.IsNullOrEmpty(config.effectName)) return;
+
+        string normKey = NormalizeEffectKey(config.effectName);
+
         ParticleSystem ps;
-        if (!effectSystems.TryGetValue(config.effectName, out ps))
+        if (!effectSystems.TryGetValue(normKey, out ps))
         {
             GameObject psObject = new GameObject(config.effectName + "_Effect");
-            psObject.transform.parent = SpwanPoint;
+            psObject.transform.parent = SpwanPoint != null ? SpwanPoint : transform;
             psObject.transform.localPosition = Vector3.zero;
-            psObject.transform.rotation = Quaternion.Euler(-90, 0, 0);
+            psObject.transform.localRotation = Quaternion.identity;
             psObject.transform.localScale = Vector3.one;
+
             ps = psObject.AddComponent<ParticleSystem>();
-            ParticleSystemRenderer renderer = ps.GetComponent<ParticleSystemRenderer>();
+            var renderer = ps.GetComponent<ParticleSystemRenderer>();
             renderer.material = defaultParticleMaterial ?? new Material(Shader.Find("Particles/Standard Unlit"));
-            effectSystems[config.effectName] = ps;
+
+            effectSystems[normKey] = ps;
+            Debug.Log($"[Particles] Created effect '{config.effectName}' (key='{normKey}').");
         }
 
         var main = ps.main;
-        ps.Stop();
-        main.startColor = config.startColor;
-        main.startSize = config.startSize;
-        main.startSpeed = config.startSpeed;
-        
-        main.duration = config.duration;
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        main.startColor    = config.startColor;
+        main.startSize     = config.startSize;
+        main.startSpeed    = config.startSpeed;
+        main.duration      = config.duration;
         main.startLifetime = config.lifetime;
-        main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+        main.loop          = true;
+        main.scalingMode   = ParticleSystemScalingMode.Hierarchy;
+        main.maxParticles  = Mathf.Max(1, config.maxParticles);   // ensure maxParticles is applied
 
         var emission = ps.emission;
+        emission.enabled = true;
         emission.rateOverTime = config.emissionRate;
 
-        ps.Stop();
-        ps.Play();
+        var shape = ps.shape;
+        shape.enabled = true;
+        if (!string.IsNullOrEmpty(config.shape))
+        {
+            var s = config.shape.Trim().ToLowerInvariant();
+            if (s == "cone")   shape.shapeType = ParticleSystemShapeType.Cone;
+            else if (s == "sphere") shape.shapeType = ParticleSystemShapeType.Sphere;
+            else if (s == "box")    shape.shapeType = ParticleSystemShapeType.Box;
+        }
     }
 
     public void InitializeLuaScript(string code)
@@ -303,6 +564,9 @@ void ProcessJsonData(string json)
         {
             luaScript = new Script();
             hasluaScript = true;
+            controlPanel.SetActive(true);
+
+            
 
             luaScript.Globals["transformProxy"] = UserData.Create(transformProxy);
             luaScript.Globals["gameObjectProxy"] = UserData.Create(gameObjectProxy);
@@ -319,7 +583,7 @@ void ProcessJsonData(string json)
             luaScript.Globals["Color"] = (Func<float, float, float, float, Color>)((r, g, b, a) => new Color(r, g, b, a));
             luaScript.Globals["Vector2"] = (Func<float, float, Vector2>)((x, y) => new Vector2(x, y));
             luaScript.Globals["Quaternion"] = (Func<float, float, float, float, Quaternion>)((x, y, z, w) => new Quaternion(x, y, z, w));
-            // code = Regex.Unescape(code); 
+
             luaScript.DoString(code);
 
             startFunction = luaScript.Globals.Get("start");
@@ -337,60 +601,110 @@ void ProcessJsonData(string json)
 
             if (uiButton != null && onButtonClickFunction != null)
                 uiButton.onClick.AddListener(() => luaScript.Call(onButtonClickFunction));
+
+            var gs = GetComponent<GenerateSpot>();
+            if (gs != null && gs.loadingParticles != null)
+                gs.loadingParticles.Stop();
+
+            // Re-apply last known name after Lua init to beat late UI hookups
+            if (!string.IsNullOrEmpty(_lastObjectNameFromJson))
+                ApplyObjectName(_lastObjectNameFromJson, force: false);
         }
         catch (Exception ex)
         {
-            Debug.LogError($"❌ Lua Script Error: {ex.Message}");
+            Debug.LogError("Lua Script Error: " + ex.Message);
+            // Ensure name stays sticky even after errors
+            if (!string.IsNullOrEmpty(_lastObjectNameFromJson))
+                ApplyObjectName(_lastObjectNameFromJson, force: true);
             LuaErrorReporting(ex.Message);
         }
     }
 
-
     public void LuaErrorReporting(string errormsg)
     {
-        manager.sendCommandwithPrompt("Luagoterror", ID, errormsg);
+        if (manager != null) manager.sendCommandwithPrompt("Luagoterror", ID, errormsg);
         FetchAgain();
-    
-
+        // Re-assert name on error-driven recalls
+        if (!string.IsNullOrEmpty(_lastObjectNameFromJson))
+            ApplyObjectName(_lastObjectNameFromJson, force: false);
     }
-
 
     void Update()
     {
-        if (!isRunning) return;
-        if (informationToggle != null)
-            InfoTab.SetActive(informationToggle.isOn);
-
         if (Input.GetKeyDown(KeyCode.F3))
         {
-            InitializeLuaScript(luaScriptText);
-            Debug.Log("Lua script reloaded.");
+            PlayorStopBtn();
         }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            if (debugSelect) DebugRunJson(debugJson);
+        }
+
+
+
+        if (btnLabel != null && !isRunning )
+        {
+            btnLabel.text = "Play";
+
+        }
+
+        else
+        {
+
+            if (btnLabel != null) btnLabel.text = "Stop";
+        }
+
+        if (!isRunning) return;
+
+        if (informationToggle != null && InfoTab != null)
+            InfoTab.SetActive(informationToggle.isOn);
 
         if (updateFunction != null && updateFunction.Type == DataType.Function)
             luaScript.Call(updateFunction, Time.deltaTime);
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         if (!isRunning) return;
-        string otherObjectName = collision.gameObject.name;
+
+        print("OnCollisionEnter with: " + collision.gameObject.name);
+
+        if (innerCollider != null)
+        {
+            if (collision.contactCount == 0 || collision.GetContact(0).thisCollider != innerCollider)
+                return;
+        }
+
+        var otherGO = collision.gameObject;
+        var otherProxy = new GameObjectProxy(otherGO);
+
         if (onCollisionEnterFunction != null && onCollisionEnterFunction.Type == DataType.Function)
-            luaScript.Call(onCollisionEnterFunction, otherObjectName);
+            luaScript.Call(onCollisionEnterFunction, UserData.Create(otherProxy));
     }
 
-    void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
         if (!isRunning) return;
-        string otherObjectName = collision.gameObject.name;
+        print("OnCollisionExit with: " + collision.gameObject.name);
+
+        if (innerCollider != null)
+        {
+            if (collision.contactCount == 0 || collision.GetContact(0).thisCollider != innerCollider)
+                return;
+        }
+
+        var otherGO = collision.gameObject;
+        var otherProxy = new GameObjectProxy(otherGO);
+
         if (onCollisionExitFunction != null && onCollisionExitFunction.Type == DataType.Function)
-            luaScript.Call(onCollisionExitFunction, otherObjectName);
+            luaScript.Call(onCollisionExitFunction, UserData.Create(otherProxy));
     }
 
     public void RPCTrigger()
     {
         if (!isRunning) return;
-        generateSpotRPC.CallTriggerRPC();
+        if (generateSpotRPC != null) generateSpotRPC.CallTriggerRPC();
         var func = luaScript.Globals.Get("trigger");
         if (func != null && func.Type == DataType.Function)
             luaScript.Call(func);
@@ -404,40 +718,91 @@ void ProcessJsonData(string json)
             luaScript.Call(func);
     }
 
-    void ActivateEffect(string effectName)
+    private void ActivateEffect(string effectName)
     {
-        if (effectSystems.TryGetValue(effectName, out var ps))
+        if (string.IsNullOrWhiteSpace(effectName))
+        {
+            Debug.LogWarning("[Particles] activateEffect called with empty name.");
+            LogAvailableEffects("Empty request");
+            return;
+        }
+
+        string norm = NormalizeEffectKey(effectName);
+
+        if (effectSystems.TryGetValue(norm, out var ps))
+        {
+            ps.Clear();
             ps.Play();
-        else
-            Debug.LogWarning($"No particle effect configuration found for: {effectName}");
+            Debug.Log($"[Particles] Activated '{effectName}' (key='{norm}').");
+            return;
+        }
+
+        // Fallback: try loose contains match
+        foreach (var kv in effectSystems)
+        {
+            if (kv.Key.Contains(norm))
+            {
+                kv.Value.Clear();
+                kv.Value.Play();
+                Debug.Log($"[Particles] Activated (fuzzy) '{effectName}' using key '{kv.Key}'.");
+                return;
+            }
+        }
+
+        Debug.LogWarning($"[Particles] No effect found for '{effectName}'.");
+        LogAvailableEffects("Activation failed");
     }
 
-    void DeactivateEffect()
+    private void DeactivateEffect()
     {
         foreach (var ps in effectSystems.Values)
             ps.Stop();
     }
 
     public Script Script => luaScript;
+    public TMP_Text btnLabel;
+
+    public void PlayorStopBtn()
+    {
+        if (isRunning)
+        {
+            Stop();
+            if (btnLabel != null) btnLabel.text = "Play";
+        }
+        else
+        {
+            Play();
+            if (btnLabel != null) btnLabel.text = "Stop";
+        }
+    }
 
     public void Play()
     {
-        if (!hasluaScript)
-        {
-            Debug.LogWarning("No Lua script loaded.");
-            return;
-        }
+        if (!hasluaScript) return;
 
+        // Before starting, try to push the latest UI values into Lua globals
+        ApplyUIParamsToLua();
+
+        // Now call start() so Lua runs with fresh params
         if (startFunction != null && startFunction.Type == DataType.Function)
+        {
             luaScript.Call(startFunction);
-
+            var gs = GetComponent<GenerateSpot>();
+            if (gs != null && gs.physicToggle != null)
+            {
+                gs.physicToggle.isOn = true;    
+            }
+          
+        }
         isRunning = true;
-        Debug.Log("▶ Lua execution started.");
     }
 
     public void Stop()
     {
         isRunning = false;
+
+        var gs = GetComponent<GenerateSpot>();
+        if (gs != null && gs.physicToggle != null) gs.physicToggle.isOn = false;
 
         transform.position = initialPosition;
         transform.rotation = initialRotation;
@@ -450,6 +815,246 @@ void ProcessJsonData(string json)
         }
 
         DeactivateEffect();
-        Debug.Log("⏹ Lua execution stopped and object reset.");
+    }
+
+    // Context-menu test helpers
+    [ContextMenu("Particles/Play All")]
+    public void PlayAllEffects()
+    {
+        foreach (var ps in effectSystems.Values)
+        {
+            ps.Clear();
+            ps.Play();
+        }
+        LogAvailableEffects("Play All");
+    }
+
+    [ContextMenu("Particles/Stop All")]
+    public void StopAllEffects()
+    {
+        foreach (var ps in effectSystems.Values) ps.Stop();
+    }
+
+    // =========================
+    // UI -> Lua param bridging
+    // =========================
+
+    /// <summary>
+    /// Pushes current Param UI values into Lua globals before starting or on demand.
+    /// Tries several strategies so it works even if LuaParamUIBuilder shape changes:
+    /// 1) Looks for a method "GetCurrentParams" that returns IEnumerable of { key, value }.
+    /// 2) Looks for a method "CollectAllParamValues" that returns Dictionary<string, object>.
+    /// 3) Looks for a field/property "luaParamValues" Dictionary<string, object/float>.
+    /// If none found, logs a one-time warning.
+    /// </summary>
+    public void ApplyUIParamsToLua()
+    {
+        if (!hasluaScript || luaScript == null) return;
+
+        bool appliedAny = false;
+
+        if (LuaParamUIBuilder != null)
+        {
+            try
+            {
+                // Strategy 1: GetCurrentParams()
+                var m1 = LuaParamUIBuilder.GetType().GetMethod("GetCurrentParams", Type.EmptyTypes);
+                if (m1 != null)
+                {
+                    var enumerable = m1.Invoke(LuaParamUIBuilder, null) as System.Collections.IEnumerable;
+                    if (enumerable != null)
+                    {
+                        foreach (var item in enumerable)
+                        {
+                            if (!TryExtractKeyValue(item, out var key, out var val)) continue;
+                            SetLuaGlobalFromObject(key, val);
+                            appliedAny = true;
+                        }
+                    }
+                }
+                else
+                {
+                    // Strategy 2: CollectAllParamValues()
+                    var m2 = LuaParamUIBuilder.GetType().GetMethod("CollectAllParamValues", Type.EmptyTypes);
+                    if (m2 != null)
+                    {
+                        var map = m2.Invoke(LuaParamUIBuilder, null) as System.Collections.IDictionary;
+                        if (map != null)
+                        {
+                            foreach (var k in map.Keys)
+                            {
+                                var key = k as string;
+                                var val = map[k];
+                                if (string.IsNullOrEmpty(key)) continue;
+                                SetLuaGlobalFromObject(key, val);
+                                appliedAny = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Strategy 3: field or prop "luaParamValues"
+                        var f = LuaParamUIBuilder.GetType().GetField("luaParamValues");
+                        object dictObj = null;
+                        if (f != null) dictObj = f.GetValue(LuaParamUIBuilder);
+                        if (dictObj == null)
+                        {
+                            var p = LuaParamUIBuilder.GetType().GetProperty("luaParamValues");
+                            if (p != null) dictObj = p.GetValue(LuaParamUIBuilder, null);
+                        }
+
+                        var dict = dictObj as System.Collections.IDictionary;
+                        if (dict != null)
+                        {
+                            foreach (var k in dict.Keys)
+                            {
+                                var key = k as string;
+                                var val = dict[k];
+                                if (string.IsNullOrEmpty(key)) continue;
+                                SetLuaGlobalFromObject(key, val);
+                                appliedAny = true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[LuaMonoBehavior] ApplyUIParamsToLua() reflection failed: {ex.Message}");
+            }
+        }
+
+        if (!appliedAny)
+        {
+            Debug.Log("[LuaMonoBehavior] ApplyUIParamsToLua: no UI params found to apply (is LuaParamUIBuilder exposing values?).");
+        }
+    }
+
+    private bool TryExtractKeyValue(object item, out string key, out object value)
+    {
+        key = null;
+        value = null;
+        if (item == null) return false;
+
+        var t = item.GetType();
+
+        // Try KeyValuePair<string, object>
+        if (t.IsGenericType && t.Name.StartsWith("KeyValuePair"))
+        {
+            var kProp = t.GetProperty("Key");
+            var vProp = t.GetProperty("Value");
+            if (kProp != null && vProp != null)
+            {
+                key = kProp.GetValue(item) as string;
+                value = vProp.GetValue(item);
+                return !string.IsNullOrEmpty(key);
+            }
+        }
+
+        // Try fields named key/value
+        var keyField = t.GetField("key");
+        var valField = t.GetField("value");
+        if (keyField != null && valField != null)
+        {
+            key = keyField.GetValue(item) as string;
+            value = valField.GetValue(item);
+            return !string.IsNullOrEmpty(key);
+        }
+
+        // Try properties named Key/Value or key/value
+        var keyProp = t.GetProperty("Key") ?? t.GetProperty("key");
+        var valProp = t.GetProperty("Value") ?? t.GetProperty("value");
+        if (keyProp != null && valProp != null)
+        {
+            key = keyProp.GetValue(item) as string;
+            value = valProp.GetValue(item);
+            return !string.IsNullOrEmpty(key);
+        }
+
+        return false;
+    }
+
+    private void SetLuaGlobalFromObject(string key, object val)
+    {
+        if (string.IsNullOrEmpty(key)) return;
+
+        try
+        {
+            if (val == null)
+            {
+                luaScript.Globals[key] = DynValue.Nil;
+                return;
+            }
+
+            switch (val)
+            {
+                case bool b:
+                    luaScript.Globals[key] = b;
+                    break;
+                case int i:
+                    luaScript.Globals[key] = (double)i;
+                    break;
+                case long l:
+                    luaScript.Globals[key] = (double)l;
+                    break;
+                case float f:
+                    luaScript.Globals[key] = (double)f;
+                    break;
+                case double d:
+                    luaScript.Globals[key] = d;
+                    break;
+                case string s:
+                    if (double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var dnum))
+                        luaScript.Globals[key] = dnum;
+                    else if (bool.TryParse(s, out var bval))
+                        luaScript.Globals[key] = bval;
+                    else
+                        luaScript.Globals[key] = s;
+                    break;
+                default:
+                    var str = val.ToString();
+                    if (double.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out var dnum2))
+                        luaScript.Globals[key] = dnum2;
+                    else if (bool.TryParse(str, out var bval2))
+                        luaScript.Globals[key] = bval2;
+                    else
+                        luaScript.Globals[key] = str;
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"[LuaMonoBehavior] Failed to set Lua global '{key}' from value '{val}': {ex.Message}");
+        }
+    }
+
+    // --- Name stickiness helpers ---
+    private void ApplyObjectName(string rawName, bool force = false)
+    {
+        string n = (rawName ?? "").Trim();
+        if (string.IsNullOrEmpty(n)) return;
+
+        if (!force && gameObject.name == n && (object_name_text == null || object_name_text.text == n))
+            return;
+
+        gameObject.name = n;
+        if (object_name_text != null) object_name_text.text = n;
+        _lastObjectNameFromJson = n;
+
+        if (_applyNameCo != null) StopCoroutine(_applyNameCo);
+        _applyNameCo = StartCoroutine(ApplyNameNextFrame(n));
+
+        Debug.Log($"[LuaMonoBehavior] Applied object name: {n} (force={force})");
+    }
+
+    private IEnumerator ApplyNameNextFrame(string nameToApply)
+    {
+        yield return null;
+        gameObject.name = nameToApply;
+        if (object_name_text != null) object_name_text.text = nameToApply;
+        yield return null;
+        gameObject.name = nameToApply;
+        if (object_name_text != null) object_name_text.text = nameToApply;
+        Debug.Log($"[LuaMonoBehavior] Re-applied object name on next frames: {nameToApply}");
     }
 }
