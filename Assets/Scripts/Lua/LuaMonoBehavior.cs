@@ -28,15 +28,16 @@ public class ParticleEffectConfig
 [Serializable]
 public class RawParamUIDef
 {
-    public string name;      // optional: display or fallback key
-    public string variable;  // optional: Lua global (preferred if present)
-    public string key;       // supports JSON that uses "key"
-    public string type;      // slider/toggle/dropdown/inputfield/button
+    public string name;       // optional: display or fallback key (legacy)
+    public string variable;   // optional: Lua global (legacy)
+    public string key;        // supports JSON that uses "key"
+    public string type;       // slider/toggle/dropdown/inputfield/button
     public float min;
     public float max;
     public float @default;
     public List<string> options;
-    public string label;     // optional pretty label if you have it
+    public string label;      // optional pretty label if you have it
+    public string effectName; // preferred for param_ui_particle
 }
 
 [Serializable]
@@ -195,7 +196,7 @@ public class LuaMonoBehavior : MonoBehaviour
     [TextArea(5, 20)] public string debugJson = "";
     public bool debugSelect = false;
 
-    // Add this method to run a full DynamicCoding JSON string
+    // Add this method to run a full DynamicCoding JSON string (forces apply, bypassing timestamp)
     public void DebugRunJson(string jsonString)
     {
         if (string.IsNullOrEmpty(jsonString))
@@ -206,9 +207,10 @@ public class LuaMonoBehavior : MonoBehaviour
 
         try
         {
-            Debug.Log("DebugRunJson: Executing provided JSON...");
+            Debug.Log("DebugRunJson: Forcing execution of provided JSON...");
             _lastJsonSnapshot = jsonString; // store snapshot for debugging
-            ProcessJsonData(jsonString);    // reuse existing pipeline
+            lastLoadedTimestamp = string.Empty; // reset gate
+            ProcessJsonData(jsonString, force: true);    // reuse pipeline with force
         }
         catch (Exception ex)
         {
@@ -287,7 +289,8 @@ public class LuaMonoBehavior : MonoBehaviour
         fileCheckCoroutine = null;
     }
 
-    private void ProcessJsonData(string json)
+    // UPDATED: allow 'force' to bypass the created_at gate
+    private void ProcessJsonData(string json, bool force = false)
     {
         try
         {
@@ -298,13 +301,13 @@ public class LuaMonoBehavior : MonoBehaviour
                 return;
             }
 
-            if (data.created_at == lastLoadedTimestamp)
+            if (!force && data.created_at == lastLoadedTimestamp)
             {
                 Debug.Log("ProcessJsonData: Timestamp unchanged. Skipping update.");
                 return;
             }
 
-            lastLoadedTimestamp = data.created_at;
+            lastLoadedTimestamp = data.created_at ?? string.Empty;
             luaScriptText = Regex.Unescape(data.lua_code ?? "");
 
             if (CodeInfo != null) CodeInfo.text = data.lua_code ?? "";
@@ -322,8 +325,12 @@ public class LuaMonoBehavior : MonoBehaviour
                     var cfg = ParseParticleConfig(raw);
                     typedEffects.Add(cfg);
                     CreateOrUpdateParticleSystem(cfg);
+                    Debug.Log($"[JSON->PS] effectName='{cfg.effectName}', duration={cfg.duration}, startColor={cfg.startColor}, startSize={cfg.startSize}, startSpeed={cfg.startSpeed}, emissionRate={cfg.emissionRate}, lifetime={cfg.lifetime}, maxParticles={cfg.maxParticles}, shape='{cfg.shape}'");
                 }
             }
+
+            // After systems are available, rebind Lua's particleSystemProxy to the first effect (legacy compatibility)
+            RebindParticleProxyToFirstEffect();
 
             // Build split UI with both panels visible (JSON-first; comment fallback)
             if (LuaParamUIBuilder != null)
@@ -416,7 +423,7 @@ public class LuaMonoBehavior : MonoBehaviour
             // Resolve Lua global: prefer 'variable', then 'name', then 'key'
             string resolvedKey =
                 !string.IsNullOrEmpty(r.variable) ? r.variable :
-                !string.IsNullOrEmpty(r.name)     ? r.name     :
+                !string.IsNullOrEmpty(r.name) ? r.name :
                 r.key;
 
             if (string.IsNullOrEmpty(resolvedKey))
@@ -428,8 +435,8 @@ public class LuaMonoBehavior : MonoBehaviour
             // Label (label > name > key > resolvedKey)
             string uiLabel =
                 !string.IsNullOrEmpty(r.label) ? r.label :
-                !string.IsNullOrEmpty(r.name)  ? r.name  :
-                !string.IsNullOrEmpty(r.key)   ? r.key   :
+                !string.IsNullOrEmpty(r.name) ? r.name :
+                !string.IsNullOrEmpty(r.key) ? r.key :
                 resolvedKey;
 
             list.Add(new LuaParamUIBuilder.ParamUIDef
@@ -450,7 +457,23 @@ public class LuaMonoBehavior : MonoBehaviour
         return list;
     }
 
-    // label shows "EffectName: property" (or just property if effectName unknown)
+    // Helper: split "EffectName: key" into parts
+    private static bool TrySplitEffectAndKey(string raw, out string effect, out string key)
+    {
+        effect = null; key = null;
+        if (string.IsNullOrWhiteSpace(raw)) return false;
+        int colon = raw.IndexOf(':');
+        if (colon <= 0 || colon >= raw.Length - 1) return false;
+        effect = raw.Substring(0, colon).Trim();
+        key    = raw.Substring(colon + 1).Trim();
+        return !string.IsNullOrEmpty(effect) && !string.IsNullOrEmpty(key);
+    }
+
+    // UPDATED: honor new/legacy param_ui_particle shapes.
+    // Accepts any of:
+    //   { effectName:"HIT_SPARK", key:"duration", ... }
+    //   { name:"HIT_SPARK: duration", ... }  or  { label:"HIT_SPARK: duration", ... }
+    //   { name:"duration", ... }  // if only one effect exists, target that effect
     private List<LuaParamUIBuilder.ParamUIDef> ConvertParticleParams(List<RawParamUIDef> raw, List<ParticleEffectConfig> effects)
     {
         if (raw == null) return null;
@@ -460,34 +483,57 @@ public class LuaMonoBehavior : MonoBehaviour
         var list = new List<LuaParamUIBuilder.ParamUIDef>();
         foreach (var r in raw)
         {
-            // Which particle system to target (prefer explicit effectName; fallback to default if only one)
-            string effectName = !string.IsNullOrEmpty(r.name) ? r.name : defaultEffect; // legacy: if generator used 'name' to carry effectName
-            if (string.IsNullOrEmpty(effectName) && !string.IsNullOrEmpty(r.label))
-                effectName = r.label; // secondary legacy path if needed
+            // Prefer explicit fields if provided
+            string effectName = !string.IsNullOrEmpty(r.effectName) ? r.effectName : null;
+            string propKey    = !string.IsNullOrEmpty(r.key)        ? r.key        : null;
 
-            // Property key (duration/startSpeed/startSize/lifetime/etc.)
-            string propKey = !string.IsNullOrEmpty(r.key) ? r.key : r.variable; // prefer 'key'; fallback 'variable'
+            // If missing, try "name" or "label" carrier in the form "Effect: key"
+            if (string.IsNullOrEmpty(effectName) || string.IsNullOrEmpty(propKey))
+            {
+                string carrier = !string.IsNullOrEmpty(r.name) ? r.name : r.label;
+                if (!string.IsNullOrEmpty(carrier))
+                {
+                    if (TrySplitEffectAndKey(carrier, out var effFromCarrier, out var keyFromCarrier))
+                    {
+                        if (string.IsNullOrEmpty(effectName)) effectName = effFromCarrier;
+                        if (string.IsNullOrEmpty(propKey))    propKey    = keyFromCarrier;
+                    }
+                    else
+                    {
+                        // Carrier might be just key (e.g., "duration")
+                        if (string.IsNullOrEmpty(propKey)) propKey = carrier.Trim();
+                    }
+                }
+            }
+
+            // If still no effect name and only one exists, use that
+            if (string.IsNullOrEmpty(effectName)) effectName = defaultEffect;
 
             if (string.IsNullOrEmpty(propKey))
             {
-                Debug.LogWarning("[LuaMonoBehavior] Skipping particle param: missing 'key'.");
+                Debug.LogWarning("[LuaMonoBehavior] Skipping particle param: missing 'key' (could not infer).");
                 continue;
             }
 
-            string displayLabel = string.IsNullOrEmpty(effectName) ? propKey : $"{effectName}: {propKey}";
+            // Build label
+            string displayLabel =
+                !string.IsNullOrEmpty(r.label) ? r.label :
+                !string.IsNullOrEmpty(r.name)  ? r.name  :
+                (string.IsNullOrEmpty(effectName) ? propKey : $"{effectName}: {propKey}");
 
             list.Add(new LuaParamUIBuilder.ParamUIDef
             {
                 effectName = effectName,
-                label = displayLabel,
-                key = propKey,
-                type = NormalizeType(r.type),
-                min = r.min,
-                max = r.max,
-                @default = r.@default,
-                options = r.options
+                label      = displayLabel,
+                key        = propKey,
+                type       = NormalizeType(r.type),
+                min        = r.min,
+                max        = r.max,
+                @default   = r.@default,
+                options    = r.options
             });
         }
+        Debug.Log($"[LuaMonoBehavior] ConvertParticleParams -> {list.Count} particle controls resolved.");
         return list;
     }
 
@@ -541,7 +587,7 @@ public class LuaMonoBehavior : MonoBehaviour
         main.startLifetime = config.lifetime;
         main.loop          = true;
         main.scalingMode   = ParticleSystemScalingMode.Hierarchy;
-        main.maxParticles  = Mathf.Max(1, config.maxParticles);   // ensure maxParticles is applied
+        main.maxParticles  = Mathf.Max(1, config.maxParticles);
 
         var emission = ps.emission;
         emission.enabled = true;
@@ -556,6 +602,30 @@ public class LuaMonoBehavior : MonoBehaviour
             else if (s == "sphere") shape.shapeType = ParticleSystemShapeType.Sphere;
             else if (s == "box")    shape.shapeType = ParticleSystemShapeType.Box;
         }
+
+        Debug.Log($"[Particles] Updated '{config.effectName}': dur={config.duration}, size={config.startSize}, speed={config.startSpeed}, emit={config.emissionRate}, life={config.lifetime}, max={config.maxParticles}, shape={config.shape}");
+    }
+
+    // Rebind Lua's particleSystemProxy to first JSON effect for legacy scripts that call particleSystemProxy:Play()
+    private void RebindParticleProxyToFirstEffect()
+    {
+        if (luaScript == null) return;
+        foreach (var kv in effectSystems)
+        {
+            try
+            {
+                var ps = kv.Value;
+                if (ps == null) continue;
+                var newProxy = new ParticleSystemProxy(ps);
+                luaScript.Globals["particleSystemProxy"] = UserData.Create(newProxy);
+                Debug.Log($"[Particles] particleSystemProxy rebound to JSON effect '{kv.Key}'.");
+                break; // first effect is enough for legacy calls
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[Particles] Failed to rebind particleSystemProxy: {ex.Message}");
+            }
+        }
     }
 
     public void InitializeLuaScript(string code)
@@ -564,9 +634,7 @@ public class LuaMonoBehavior : MonoBehaviour
         {
             luaScript = new Script();
             hasluaScript = true;
-            controlPanel.SetActive(true);
-
-            
+            if (controlPanel != null) controlPanel.SetActive(true);
 
             luaScript.Globals["transformProxy"] = UserData.Create(transformProxy);
             luaScript.Globals["gameObjectProxy"] = UserData.Create(gameObjectProxy);
@@ -641,17 +709,12 @@ public class LuaMonoBehavior : MonoBehaviour
             if (debugSelect) DebugRunJson(debugJson);
         }
 
-
-
         if (btnLabel != null && !isRunning )
         {
             btnLabel.text = "Play";
-
         }
-
         else
         {
-
             if (btnLabel != null) btnLabel.text = "Stop";
         }
 
@@ -790,9 +853,8 @@ public class LuaMonoBehavior : MonoBehaviour
             var gs = GetComponent<GenerateSpot>();
             if (gs != null && gs.physicToggle != null)
             {
-                gs.physicToggle.isOn = true;    
+                gs.physicToggle.isOn = true;
             }
-          
         }
         isRunning = true;
     }

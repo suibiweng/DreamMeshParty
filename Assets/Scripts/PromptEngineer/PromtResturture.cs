@@ -17,6 +17,8 @@ public class PromptRestructure : MonoBehaviour
 
     public string combinedPrompt;
 
+    public string debugtext;
+
     void Start()
     {
         combinedPrompt = FormatPrompt();
@@ -25,10 +27,18 @@ public class PromptRestructure : MonoBehaviour
 
     void Update()
     {
+        var debugSelect = generateSpot.gameObject.GetComponent<LuaMonoBehavior>().debugSelect;
 
-        if (Input.GetKeyDown(KeyCode.F6))
+        if (Input.GetKeyDown(KeyCode.F6) && debugSelect)
         {
             OnEdit();
+        }
+
+
+
+        if (Input.GetKeyDown(KeyCode.F7) && debugSelect)
+        {
+            OnDebugEdit();
         }
         // Optional: live updating
         combinedPrompt = FormatPrompt();
@@ -52,8 +62,21 @@ public class PromptRestructure : MonoBehaviour
     public void OnEdit()
     {
         combinedPrompt = FormatPrompt();
-        // realityEditorManager.SubmitPrompt(combinedPrompt);
+
         generateSpot.Prompt = combinedPrompt;
         generateSpot.EditCode();
     }
+
+
+    
+
+    public void OnDebugEdit()
+    {
+        combinedPrompt = debugtext;
+
+        generateSpot.Prompt = combinedPrompt;
+        generateSpot.EditCode();
+    }
+
+
 }

@@ -185,7 +185,7 @@ public void TogglePhysic()
     lastToggleState = currentToggleState;
 
     if (objectRigidbody == null) objectRigidbody = GetComponent<Rigidbody>();
-    // if (GeneratedmeshCollider == null) return;
+    if (GeneratedmeshCollider == null) return;
 
     // // If it's a TerrainCollider or similar, bail out — cannot be dynamic
     // if (GeneratedmeshCollider is TerrainCollider)
@@ -742,7 +742,7 @@ public void TogglePhysic()
         PromtText.text = Prompt;
 
 
-        if (Input.GetKeyDown(KeyCode.X) && !isRealObject)
+        if (Input.GetKeyDown(KeyCode.X) && !isRealObject && luaMonoBehavior.debugSelect)
         {
             OnSelect();
             DebugGenrateModel();
@@ -751,14 +751,6 @@ public void TogglePhysic()
         }
 
 
-
-        if (Input.GetKeyDown(KeyCode.T) && !isRealObject)
-        {
-            OnSelect();
-            EditCode();
-
-
-        }
 
 
 
@@ -955,6 +947,9 @@ public void TogglePhysic()
 
     public void GenrateModel()
     {
+
+            OnSelect();
+
         manager.promtGenerateModel(id, Prompt, URLID);
 
         if (isSketching)

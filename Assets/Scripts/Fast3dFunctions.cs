@@ -109,20 +109,20 @@ public class Fast3dFunctions : MonoBehaviour
 
 void InitCameraMask(){
 
-           if (CaptureCamera == null)
-        {
-           // CaptureCamera = GetComponent<Camera>(); // Attempt to auto-assign
-        }
+        //    if (CaptureCamera == null)
+        // {
+        //    // CaptureCamera = GetComponent<Camera>(); // Attempt to auto-assign
+        // }
 
-        if (CaptureCamera != null)
-        {
-            // Store the original culling mask of the camera
-            originalCullingMask = CaptureCamera.cullingMask;
-        }
-        else
-        {
-            Debug.LogError("No camera assigned to CameraCullingSwitcher!");
-        }
+        // if (CaptureCamera != null)
+        // {
+        //     // Store the original culling mask of the camera
+        //     originalCullingMask = CaptureCamera.cullingMask;
+        // }
+        // else
+        // {
+        //     Debug.LogError("No camera assigned to CameraCullingSwitcher!");
+        // }
 
 
 

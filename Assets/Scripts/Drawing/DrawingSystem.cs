@@ -61,8 +61,9 @@ public class DrawingSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (DrawingMode == null) return;
 
-        if(!DrawingMode.isOn) return;
+        if (!DrawingMode.isOn) return;
 
         
 

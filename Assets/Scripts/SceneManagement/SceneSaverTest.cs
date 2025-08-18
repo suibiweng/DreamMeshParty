@@ -172,8 +172,8 @@ public class SceneSaverTest : MonoBehaviour
        // Request to load the selected scene from the server
        // if (TestLoadSceneName.Length != 0)
        // {
-           string selectedSceneName = ScenesDropDown.options[ScenesDropDown.value].text;
-           StartCoroutine(DownloadSceneData(selectedSceneName));
+     //     string selectedSceneName = ScenesDropDown.options[ScenesDropDown.value].text;
+       //    StartCoroutine(DownloadSceneData(selectedSceneName));
        // }
        // else
        // {

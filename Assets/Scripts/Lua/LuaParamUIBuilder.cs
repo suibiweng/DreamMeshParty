@@ -114,7 +114,7 @@ public class LuaParamUIBuilder : MonoBehaviour
         if (luaPanel) luaPanel.gameObject.SetActive(true);
         if (particlePanel) particlePanel.gameObject.SetActive(true);
         if (luaTabHeader) luaTabHeader.SetActive(false);
-        if (particleTabHeader) particleTabHeader.SetActive(false);
+        if (particleTabHeader) luaTabHeader.SetActive(false);
     }
 
     public void SetDescription(string text)
@@ -138,7 +138,6 @@ public class LuaParamUIBuilder : MonoBehaviour
             foreach (var p in luaParams)
             {
                 BuildUIElement(luaPanel, p, isLua: true);
-
                 // Auto-color on load
                 MarkLuaToken(p.key);
                 MarkLuaToken(p.label);
@@ -151,7 +150,6 @@ public class LuaParamUIBuilder : MonoBehaviour
             foreach (var p in particleParams)
             {
                 BuildUIElement(particlePanel, p, isLua: false);
-
                 // Auto-color on load
                 MarkParticleToken(p.key);
                 MarkParticleToken(p.label);
@@ -316,6 +314,69 @@ public class LuaParamUIBuilder : MonoBehaviour
 
     private string FormatSliderLabel(string baseLabel, float value) => $"{baseLabel}: {value:0.##}";
 
+    // ============== PARTICLE HELPERS (NEW) ==============
+    private static string NormalizeEffectKey(string name)
+    {
+        return string.IsNullOrEmpty(name) ? "" : name.Trim().ToLowerInvariant();
+    }
+
+    private void ApplyParticleFloat(string effectName, string propKey, float value)
+    {
+        if (string.IsNullOrEmpty(effectName) || string.IsNullOrEmpty(propKey)) return;
+        var norm = NormalizeEffectKey(effectName);
+        if (!particleSystems.TryGetValue(norm, out var ps) || ps == null) return;
+
+        var main = ps.main;
+        var emission = ps.emission;
+
+        switch (propKey)
+        {
+            case "duration":
+                main.duration = Mathf.Max(0.01f, value);
+                break;
+            case "startSpeed":
+                main.startSpeed = value;
+                break;
+            case "startSize":
+                main.startSize = value;
+                break;
+            case "lifetime":
+                main.startLifetime = Mathf.Max(0.01f, value);
+                break;
+            case "emissionRate":
+                emission.enabled = true;
+                emission.rateOverTime = value;
+                break;
+            case "maxParticles":
+                main.maxParticles = Mathf.Max(1, Mathf.RoundToInt(value));
+                break;
+            // startColor would require a color UI, not implemented here
+        }
+    }
+
+    private void ApplyParticleString(string effectName, string propKey, string s)
+    {
+        if (string.IsNullOrEmpty(effectName) || string.IsNullOrEmpty(propKey)) return;
+        var norm = NormalizeEffectKey(effectName);
+        if (!particleSystems.TryGetValue(norm, out var ps) || ps == null) return;
+
+        var shape = ps.shape;
+        if (propKey == "shape")
+        {
+            shape.enabled = true;
+            var t = (s ?? "").Trim().ToLowerInvariant();
+            if (t == "cone")        shape.shapeType = ParticleSystemShapeType.Cone;
+            else if (t == "sphere") shape.shapeType = ParticleSystemShapeType.Sphere;
+            else if (t == "box")    shape.shapeType = ParticleSystemShapeType.Box;
+        }
+    }
+
+    private static string ParticleIndexKey(string effectName, string key)
+    {
+        return string.IsNullOrEmpty(effectName) ? $"__particle__::{key}" : $"__particle__::{effectName}::{key}";
+    }
+    // ====================================================
+
     private void BuildUIElement(Transform panel, ParamUIDef param, bool isLua)
     {
         if (!panel || param == null || string.IsNullOrEmpty(param.type)) return;
@@ -337,9 +398,19 @@ public class LuaParamUIBuilder : MonoBehaviour
                     slider.value    = param.@default;
                     if (label != null) label.text = FormatSliderLabel(string.IsNullOrEmpty(param.label) ? param.key : param.label, slider.value);
 
-                    // Index and seed defaults
-                    IndexControl(param.key, element, label, slider: slider);
-                    SeedValue(param, slider.value, isLua);
+                    // Use composite index for particle controls to avoid clashes
+                    var indexKey = isLua ? param.key : ParticleIndexKey(param.effectName, param.key);
+                    IndexControl(indexKey, element, label, slider: slider);
+
+                    // Seed
+                    if (isLua)
+                    {
+                        SeedValue(param, slider.value, true);
+                    }
+                    else
+                    {
+                        ApplyParticleFloat(param.effectName, param.key, slider.value);
+                    }
 
                     slider.onValueChanged.AddListener(val =>
                     {
@@ -356,14 +427,15 @@ public class LuaParamUIBuilder : MonoBehaviour
                 var toggle = element.GetComponentInChildren<Toggle>();
                 var label  = element.GetComponent<TMP_Text>() ?? element.GetComponentInChildren<TMP_Text>();
                 if (label != null) label.text = string.IsNullOrEmpty(param.label) ? param.key : param.label;
+
+                var indexKey = isLua ? param.key : ParticleIndexKey(param.effectName, param.key);
+                IndexControl(indexKey, element, label, toggle: toggle);
+
                 if (toggle != null)
                 {
-                    IndexControl(param.key, element, label, toggle: toggle);
-                    SeedValue(param, false, isLua);
-
                     toggle.isOn = false;
+                    if (isLua) { SeedValue(param, false, true); OnToggleChanged(param, false, true); }
                     toggle.onValueChanged.AddListener(val => OnToggleChanged(param, val, isLua));
-                    OnToggleChanged(param, false, isLua);
                 }
                 return;
             }
@@ -383,8 +455,15 @@ public class LuaParamUIBuilder : MonoBehaviour
                     dropdown.interactable = requireDropdownEvenSingleOption || opts.Count > 1;
                     dropdown.value = 0;
 
-                    IndexControl(param.key, element, label, dropdown: dropdown);
-                    if (opts.Count > 0) SeedValue(param, opts[0], isLua);
+                    var indexKey = isLua ? param.key : ParticleIndexKey(param.effectName, param.key);
+                    IndexControl(indexKey, element, label, dropdown: dropdown);
+
+                    // Seed
+                    if (opts.Count > 0)
+                    {
+                        if (isLua) SeedValue(param, opts[0], true);
+                        else       ApplyParticleString(param.effectName, param.key, opts[0]);
+                    }
 
                     dropdown.onValueChanged.AddListener(i => OnDropdownChanged(param, i, isLua));
                     OnDropdownChanged(param, dropdown.value, isLua);
@@ -400,8 +479,10 @@ public class LuaParamUIBuilder : MonoBehaviour
                 var label    = element.GetComponent<TMP_Text>() ?? element.GetComponentInChildren<TMP_Text>();
                 if (label != null) label.text = string.IsNullOrEmpty(param.label) ? param.key : param.label;
 
-                IndexControl(param.key, element, label, inputTMP: tmpInput, inputUGUI: uguiIn);
-                SeedValue(param, "", isLua);
+                var indexKey = isLua ? param.key : ParticleIndexKey(param.effectName, param.key);
+                IndexControl(indexKey, element, label, inputTMP: tmpInput, inputUGUI: uguiIn);
+
+                if (isLua) SeedValue(param, "", true);
 
                 if (tmpInput != null) tmpInput.onEndEdit.AddListener(text => OnInputFieldChanged(param, text, isLua));
                 else if (uguiIn != null) uguiIn.onEndEdit.AddListener(text => OnInputFieldChanged(param, text, isLua));
@@ -414,6 +495,7 @@ public class LuaParamUIBuilder : MonoBehaviour
                 var button = element.GetComponentInChildren<Button>();
                 var label  = element.GetComponent<TMP_Text>() ?? element.GetComponentInChildren<TMP_Text>();
                 if (label != null) label.text = string.IsNullOrEmpty(param.label) ? param.key : param.label;
+                // Button index uses key always
                 IndexControl(param.key, element, label);
                 if (button != null) button.onClick.AddListener(() => OnButtonPressed(param));
                 return;
@@ -469,6 +551,7 @@ public class LuaParamUIBuilder : MonoBehaviour
         }
         else
         {
+            ApplyParticleFloat(param.effectName, param.key, value);
             MarkParticleToken(param.key);
             MarkParticleToken(param.label);
             if (!string.IsNullOrEmpty(param.effectName))
@@ -524,6 +607,11 @@ public class LuaParamUIBuilder : MonoBehaviour
         }
         else
         {
+            string chosen = null;
+            if (param.options != null && index >= 0 && index < param.options.Count)
+                chosen = param.options[index];
+
+            ApplyParticleString(param.effectName, param.key, chosen);
             MarkParticleToken(param.key);
             MarkParticleToken(param.label);
             if (!string.IsNullOrEmpty(param.effectName))
@@ -625,6 +713,8 @@ public class LuaParamUIBuilder : MonoBehaviour
     }
 
     // -------- Called by LuaParamFusionSync to reflect remote changes without looping --------
+    // NOTE: This is currently used for LUA params only (index key = plain 'key').
+    // Particle controls use composite keys and are not network-synced by default.
     public void SetControlVisual(string key, LuaParamType type, float fVal, bool bVal, string sVal)
     {
         if (string.IsNullOrEmpty(key)) return;
