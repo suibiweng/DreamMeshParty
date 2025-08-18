@@ -546,7 +546,8 @@ public void TogglePhysic()
                 GeneratedmeshCollider.enabled = false;
                 luaMonoBehavior.innerCollider = GeneratedmeshCollider;
                 GeneratedmeshCollider.gameObject.name = gameObject.name;
-               // GeneratedmeshCollider.gameObject.layer = LayerMask.NameToLayer("GeneratedObject");
+                GeneratedmeshCollider.excludeLayers = LayerMask.GetMask("GeneratedObject");
+
 
             }
       
