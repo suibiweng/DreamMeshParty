@@ -25,7 +25,9 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             //Vector3 spawnPosition = new Vector3(UnityEngine.Random.Range(1, 5), 0.5f, UnityEngine.Random.Range(1, 5));
 
-            NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
+            NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.up * 2, Quaternion.identity, player); //changed this for the golf club in golf game
+            // NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
+
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedUsers.Add(player, networkPlayerObject);
         }

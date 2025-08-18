@@ -13,6 +13,8 @@ TagManager:
   - Hat
   - RealObject
   - playerBody
+  - GolfBall
+  - GolfHole
   layers:
   - Default
   - TransparentFX
