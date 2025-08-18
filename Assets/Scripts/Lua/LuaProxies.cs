@@ -28,8 +28,37 @@ namespace LuaProxies
 
         public string GetName() => _gameObject.name;
         public void SetName(string name) => _gameObject.name = name;
+
+        public string GetTag() => _gameObject.tag;
         public bool IsActive() => _gameObject.activeSelf;
         public void SetActive(bool active) => _gameObject.SetActive(active);
+
+        // New helpers for Lua access
+        public TransformProxy GetTransformProxy() => 
+            _gameObject != null && _gameObject.transform != null ? new TransformProxy(_gameObject.transform) : null;
+
+        public bool HasRigidbody() => _gameObject != null && _gameObject.TryGetComponent<Rigidbody>(out _);
+
+        public RigidbodyProxy GetRigidbodyProxy()
+        {
+            if (_gameObject != null && _gameObject.TryGetComponent<Rigidbody>(out var rb))
+                return new RigidbodyProxy(rb);
+            return null;
+        }
+
+        public AudioSourceProxy GetAudioSourceProxy()
+        {
+            if (_gameObject != null && _gameObject.TryGetComponent<AudioSource>(out var src))
+                return new AudioSourceProxy(src);
+            return null;
+        }
+
+        public AnimatorProxy GetAnimatorProxy()
+        {
+            if (_gameObject != null && _gameObject.TryGetComponent<Animator>(out var anim))
+                return new AnimatorProxy(anim);
+            return null;
+        }
     }
 
     [MoonSharpUserData]
@@ -38,10 +67,32 @@ namespace LuaProxies
         private readonly Rigidbody _rb;
         public RigidbodyProxy(Rigidbody rb) => _rb = rb;
 
+        // Existing Vector3 APIs
         public void AddForce(Vector3 force) => _rb.AddForce(force);
         public void SetVelocity(Vector3 velocity) => _rb.velocity = velocity;
+
+        // New numeric overloads for Lua (avoid constructing Vector3 in Lua)
+        public void AddForce(float x, float y, float z) => _rb.AddForce(new Vector3(x, y, z));
+        public void SetVelocity(float x, float y, float z) => _rb.velocity = new Vector3(x, y, z);
+
+        // ForceMode overloads
+        public void AddForce(Vector3 force, string mode)
+        {
+            if (!System.Enum.TryParse(mode, true, out ForceMode fm)) fm = ForceMode.Force;
+            _rb.AddForce(force, fm);
+        }
+
+        public void AddForce(float x, float y, float z, string mode)
+        {
+            if (!System.Enum.TryParse(mode, true, out ForceMode fm)) fm = ForceMode.Force;
+            _rb.AddForce(new Vector3(x, y, z), fm);
+        }
+
         public Vector3 GetVelocity() => _rb.velocity;
         public void SetUseGravity(bool useGravity) => _rb.useGravity = useGravity;
+        public float GetMass() => _rb.mass;
+        public void SetMass(float mass) => _rb.mass = mass;
+        public void AddImpulse(float x, float y, float z) => _rb.AddForce(new Vector3(x, y, z), ForceMode.Impulse);
     }
 
     [MoonSharpUserData]
@@ -84,9 +135,29 @@ namespace LuaProxies
         private readonly Collision _collision;
         public CollisionProxy(Collision collision) => _collision = collision;
 
-        public GameObjectProxy GetGameObject() => new GameObjectProxy(_collision.gameObject);
-        public Vector3 GetContactPoint() => _collision.contacts.Length > 0 ? _collision.contacts[0].point : Vector3.zero;
-        public Vector3 GetRelativeVelocity() => _collision.relativeVelocity;
+        public GameObjectProxy GetGameObject() =>
+            _collision != null && _collision.gameObject != null ? new GameObjectProxy(_collision.gameObject) : null;
+
+        public Vector3 GetContactPoint() =>
+            _collision != null && _collision.contacts.Length > 0 ? _collision.contacts[0].point : Vector3.zero;
+
+        public Vector3 GetRelativeVelocity() => _collision != null ? _collision.relativeVelocity : Vector3.zero;
+
+        public string GetName() => _collision != null && _collision.gameObject != null ? _collision.gameObject.name : null;
+
+        // New: directly get the other object's RigidbodyProxy
+        public RigidbodyProxy GetRigidbodyProxy()
+        {
+            if (_collision != null && _collision.rigidbody != null)
+                return new RigidbodyProxy(_collision.rigidbody);
+
+            // If the collision was against a collider with no rigidbody, try the GameObject
+            var go = _collision != null ? _collision.gameObject : null;
+            if (go != null && go.TryGetComponent<Rigidbody>(out var rb))
+                return new RigidbodyProxy(rb);
+
+            return null;
+        }
     }
 
     [MoonSharpUserData]

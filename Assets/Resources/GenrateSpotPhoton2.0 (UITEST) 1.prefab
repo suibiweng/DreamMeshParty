@@ -36066,6 +36066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505bcb10b9d8ac24bbf9d210ec84da15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRunning: 0
   SpwanPoint: {fileID: 7782502458055524982}
   ID: 
   serverURL: http://yourserver.com/
@@ -36077,6 +36078,7 @@ MonoBehaviour:
   defaultParticleMaterial: {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
   manager: {fileID: 0}
   hasluaScript: 0
+  lastLoadedTimestamp: 
   generateSpotRPC: {fileID: 0}
   informationToggle: {fileID: 0}
   tabsToggles: []
@@ -36084,6 +36086,8 @@ MonoBehaviour:
   InfoTab: {fileID: 0}
   CodeInfo: {fileID: 0}
   ExplanationsInfo: {fileID: 0}
+  LuaParamUIBuilder: {fileID: 0}
+  urlToCheck: 
 --- !u!1 &5064020556461686479
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ using ExitGames.Client.Photon.StructWrapping;
 using Oculus.Interaction;
 using Fusion;
 using Meta.XR.MultiplayerBlocks.Fusion;
+using Collada141;
 
 
 
@@ -24,7 +25,9 @@ public class GenerateSpot : MonoBehaviour
     public int id;
     public string downloadURL = "http://34.106.250.143/upload/";
 
-    public string URLID; 
+    public string URLID;
+
+    public Collider boxCollider;
 
 
     //Manager
@@ -115,10 +118,6 @@ public class GenerateSpot : MonoBehaviour
 
     public bool SculptingModeOn = false;
     
-    //Networking
-    // public string DataSyncTestNumber; 
-    // public RealtimeTransform _realtimeTransform;
-    // public RealtimeView _realtimeView;
     private NetworkObject _networkObject;
     private PhotonDataSync _photonDataSync;
     private GenerateSpotRPC _generateSpotRPC;
@@ -182,28 +181,63 @@ private bool lastToggleState = false;
 public void TogglePhysic()
 {
     bool currentToggleState = physicToggle.isOn;
-
-    if (currentToggleState == lastToggleState) return; // No change, skip
-
+    if (currentToggleState == lastToggleState) return;
     lastToggleState = currentToggleState;
 
     if (objectRigidbody == null) objectRigidbody = GetComponent<Rigidbody>();
     if (GeneratedmeshCollider == null) return;
 
+    // // If it's a TerrainCollider or similar, bail out — cannot be dynamic
+    // if (GeneratedmeshCollider is TerrainCollider)
+    // {
+    //     Debug.LogWarning("Terrain/heightfield colliders can't be dynamic. Use a child with a primitive/convex collider.");
+    //     return;
+    // }
+
+    var meshCol = GeneratedmeshCollider as MeshCollider;
+
         if (currentToggleState)
         {
+            // -> turn physics ON (dynamic)
+            if (meshCol != null)
+            {
+                // Make it convex BEFORE going dynamic
+                if (!meshCol.convex) meshCol.convex = true;
+            }
+
+            // Now safe to go dynamic
             objectRigidbody.isKinematic = false;
-            GeneratedmeshCollider.enabled = true;
             objectRigidbody.useGravity = true;
-            GeneratedmeshCollider.convex = true; // Ensure the collider is convex for physics interactions
+
+
+
+
+            // Finally enable collider
+            GeneratedmeshCollider.enabled = true;
+            
+         
+
+
+
+
+
         }
         else
         {
-            objectRigidbody.isKinematic = true;
-            GeneratedmeshCollider.enabled = false;
+            // -> turn physics OFF (kinematic)
+            objectRigidbody.isKinematic = true;      // make it kinematic FIRST
             objectRigidbody.useGravity = false;
 
-            GeneratedmeshCollider.convex = false; // Disable convex for non-physics interactions
+            // You can disable collider if desired
+            GeneratedmeshCollider.enabled = false;
+
+            if (meshCol != null)
+            {
+                // Non-convex is fine when kinematic
+                if (meshCol.convex) meshCol.convex = false;
+            }
+
+
         }
 }
 
@@ -244,6 +278,10 @@ public void TogglePhysic()
         }
 
     }
+
+    
+
+
 
     public GrabInteractable grabInteractable;
 
@@ -327,6 +365,12 @@ public void TogglePhysic()
                 SpotType = GenerateType.Reconstruction;
                 initReconstruction();
                 break;
+            case 3:
+                SpotType = GenerateType.Sketch;
+                initSketch();
+                // OpenEditMenu();
+                // initReconstruction();
+                break;
 
         }
         
@@ -338,9 +382,9 @@ public void TogglePhysic()
     public void initAdd()
     {
         //ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_generated.zip"));
-        loadingParticles.Play();
+      //  loadingParticles.Play();
         isMaterialChanging = false;
-        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+     //   ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
        
         // VoicePanel.SetActive(true);
     }
@@ -348,6 +392,17 @@ public void TogglePhysic()
     void initReconstruction()
     {
         if(ScanningPanel!=null)  ScanningPanel.SetActive(true);
+    }
+
+    bool isSketching = false;
+
+    void initSketch()
+    {
+
+        isSketching = true;
+
+
+
     }
 
 
@@ -486,9 +541,12 @@ public void TogglePhysic()
 
 
             if (GeneratedmeshCollider == null)
-            { 
+            {
                 GeneratedmeshCollider = ColliderUtils.AddMeshCollider(obj.gameObject, convex: true);
                 GeneratedmeshCollider.enabled = false;
+                luaMonoBehavior.innerCollider = GeneratedmeshCollider;
+                GeneratedmeshCollider.gameObject.name = gameObject.name;
+               // GeneratedmeshCollider.gameObject.layer = LayerMask.NameToLayer("GeneratedObject");
 
             }
       
@@ -679,19 +737,12 @@ public void TogglePhysic()
 
 
         }
-
-
         //  BoundingBoxColorAlhpaDinstance();
-
-
-
-
-
         // if (isselsected) PromtText.text = Prompt;
         PromtText.text = Prompt;
 
 
-        if (Input.GetKeyDown(KeyCode.X) && !isRealObject)
+        if (Input.GetKeyDown(KeyCode.X) && !isRealObject && luaMonoBehavior.debugSelect)
         {
             OnSelect();
             DebugGenrateModel();
@@ -700,14 +751,6 @@ public void TogglePhysic()
         }
 
 
-
-        if (Input.GetKeyDown(KeyCode.T) && !isRealObject)
-        {
-            OnSelect();
-            EditCode();
-
-
-        }
 
 
 
@@ -732,9 +775,7 @@ public void TogglePhysic()
 
         TogglePhysic();
 
-        //Text_Instruction.text = RecordData.instruction;
-
-
+     
 
     }
 
@@ -862,6 +903,31 @@ public void TogglePhysic()
     }
 
 
+        public void DrawTo3D(){
+            var fast3DFunctions = FindObjectOfType<Fast3dFunctions>();
+
+           string Drawingto3DURL = manager.ServerURL + "/DrawToModel";
+
+        //fast3DFunctions.UploadDrawing("http://192.168.0.139:5000/DrawToModel",URLID+"@"+Version+"_Darwing3D.png",prompt,ObjectScreenPosition(),URLID+"@"+Version);
+        fast3DFunctions.UploadDrawing(Drawingto3DURL,URLID+"_Darwing3D.png",Prompt,new Vector2(0,0),URLID);
+
+        // if(FileCheck==null)
+        //     FileCheck= StartCoroutine(CheckURLPeriodically(DownloadURL+"/" + URLID+"@"+Version + "_Drawing.zip"));
+        RPCGenrateModel(); //Doing the file checking by sending it to the RPC, then it executes the function on all clients.
+
+        loadingParticles.Play();
+
+
+
+
+
+
+
+
+    }
+
+
+
 
 
     public string DremmeshPrompt;
@@ -881,14 +947,44 @@ public void TogglePhysic()
 
     public void GenrateModel()
     {
+
+            OnSelect();
+
         manager.promtGenerateModel(id, Prompt, URLID);
-        // manager.sendCommand("ShapeE");
-        manager.sendCommand("DynamicCoding");
-        ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+
+        if (isSketching)
+        {
+
+             manager.sendCommand("DynamicCodingwithDrawing");
+            DrawTo3D();
+       
+            ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + URLID+"_Drawing.zip"));
+
+        }
+        else
+        {
+
+            //manager.sendCommand("ShapeE");
+            manager.sendCommand("DynamicCoding");
+            ChecktheFile = StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
+
+
+
+
+        }
+
+
+        
+
+
+
+
+
         // if(luaMonoBehavior!=null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
-                if (luaMonoBehavior != null) luaMonoBehavior.hasluaScript = true;
-        
-        
+
+        //if (luaMonoBehavior != null) luaMonoBehavior.hasluaScript = true;
+
+
         loadingParticles.Play();
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
@@ -948,6 +1044,14 @@ public void TogglePhysic()
 
     public void EditCode()
     {
+        if (isRealObject)
+        {
+
+            Prompt = "[This is a real object in the space]" + Prompt;
+
+        }
+
+
         manager.promtGenerateModel(id, Prompt, URLID);
         // manager.sendCommand("ShapeE");
         manager.sendCommand("ModifyDynamicCoding");
@@ -959,18 +1063,14 @@ public void TogglePhysic()
         SmoothCubeRenderer.enabled = false;
         Outlinebox.wire_renderer = false;
 
-        DremmeshPrompt = Prompt;
+        // DremmeshPrompt = Prompt;
         manager.updateSession();
         manager.UpdatealltheCode();
 
 
-        Prompt = "";
+        // Prompt = "";
 
     }
-
-
-
-
 
 
     public void GenrateModelPrompt(string prompt)

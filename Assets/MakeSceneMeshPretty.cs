@@ -6,31 +6,38 @@ public class MakeSceneMeshPretty : MonoBehaviour
 {
     // public List<Rigidbody> balls = new List<Rigidbody>();
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
 
     // Update is called once per frame
     void Update()
     {
         
     }
+    
+
+
+    IEnumerator Start()
+    {
+        yield return new WaitForSeconds(30f);
+        makeSceneMeshPretty();
+    }
     //I just want to remove the global meshes because I think they are ugly. 
     public void makeSceneMeshPretty()
     {
-        GameObject MeshVolumeNoCollider =  GameObject.Find("MeshVolumeNoCollider");
-        if (MeshVolumeNoCollider!= null)
+        GameObject MeshVolumeNoCollider = GameObject.Find("MeshVolumeNoCollider");
+        if (MeshVolumeNoCollider != null)
         {
-            MeshVolumeNoCollider.SetActive(false);
+            // MeshVolumeNoCollider.SetActive(false);
         }
+
+        MeshVolumeNoCollider.layer = LayerMask.NameToLayer("GeneratedObject");
         // GameObject GLOBAL_MESH =  GameObject.Find("GLOBAL_MESH");
         // if (GLOBAL_MESH!= null)
         // {
         //     GLOBAL_MESH.SetActive(false);
         // }
         // GameObject.Find("MeshVolumeNoCollider").SetActive(false);
-        StartCoroutine("removeGloabalMesh"); 
+        // StartCoroutine("removeGloabalMesh");
 
         // MeshVolumeNoCollider
         // GLOBAL_MESH

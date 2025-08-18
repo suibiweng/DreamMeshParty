@@ -14,6 +14,8 @@ namespace RealityEditor
 
         Instruction,
 
+        Sketch,
+
 
         None
 

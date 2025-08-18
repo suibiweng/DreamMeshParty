@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7827051359291948841}
   - component: {fileID: 5610402102523887058}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: User_LeftHand
   m_TagString: playerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,7 +101,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 6344197524824173724}
   - component: {fileID: 8695689260809585524}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: User_Body
   m_TagString: playerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,7 +238,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3534268371361221014}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 9088963018448031785}
   - component: {fileID: 8536444483140658478}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: User_Head
   m_TagString: playerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,7 +434,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6354269713690538297}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -486,7 +486,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 4597720416869564375}
   - component: {fileID: 1040834336512877829}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: 'User_RightHand '
   m_TagString: playerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -591,7 +591,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
