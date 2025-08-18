@@ -17958,6 +17958,7 @@ MonoBehaviour:
   id: 0
   downloadURL: http://192.168.1.139:8000/
   URLID: 
+  boxCollider: {fileID: 0}
   manager: {fileID: 0}
   isselsected: 0
   loadingIcon: {fileID: 5916389838832587971}
@@ -18271,8 +18272,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c9aee8aca795d4596e5520b5ea6e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EditBehaviorToggle: {fileID: 0}
+  ShowCode: {fileID: 0}
+  Physics: {fileID: 0}
   _NetworkedUrlID: 
   _NetworkedPrompt: 
+  _EditBehavior: 0
+  _ShowLua: 0
+  _EnablePhysics: 0
 --- !u!114 &8015189774527831068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18287,6 +18294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _generateSpot: {fileID: 0}
   _luaMonoBehavior: {fileID: 0}
+  manager: {fileID: 0}
 --- !u!114 &6378604827761282201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18393,7 +18401,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505bcb10b9d8ac24bbf9d210ec84da15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  object_name_text: {fileID: 0}
   isRunning: 0
+  innerCollider: {fileID: 0}
   SpwanPoint: {fileID: 6774784050564882441}
   ID: 
   serverURL: http://yourserver.com/
@@ -18405,6 +18415,7 @@ MonoBehaviour:
   defaultParticleMaterial: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   manager: {fileID: 0}
   hasluaScript: 0
+  controlPanel: {fileID: 0}
   lastLoadedTimestamp: 
   generateSpotRPC: {fileID: 0}
   informationToggle: {fileID: 9019280584731347403}
@@ -18418,7 +18429,10 @@ MonoBehaviour:
   CodeInfo: {fileID: 1251328961947026519}
   ExplanationsInfo: {fileID: 3338676421034078996}
   LuaParamUIBuilder: {fileID: 3156632620986541110}
+  debugJson: 
+  debugSelect: 0
   urlToCheck: 
+  btnLabel: {fileID: 0}
 --- !u!114 &3156632620986541110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18445,10 +18459,10 @@ MonoBehaviour:
   luaChangedColor: {r: 0.18, g: 0.6, b: 1, a: 1}
   particleChangedColor: {r: 1, g: 0.5, b: 0.15, a: 1}
   showBothPanels: 1
-  dualColorDuplicateToken: 1
   requireDropdownEvenSingleOption: 1
   singleOptionFallback: (only choice)
   targetBehavior: {fileID: 7541909544671404846}
+  netSync: {fileID: 0}
 --- !u!1 &3780615758997034928
 GameObject:
   m_ObjectHideFlags: 0

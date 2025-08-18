@@ -6,12 +6,14 @@ public class GenerateSpotRPC : NetworkBehaviour
 {
     public GenerateSpot _generateSpot;
     public LuaMonoBehavior _luaMonoBehavior;
+    public RealityEditorManager manager;
 
     private void Start()
     {
         _generateSpot = GetComponent<GenerateSpot>();
         _luaMonoBehavior = GetComponent<LuaMonoBehavior>();
-    
+        manager = FindObjectOfType<RealityEditorManager>();
+
 
     }
 
@@ -28,28 +30,31 @@ public class GenerateSpotRPC : NetworkBehaviour
         // Additional logic to handle the RPC
     }
 
-
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
     public void RPC_ConFirmCodeditng()
     {
         Debug.Log($"RPC received to ConfirmGeneration");
         // _generateSpot.initAdd();
         // _generateSpot.Outlinebox.wire_renderer = false;
         // _generateSpot.VoicePanel.SetActive(false);
-        _generateSpot.RPCEditCode();
-        _generateSpot.RPC_UpdateallLuaScripts();
+        // _generateSpot.RPCEditCode();
+        // _generateSpot.RPC_UpdateallLuaScripts();
+
+
+        _luaMonoBehavior.StartFetchingCode(_generateSpot.downloadURL, _generateSpot.URLID); 
+        manager.UpdatealltheCode();
+
         // Additional logic to handle the RPC
     }
-
-
+    
+    
+    
     public void RPCTrigger()
     {
         Debug.Log($"RPC received to Trigger");
         _luaMonoBehavior.RPCTrigger();
     }
-
-
-
-
+    
     // Example of how to call an RPC
     public void CallConfirmGenerationRPC()
     {
@@ -71,9 +76,6 @@ public class GenerateSpotRPC : NetworkBehaviour
         RPC_ConFirmCodeditng();
     }
 
-
-
-
     
     //Remove spot from all player's dictionaries to properly delete a spot
     [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
@@ -90,4 +92,8 @@ public class GenerateSpotRPC : NetworkBehaviour
         // Call the RPC on all clients
         RPC_DeleteSpot();
     }
+    
+    
+    
+    
 }

@@ -1067,6 +1067,8 @@ public void TogglePhysic()
         manager.updateSession();
         manager.UpdatealltheCode();
 
+        // _generateSpotRPC.CallLuaUpdateCodeRPC(); 
+
 
         // Prompt = "";
 

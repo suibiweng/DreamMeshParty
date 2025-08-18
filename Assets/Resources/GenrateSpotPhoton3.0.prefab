@@ -11189,8 +11189,8 @@ RectTransform:
   - {fileID: 5959272675701731400}
   - {fileID: 3679974612469760627}
   - {fileID: 3124110797201967600}
-  - {fileID: 6543967344092820051}
   - {fileID: 4031318476487382642}
+  - {fileID: 6543967344092820051}
   - {fileID: 5445368670541817532}
   - {fileID: 6936260776912460522}
   - {fileID: 9092371728337720524}
@@ -11880,6 +11880,18 @@ MonoBehaviour:
       - m_Target: {fileID: 8894324675442072847}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7631976194244656639}
+        m_TargetAssemblyTypeName: PhotonDataSync, Assembly-CSharp
+        m_MethodName: UpdateMenu1
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14252,9 +14264,9 @@ RectTransform:
   - {fileID: 8918007448251857258}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 206.5, y: -454.432}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2427070133648456643
@@ -14342,6 +14354,18 @@ MonoBehaviour:
       - m_Target: {fileID: 4338405595366857821}
         m_TargetAssemblyTypeName: PromptRestructure, Assembly-CSharp
         m_MethodName: OnEdit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 781653700929342120}
+        m_TargetAssemblyTypeName: GenerateSpotRPC, Assembly-CSharp
+        m_MethodName: RPC_ConFirmCodeditng
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -31732,7 +31756,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Information
+  m_Text: Show Code
 --- !u!1 &4779375761002911635
 GameObject:
   m_ObjectHideFlags: 0
@@ -45060,8 +45084,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c9aee8aca795d4596e5520b5ea6e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EditBehaviorToggle: {fileID: 3254507244017603422}
+  ShowCode: {fileID: 1458648877310149131}
+  Physics: {fileID: 1969822378677578748}
   _NetworkedUrlID: 
   _NetworkedPrompt: 
+  _EditBehavior: 0
+  _ShowLua: 0
+  _EnablePhysics: 0
 --- !u!114 &781653700929342120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45076,6 +45106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _generateSpot: {fileID: 0}
   _luaMonoBehavior: {fileID: 0}
+  manager: {fileID: 0}
 --- !u!114 &8030394496222595884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46154,9 +46185,9 @@ RectTransform:
   - {fileID: 149707780679161401}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 206.5, y: -364.716}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3672317976966159377
@@ -47844,7 +47875,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7631976194244656639}
+        m_TargetAssemblyTypeName: PhotonDataSync, Assembly-CSharp
+        m_MethodName: UpdateMenu3
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &6670766826847723177
 GameObject:
@@ -48562,9 +48605,9 @@ RectTransform:
   - {fileID: 1954605862130570507}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 206.5, y: -275}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &435650559083327799
@@ -55524,9 +55567,9 @@ RectTransform:
   - {fileID: 904950066152902975}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 206.5, y: -95.568}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8422133850939961693
@@ -57361,7 +57404,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3249878433821786931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -57503,7 +57546,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Physic
+  m_Text: Physics
 --- !u!1 &8372311545510248183
 GameObject:
   m_ObjectHideFlags: 0
@@ -58240,9 +58283,9 @@ RectTransform:
   - {fileID: 2527666451164339142}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 206.5, y: -185.284}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8897272443488060315
@@ -59896,7 +59939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9092371728337720524
 RectTransform:
   m_ObjectHideFlags: 0
@@ -60376,6 +60419,18 @@ MonoBehaviour:
       - m_Target: {fileID: 4887848370388510359}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7631976194244656639}
+        m_TargetAssemblyTypeName: PhotonDataSync, Assembly-CSharp
+        m_MethodName: UpdateMenu2
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
