@@ -47,9 +47,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DreamProtalTestScene.unity
     guid: c135a9373984e6a4a829ef9d4bb47aa9
-  - enabled: 0
-    path: Assets/Scenes/TestLUA.unity
-    guid: 67d0427bec9f9c84782216704d3e282d
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7dafe5f8db58eca40b1d44174dc3d078, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ad7b311f2f55bc45b379fc5b93a9d20, type: 2}

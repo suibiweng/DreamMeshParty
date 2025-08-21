@@ -239,7 +239,7 @@ public class SceneSaverTest : MonoBehaviour
    {
        Debug.Log("Should be populating the dropdown");
        // Clear existing options
-       ScenesDropDown.ClearOptions();
+//       ScenesDropDown.ClearOptions();
 
        // Start coroutine to get filenames from the server
        StartCoroutine(FetchSceneFileNames());

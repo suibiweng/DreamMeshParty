@@ -82,7 +82,7 @@ public class GenerateSpot : MonoBehaviour
     public recordData RecordData;
 
 
-    public MeshCollider GeneratedmeshCollider;
+    public Collider GeneratedCollider;
     public Rigidbody objectRigidbody;
     
     public Projector erasingProjector;
@@ -185,35 +185,31 @@ public void TogglePhysic()
     lastToggleState = currentToggleState;
 
     if (objectRigidbody == null) objectRigidbody = GetComponent<Rigidbody>();
-    if (GeneratedmeshCollider == null) return;
+    if (GeneratedCollider == null) return;
 
-    // // If it's a TerrainCollider or similar, bail out — cannot be dynamic
-    // if (GeneratedmeshCollider is TerrainCollider)
-    // {
-    //     Debug.LogWarning("Terrain/heightfield colliders can't be dynamic. Use a child with a primitive/convex collider.");
-    //     return;
-    // }
+        // // If it's a TerrainCollider or similar, bail out — cannot be dynamic
+        // if (GeneratedmeshCollider is TerrainCollider)
+        // {
+        //     Debug.LogWarning("Terrain/heightfield colliders can't be dynamic. Use a child with a primitive/convex collider.");
+        //     return;
+        // }
 
-    var meshCol = GeneratedmeshCollider as MeshCollider;
+        var meshCol = GeneratedCollider;
 
         if (currentToggleState)
         {
             // -> turn physics ON (dynamic)
-            if (meshCol != null)
-            {
-                // Make it convex BEFORE going dynamic
-                if (!meshCol.convex) meshCol.convex = true;
-            }
+
 
             // Now safe to go dynamic
             objectRigidbody.isKinematic = false;
-            objectRigidbody.useGravity = true;
+           // objectRigidbody.useGravity = true;
 
 
 
 
             // Finally enable collider
-            GeneratedmeshCollider.enabled = true;
+            GeneratedCollider.enabled = true;
             
          
 
@@ -226,16 +222,11 @@ public void TogglePhysic()
         {
             // -> turn physics OFF (kinematic)
             objectRigidbody.isKinematic = true;      // make it kinematic FIRST
-            objectRigidbody.useGravity = false;
+          //  objectRigidbody.useGravity = false;
 
             // You can disable collider if desired
-            GeneratedmeshCollider.enabled = false;
+            // GeneratedCollider.enabled = false;
 
-            if (meshCol != null)
-            {
-                // Non-convex is fine when kinematic
-                if (meshCol.convex) meshCol.convex = false;
-            }
 
 
         }
@@ -248,14 +239,8 @@ public void TogglePhysic()
       
         luaMonoBehavior.ID = URLID;
         luaMonoBehavior.serverURL = downloadURL;
-     
-
-    //   genObject.dynamicObj=this;
-
-
-        
-
     
+
 
     }
 
@@ -511,9 +496,11 @@ public void TogglePhysic()
     }
 
     bool originTex=false;
+    bool initOnce;
 
-    public bool setMaterialforGenrated(Transform obj,Shader shader)
+    public bool setMaterialforGenrated(Transform obj, Shader shader)
     {
+    
 
         if (obj.childCount == 0)
         {
@@ -527,40 +514,190 @@ public void TogglePhysic()
             renderer = obj.gameObject.GetComponentInChildren<Renderer>();
 
             renderer.materials[0].shader = shader;
-            
-            TargetMaterial=renderer.materials[0];
-            if(SpotType!=GenerateType.Add)
+
+            TargetMaterial = renderer.materials[0];
+            if (SpotType != GenerateType.Add)
             {
-                if(!originTex){
-                    originTex=true;
-                    OriginTex=TargetMaterial.GetTexture("_MainTex");
-                     
+                if (!originTex)
+                {
+                    originTex = true;
+                    OriginTex = TargetMaterial.GetTexture("_MainTex");
+
                 }
 
+
+
+
             }
 
 
-            if (GeneratedmeshCollider == null)
+
+            if (!initOnce)
             {
-                GeneratedmeshCollider = ColliderUtils.AddMeshCollider(obj.gameObject, convex: true);
-                GeneratedmeshCollider.enabled = false;
-                luaMonoBehavior.innerCollider = GeneratedmeshCollider;
-                GeneratedmeshCollider.gameObject.name = gameObject.name;
-                GeneratedmeshCollider.excludeLayers = LayerMask.GetMask("GeneratedObject");
+                initOnce = true;
+                var objA = TargetObject.GetComponentInChildren<MeshFilter>().gameObject;
+            print("Calling BuildRuntimeConvexNowDeep for: " + GetTransformPath(objA != null ? objA.transform : null));
+                BuildPlanBColliderNow();
 
 
+                
             }
-      
+  
 
 
-            
+
+
             return true;
-            
+
         }
-        
+
     }
 
 
+
+[Range(1,24)] public int convexParts = 6;
+    public bool hideOriginalRenderers = true;
+    public string generatedLayerName = "GeneratedObject";
+    public int convexBatchSize = 1;
+
+    public void BuildRuntimeConvexNowDeep(GameObject root = null)
+    {
+        var target = root ? root : TargetObject;
+        if (!target) return;
+        StartCoroutine(BuildAllOwnersFusionFriendly(target, 2f)); // 2 ms/frame
+    }
+
+    public void BuildPlanBColliderNow()
+    {
+        var root = TargetObject ? TargetObject : gameObject;
+        var hint = root.GetComponentInChildren<MeshFilter>(true)?.transform;
+
+        GeneratedCollider = FastBoundsColliderBuilder.BuildSingle(
+        root,
+        FastBoundsColliderBuilder.PlanBShape.CapsuleAutoAxis,   // Box / Sphere also supported
+        generatedLayerName,
+        makeSameNamedChild: true,
+        hideOriginalRenderers: false,
+        lua: luaMonoBehavior,
+        alignToBestRenderer: true,         // turn on orientation
+        orientationHint: hint              // or null to auto-pick largest renderer
+    );
+        Debug.Log($"[PlanB] Inner collider = {GeneratedCollider}");
+
+        if (luaMonoBehavior) luaMonoBehavior.innerCollider = GeneratedCollider;
+
+        GeneratedCollider.excludeLayers = LayerMask.GetMask("GeneratedObject");
+
+        GeneratedCollider.gameObject.name = gameObject.name;
+        GeneratedCollider.gameObject.layer = LayerMask.NameToLayer("Default");
+    }
+
+    IEnumerator BuildAllOwnersFusionFriendly(GameObject target, float frameBudgetMs)
+{
+    var owners = CollectMeshOwners(target); // your existing helper
+    for (int i = 0; i < owners.Count; i++)
+    {
+        var owner = owners[i];
+        CleanupPreviousHulls(owner);        // your existing helper
+        yield return StartCoroutine(RuntimeConvexPartsBuilder.BuildFromObject(
+            root: owner,
+            parts: convexParts,
+            hideOriginalRenderers: hideOriginalRenderers,
+            layerName: generatedLayerName,
+            batchSize: convexBatchSize,
+            wireLuaBehavior: false,
+            frameBudgetMs: frameBudgetMs
+        ));
+    }
+
+    var lua = luaMonoBehavior ? luaMonoBehavior : TargetObject ? TargetObject.GetComponent<LuaMonoBehavior>() : null;
+    if (lua)
+    {
+        lua.innerCollider = null;
+        lua.acceptGeneratedHullCollisions = true;
+        lua.generatedLayerName = generatedLayerName;
+    }
+}
+
+
+    IEnumerator BuildAllOwners(GameObject target)
+    {
+
+        yield return new WaitForSeconds(3f); // Ensure all transforms are updated before starting
+        print("BuildAllOwners called on " + GetTransformPath(target != null ? target.transform : null));
+        var owners = CollectMeshOwners(target);
+        for (int i = 0; i < owners.Count; i++)
+        {
+            var owner = owners[i];
+            CleanupPreviousHulls(owner);
+
+            yield return StartCoroutine(RuntimeConvexPartsBuilder.BuildFromObject(
+                root: owner,
+                parts: convexParts,
+                hideOriginalRenderers: hideOriginalRenderers,
+                layerName: generatedLayerName,
+                batchSize: convexBatchSize,
+                wireLuaBehavior: false
+            ));
+        }
+
+        var lua = luaMonoBehavior ? luaMonoBehavior : TargetObject ? TargetObject.GetComponent<LuaMonoBehavior>() : null;
+        if (lua)
+        {
+            lua.innerCollider = null;
+            lua.acceptGeneratedHullCollisions = true;
+            lua.generatedLayerName = generatedLayerName;
+        }
+    }
+
+    static List<GameObject> CollectMeshOwners(GameObject root)
+    {
+        var set = new HashSet<GameObject>();
+        var mfs = root.GetComponentsInChildren<MeshFilter>(true);
+        for (int i = 0; i < mfs.Length; i++)
+            if (mfs[i] && mfs[i].sharedMesh) set.Add(mfs[i].gameObject);
+
+        var smrs = root.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+        for (int i = 0; i < smrs.Length; i++)
+            if (smrs[i]) set.Add(smrs[i].gameObject);
+
+        return new List<GameObject>(set);
+    }
+
+    static void CleanupPreviousHulls(GameObject meshOwner)
+    {
+        if (!meshOwner) return;
+        Transform holder = null;
+        for (int i = 0; i < meshOwner.transform.childCount; i++)
+        {
+            var c = meshOwner.transform.GetChild(i);
+            if (c && c.name == meshOwner.name) { holder = c; break; }
+        }
+        if (!holder) return;
+
+        var toDelete = new List<GameObject>();
+        for (int i = 0; i < holder.childCount; i++)
+        {
+            var ch = holder.GetChild(i);
+            if (ch && ch.name.StartsWith("Hull_")) toDelete.Add(ch.gameObject);
+        }
+        for (int i = 0; i < toDelete.Count; i++) Destroy(toDelete[i]);
+    }
+
+
+
+
+private static string GetTransformPath(Transform t)
+{
+    if (t == null) return "<null>";
+    string path = t.name;
+    while (t.parent != null)
+    {
+        t = t.parent;
+        path = t.name + "/" + path;
+    }
+    return path;
+}
     public void ControlPanels()
     {
         for (int i = 0; i < PanelsToggles.Length; i++)
@@ -574,13 +711,13 @@ public void TogglePhysic()
         {
 
             //AimStart.GetComponent<MeshRenderer>().enabled=false;
-      //      VoicePanel.SetActive(true);
+            //      VoicePanel.SetActive(true);
         }
         else
         {
 
             RecordData.campoints.Seton(true);
-      //    VoicePanel.SetActive(false);
+            //    VoicePanel.SetActive(false);
             //AimStart.GetComponent<MeshRenderer>().enabled=true;
 
 

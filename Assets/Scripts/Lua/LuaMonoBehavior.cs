@@ -727,6 +727,239 @@ public class LuaMonoBehavior : MonoBehaviour
             luaScript.Call(updateFunction, Time.deltaTime);
     }
 
+
+
+[Tooltip("If true and innerCollider is null, allow collisions from any collider marked as GeneratedColliderMarker or on 'generatedLayerName'.")]
+public bool acceptGeneratedHullCollisions = false;
+    [Tooltip("Layer name used for generated hull colliders.")]
+    public string generatedLayerName = "GeneratedObject";
+
+
+
+
+
+// Add this field somewhere inside LuaMonoBehavior (top of the class is fine)
+private int _generatedLayerCache = int.MinValue; // -1 = not found, other >=0 = cached layer id
+
+// Add this helper inside LuaMonoBehavior
+private bool IsGeneratedCollider(Collider col)
+{
+    if (!col) return false;
+
+    // cache the layer id once
+    if (_generatedLayerCache == int.MinValue)
+    {
+        _generatedLayerCache = string.IsNullOrEmpty(generatedLayerName)
+            ? -1
+            : LayerMask.NameToLayer(generatedLayerName);
+    }
+
+    // marker component OR layer match
+    if (col.GetComponent<GeneratedColliderMarker>() != null) return true;
+    if (_generatedLayerCache != -1 && col.gameObject.layer == _generatedLayerCache) return true;
+    return false;
+}
+
+// // ---- REPLACE your three methods with these ----
+// private bool ShouldProcessCollision(Collision collision)
+// {
+//     // Mode 1: precise single inner collider
+//     if (innerCollider != null)
+//     {
+//         // Fast path: Unity gives the collider on *this* object hit in this pair
+//         if (collision.collider == innerCollider) return true;
+
+//         // Fallback: iterate contacts (sometimes contactCount can be 0 on Exit/fast contacts)
+//         for (int i = 0; i < collision.contactCount; i++)
+//         {
+//             if (collision.GetContact(i).thisCollider == innerCollider)
+//                 return true;
+//         }
+
+//         // Debug to see why we ignored it
+//         // Debug.Log($"[LuaMB] Reject: no contact with innerCollider '{innerCollider.name}' from '{collision.gameObject.name}'");
+//         return false;
+//     }
+
+//     // Mode 2: any generated hull collider (marker OR layer)
+//     if (acceptGeneratedHullCollisions)
+//     {
+//         // Quick check using collision.collider (this side of the pair)
+//         if (IsGeneratedCollider(collision.collider)) return true;
+
+//         // Fallback: check all contacts' thisCollider
+//         for (int i = 0; i < collision.contactCount; i++)
+//         {
+//             var mine = collision.GetContact(i).thisCollider;
+//             if (IsGeneratedCollider(mine)) return true;
+//         }
+
+//         // Debug.Log($"[LuaMB] Reject: not a generated collider from '{collision.gameObject.name}'");
+//         return false;
+//     }
+
+//     // Mode 3: default (no filtering)
+//     return true;
+// }
+
+// private void OnCollisionEnter(Collision collision)
+// {
+//     if (!isRunning) return;
+//     if (!ShouldProcessCollision(collision)) return;
+
+//     var otherGO = collision.gameObject;
+//     var otherProxy = new GameObjectProxy(otherGO);
+
+//     try
+//     {
+//         if (onCollisionEnterFunction != null && onCollisionEnterFunction.Type == DataType.Function)
+//             luaScript.Call(onCollisionEnterFunction, UserData.Create(otherProxy));
+//         // else Debug.Log("[LuaMB] onCollisionEnterFunction is null (Lua didn't define it).");
+//     }
+//     catch (Exception ex)
+//     {
+//         Debug.LogError($"[LuaMB] Lua onCollisionEnter error: {ex.Message}");
+//     }
+// }
+
+// private void OnCollisionExit(Collision collision)
+// {
+//     if (!isRunning) return;
+//     if (!ShouldProcessCollision(collision)) return;
+
+//     var otherGO = collision.gameObject;
+//     var otherProxy = new GameObjectProxy(otherGO);
+
+//     try
+//     {
+//         if (onCollisionExitFunction != null && onCollisionExitFunction.Type == DataType.Function)
+//             luaScript.Call(onCollisionExitFunction, UserData.Create(otherProxy));
+//         // else Debug.Log("[LuaMB] onCollisionExitFunction is null (Lua didn't define it).");
+//     }
+//     catch (Exception ex)
+//     {
+//         Debug.LogError($"[LuaMB] Lua onCollisionExit error: {ex.Message}");
+//     }
+// }
+
+
+
+
+
+
+
+
+
+    // private bool ShouldProcessCollision(Collision collision)
+    // {
+    //     // Mode 1: precise single inner collider
+    //     if (innerCollider != null)
+    //     {
+    //         for (int i = 0; i < collision.contactCount; i++)
+    //             if (collision.GetContact(i).thisCollider == innerCollider)
+    //                 return true;
+    //         return false;
+    //     }
+
+    //     // Mode 2: any generated hull collider (marker OR layer)
+    //     if (acceptGeneratedHullCollisions)
+    //     {
+    //         int genLayer = LayerMask.NameToLayer(generatedLayerName);
+    //         for (int i = 0; i < collision.contactCount; i++)
+    //         {
+    //             var mine = collision.GetContact(i).thisCollider;
+    //             if (!mine) continue;
+    //             if ((genLayer != -1 && mine.gameObject.layer == genLayer) ||
+    //                 mine.GetComponent<GeneratedColliderMarker>() != null)
+    //                 return true;
+    //         }
+    //         return false;
+    //     }
+
+    //     // Mode 3: default (no filtering)
+    //     return true;
+    // }
+
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     if (!isRunning) return;
+    //     if (!ShouldProcessCollision(collision)) return;
+
+    //     var otherGO = collision.gameObject;
+    //     var otherProxy = new GameObjectProxy(otherGO);
+
+    //     if (onCollisionEnterFunction != null && onCollisionEnterFunction.Type == DataType.Function)
+    //         luaScript.Call(onCollisionEnterFunction, UserData.Create(otherProxy));
+    // }
+
+    // private void OnCollisionExit(Collision collision)
+    // {
+    //     if (!isRunning) return;
+    //     if (!ShouldProcessCollision(collision)) return;
+
+    //     var otherGO = collision.gameObject;
+    //     var otherProxy = new GameObjectProxy(otherGO);
+
+    //     if (onCollisionExitFunction != null && onCollisionExitFunction.Type == DataType.Function)
+    //         luaScript.Call(onCollisionExitFunction, UserData.Create(otherProxy));
+    // }
+
+
+
+    //     private void OnCollisionEnter(Collision collision)
+    //     {
+    //         if (!isRunning) return;
+    //         print("OnCollisionEnter with: " + collision.gameObject.name);
+
+    //         if (innerCollider != null)
+    //         {
+    //             bool touchedInner = false;
+    //             for (int i = 0; i < collision.contactCount; i++)
+    //             {
+    //                 if (collision.GetContact(i).thisCollider == innerCollider)
+    //                 {
+    //                     touchedInner = true;
+    //                     break;
+    //                 }
+    //             }
+    //             if (!touchedInner) return;
+    //         }
+
+    //         var otherGO = collision.gameObject;
+    //         var otherProxy = new GameObjectProxy(otherGO);
+
+    //         if (onCollisionEnterFunction != null && onCollisionEnterFunction.Type == DataType.Function)
+    //             luaScript.Call(onCollisionEnterFunction, UserData.Create(otherProxy));
+    //     }
+
+    // private void OnCollisionExit(Collision collision)
+    // {
+    //     if (!isRunning) return;
+    //     print("OnCollisionExit with: " + collision.gameObject.name);
+
+    //     if (innerCollider != null)
+    //     {
+    //         bool touchedInner = false;
+    //         for (int i = 0; i < collision.contactCount; i++)
+    //         {
+    //             if (collision.GetContact(i).thisCollider == innerCollider)
+    //             {
+    //                 touchedInner = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (!touchedInner) return;
+    //     }
+
+    //     var otherGO = collision.gameObject;
+    //     var otherProxy = new GameObjectProxy(otherGO);
+
+    //     if (onCollisionExitFunction != null && onCollisionExitFunction.Type == DataType.Function)
+    //         luaScript.Call(onCollisionExitFunction, UserData.Create(otherProxy));
+    // }
+
+
+
     private void OnCollisionEnter(Collision collision)
     {
         if (!isRunning) return;

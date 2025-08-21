@@ -87,7 +87,6 @@ GameObject:
   - component: {fileID: 7916556154118280790}
   - component: {fileID: 3694107441481426238}
   - component: {fileID: 6121866248733758853}
-  - component: {fileID: 2140399856624854409}
   m_Layer: 5
   m_Name: Transcription Label
   m_TagString: Untagged
@@ -156,25 +155,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Listening...
---- !u!114 &2140399856624854409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 83882860161156175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d6b7f41315d58e4b84dde7885b2f192, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _voiceServices:
-  - {fileID: 0}
-  _transcriptionColor: {r: 1, g: 1, b: 1, a: 0}
-  _promptColor: {r: 1, g: 1, b: 1, a: 0}
-  _promptDefault: Listening...
-  _promptListening: Listening...
-  _errorColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &102686074027999016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1632,7 +1612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 4cfbf280-da1e-4c2f-afb8-cdc0662e9462
+  instanceId: 8d9ed255-5230-4025-867a-d7fde362bac3
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -10645,7 +10625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: df1d6e0c-391c-496f-9726-c8174a05d7c0
+  instanceId: ba007981-cbfc-4d37-95a2-50f692048c0e
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -12087,7 +12067,6 @@ GameObject:
   - component: {fileID: 2195262465802482120}
   - component: {fileID: 6702482125503518716}
   - component: {fileID: 8918873742469542699}
-  - component: {fileID: 7082593184604615291}
   m_Layer: 0
   m_Name: Warp
   m_TagString: Untagged
@@ -12172,27 +12151,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7082593184604615291
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2248595158252673820}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2254610223241337750
 GameObject:
   m_ObjectHideFlags: 0
@@ -44847,7 +44805,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 12288
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -44905,14 +44863,14 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4096
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &2218758279596593853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44933,7 +44891,7 @@ MonoBehaviour:
   _targetTransform: {fileID: 0}
   _maxGrabPoints: -1
   _rigidbody: {fileID: 7728300913938747389}
-  _kinematicWhileSelected: 1
+  _kinematicWhileSelected: 0
   _throwWhenUnselected: 0
 --- !u!114 &3558561309827463134
 MonoBehaviour:

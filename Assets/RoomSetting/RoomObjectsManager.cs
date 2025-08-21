@@ -75,7 +75,7 @@ public class RoomObjectsManager : MonoBehaviour
                 gc.GetComponent<LuaMonoBehavior>().innerCollider = collider;
                 var boxCollider = gc.GetComponent<GenerateSpot>().boxCollider;
                 boxCollider.enabled = false; // Disable the box collider for the generated spot 
-                collider.gameObject.layer = LayerMask.NameToLayer("GeneratedObject");
+                collider.gameObject.layer = LayerMask.NameToLayer("Environment");
                 
 
                 // Add any additional setup for the generated spot here
