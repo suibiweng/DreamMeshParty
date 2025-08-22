@@ -3,29 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using Meta.XR.MRUtilityKit;
 using RealityEditor;
-using Oculus.Platform;
-using Collada141;
 using Fusion;
-
+using UnityEngine.SceneManagement;
 
 public class RoomObjectsManager : MonoBehaviour
 {
     public MRUKAnchor[] objectsinRoom;
     public RealityEditorManager manager;
     public SceneSessionManager sceneSessionManager;
-    public SceneSaverTest SceneSaverTest;
-    public NetworkRunner _runner; 
-    
-    
+    public SceneSaverTest SceneSaverTest;   // kept
+    public NetworkRunner _runner;
 
-    private void Awake()
+private async void Awake()
+{
+    manager = GetComponent<RealityEditorManager>();
+    SceneSaverTest = FindAnyObjectByType<SceneSaverTest>();
+    sceneSessionManager = FindAnyObjectByType<SceneSessionManager>();
+    _runner = FindObjectOfType<NetworkRunner>();
+
+    if (_runner == null)
     {
-        manager = GetComponent<RealityEditorManager>();
-        SceneSaverTest = FindAnyObjectByType<SceneSaverTest>();
-        sceneSessionManager = FindAnyObjectByType<SceneSessionManager>();
-        _runner = FindObjectOfType<NetworkRunner>(); 
-
+        _runner = gameObject.AddComponent<NetworkRunner>();
     }
+
+    // If runner exists but is Shutdown, start it
+    if (_runner.State == NetworkRunner.States.Shutdown)
+    {
+        Debug.Log("Starting NetworkRunner as Host...");
+        var sceneMgr = _runner.GetComponent<NetworkSceneManagerDefault>();
+        if (sceneMgr == null) sceneMgr = _runner.gameObject.AddComponent<NetworkSceneManagerDefault>();
+
+        await _runner.StartGame(new StartGameArgs()
+        {
+            GameMode = GameMode.Host,       // this makes IsServer true
+            SessionName = "EditorTest",
+            Scene = SceneRef.None,          // stay in current scene
+            SceneManager = sceneMgr
+        });
+    }
+}
+
+
+    
 
     public void InitRoomSession()
     {
@@ -38,72 +57,98 @@ public class RoomObjectsManager : MonoBehaviour
         {
             Debug.LogWarning("No MRUKAnchor objects found in the scene.");
         }
-        
+
         StartCoroutine(DelaytoCreateSpots());
     }
-
-
 
     IEnumerator DelaytoCreateSpots()
     {
         yield return new WaitForSeconds(30f);
         SetuptheSpots();
     }
-   public void SetuptheSpots()
+
+    public void SetuptheSpots()
     {
-        if (_runner.IsServer)
+        if (_runner != null && _runner.IsServer)
         {
             foreach (MRUKAnchor anchor in objectsinRoom)
             {
+                if (anchor == null)
+                {
+                    Debug.LogWarning("Null anchor in objectsinRoom, skipping.");
+                    continue;
+                }
 
                 Collider col = anchor.GetComponentInChildren<Collider>();
-                
+                if (col == null)
+                {
+                    Debug.LogWarning($"Anchor {anchor.name} has no Collider, skipping.");
+                    continue;
+                }
 
-                // Setup each anchor as needed
+                // Setup each anchor as needed (network spawn handled inside manager)
                 GameObject gc = manager.createRealobjectSpot(anchor.transform.position, anchor.transform.localScale);
-                gc.GetComponent<GenerateSpot>().Prompt = anchor.gameObject.name;
+                if (gc == null)
+                {
+                    Debug.LogError("manager.createRealobjectSpot returned null, skipping.");
+                    continue;
+                }
+
+                var spot = gc.GetComponent<GenerateSpot>();
+                if (spot == null)
+                {
+                    Debug.LogError("Generated object missing GenerateSpot component, skipping.");
+                    continue;
+                }
+
+                spot.Prompt = anchor.gameObject.name;
                 gc.tag = "RealObject";
                 gc.name = anchor.gameObject.name;
 
-                gc.GetComponent<GenerateSpot>().Outlinebox.enabled = false;
-                gc.GetComponent<GenerateSpot>().selectMenu.SetActive(false);
-                gc.GetComponent<GenerateSpot>().isRealObject = true; // Mark this as a real object spot
+                if (spot.Outlinebox != null)
+                    spot.Outlinebox.enabled = false;
+
+                if (spot.selectMenu != null)
+                    spot.selectMenu.SetActive(false);
+
+                spot.isRealObject = true;
 
                 col.transform.parent = gc.transform;
 
                 var collider = col.GetComponent<Collider>();
-                gc.GetComponent<LuaMonoBehavior>().innerCollider = collider;
-                var boxCollider = gc.GetComponent<GenerateSpot>().boxCollider;
-                boxCollider.enabled = false; // Disable the box collider for the generated spot 
-                collider.gameObject.layer = LayerMask.NameToLayer("Environment");
-                
+                var lua = gc.GetComponent<LuaMonoBehavior>();
+                if (lua != null)
+                    lua.innerCollider = collider;
 
-                // Add any additional setup for the generated spot here
-                
-                sceneSessionManager.addSceneObject(new SceneSessionManager.SceneObjectData
+                if (spot.boxCollider != null)
+                    spot.boxCollider.enabled = false;
+
+                collider.gameObject.layer = LayerMask.NameToLayer("Environment");
+
+                if (sceneSessionManager != null)
+                {
+                    sceneSessionManager.addSceneObject(new SceneSessionManager.SceneObjectData
                     {
-                        id = gc.GetComponent<GenerateSpot>().URLID,
+                        id = spot.URLID,
                         name = anchor.gameObject.name,
                         position = anchor.transform.position,
                         rotation = anchor.transform.rotation.eulerAngles
-
-                    }
-                );
+                    });
+                }
             }
+        }
+        else
+        {
+            Debug.Log("Not the server, so not setting up the spots.");
         }
     }
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
-                StartCoroutine(DelaytoCreateSpots());
+        StartCoroutine(DelaytoCreateSpots());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
     }
 }

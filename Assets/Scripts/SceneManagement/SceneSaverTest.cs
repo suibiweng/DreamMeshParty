@@ -104,15 +104,15 @@ public class SceneSaverTest : MonoBehaviour
            Debug.Log("Load Button Has Been Pressed. Loading Scene...");
            LoadSceneFromServer();
        }
-       if(Input.GetKeyDown(KeyCode.F7)){
-           PopulateDropdown();
-       }
-       if(Input.GetKeyDown(KeyCode.F8)){
-           SaveSceneToServer();
-       }
-       if(Input.GetKeyDown(KeyCode.F9)){
-           LoadSceneFromServer();
-       }
+    //    if(Input.GetKeyDown(KeyCode.F7)){
+    //        PopulateDropdown();
+    //    }
+    //    if(Input.GetKeyDown(KeyCode.F8)){
+    //        SaveSceneToServer();
+    //    }
+    //    if(Input.GetKeyDown(KeyCode.F9)){
+    //        LoadSceneFromServer();
+    //    }
    }
    
     public void addSceneObject(SceneObjectData objData)

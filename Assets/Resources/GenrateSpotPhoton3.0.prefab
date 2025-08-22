@@ -14222,9 +14222,9 @@ RectTransform:
   - {fileID: 8918007448251857258}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 206.5, y: -454.432}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2427070133648456643
@@ -44759,7 +44759,7 @@ MonoBehaviour:
   Britheness: {fileID: 2041138332838785645}
   TargetObject: {fileID: 2475553091327552736}
   RecordData: {fileID: 0}
-  GeneratedmeshCollider: {fileID: 0}
+  GeneratedCollider: {fileID: 0}
   objectRigidbody: {fileID: 7728300913938747389}
   erasingProjector: {fileID: 7394866343844837906}
   Outlinebox: {fileID: 3567249534020646685}
@@ -44783,6 +44783,10 @@ MonoBehaviour:
   luaMonoBehavior: {fileID: 0}
   grabInteractable: {fileID: 0}
   isGrabing: 0
+  convexParts: 6
+  hideOriginalRenderers: 1
+  generatedLayerName: GeneratedObject
+  convexBatchSize: 1
   debugPromt: Baseball
   DremmeshPrompt: 
   Text_Scanning_Btn: {fileID: 0}
@@ -45108,6 +45112,8 @@ MonoBehaviour:
   debugJson: 
   debugSelect: 0
   urlToCheck: 
+  acceptGeneratedHullCollisions: 0
+  generatedLayerName: GeneratedObject
   btnLabel: {fileID: 1240414874780895432}
 --- !u!114 &7749120679023416957
 MonoBehaviour:
@@ -46143,9 +46149,9 @@ RectTransform:
   - {fileID: 149707780679161401}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 206.5, y: -364.716}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3672317976966159377
@@ -48563,9 +48569,9 @@ RectTransform:
   - {fileID: 1954605862130570507}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 206.5, y: -275}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &435650559083327799
@@ -55525,9 +55531,9 @@ RectTransform:
   - {fileID: 904950066152902975}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 206.5, y: -95.568}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8422133850939961693
@@ -58241,9 +58247,9 @@ RectTransform:
   - {fileID: 2527666451164339142}
   m_Father: {fileID: 1399393883933470448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 206.5, y: -185.284}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8897272443488060315
@@ -59897,7 +59903,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9092371728337720524
 RectTransform:
   m_ObjectHideFlags: 0

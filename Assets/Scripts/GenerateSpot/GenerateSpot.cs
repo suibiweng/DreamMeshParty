@@ -1182,17 +1182,30 @@ private static string GetTransformPath(Transform t)
 
     public void EditCode()
     {
+        OnSelect();
         if (isRealObject)
         {
 
             Prompt = "[This is a real object in the space]" + Prompt;
 
+            manager.sendCommand("RealObjectDynamicCoding");
+
+        }
+        else
+        {
+
+            manager.sendCommand("ModifyDynamicCoding");
+
+
         }
 
 
-        manager.promtGenerateModel(id, Prompt, URLID);
+
+
+
+        // manager.promtGenerateModel(id, Prompt, URLID);
         // manager.sendCommand("ShapeE");
-        manager.sendCommand("ModifyDynamicCoding");
+        // manager.sendCommand("ModifyDynamicCoding");
         // ChecktheFile=  StartCoroutine(CheckURLPeriodically(downloadURL + URLID + "_ShapE.zip"));
         if (luaMonoBehavior != null) luaMonoBehavior.StartFetchingCode(downloadURL, URLID);
 
