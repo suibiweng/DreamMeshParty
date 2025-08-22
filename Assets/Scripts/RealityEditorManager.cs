@@ -160,27 +160,69 @@ public class RealityEditorManager : MonoBehaviour
         gcube.name = "" + urlid;
         sceneSessionManager.SubmmiSession();
         
+
+
+    }
+    
+
+
+    public GameObject createRealobjectSpot(Vector3 pos, Vector3 scale)
+{
+    // Spawn the networked prefab
+    GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
+
+    // Generate new URLID
+    string urlid = IDGenerator.GenerateID();
+
+    // Local setup
+    var spot = gcube.GetComponent<GenerateSpot>();
+    spot.id = IDs;
+    spot.isRealObject = true;
+    spot.URLID = urlid;
+    gcube.transform.localScale = scale;
+
+    // Sync via PhotonDataSync so all clients get the same values
+    var sync = gcube.GetComponent<PhotonDataSync>();
+    if (sync != null && sync.HasStateAuthority)
+    {
+        sync.UpdateURLID(urlid);
+        sync.UpdatePrompt(spot.Prompt);        // or assign anchor name in SetuptheSpots
+        sync.UpdateIsRealObject(true);
+        sync.UpdateOutline(false);
+        sync.UpdateSelectMenu(false);
     }
 
-    public GameObject createRealobjectSpot(Vector3 pos,Vector3 scale)
-    {
-        GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
-        gcube.GetComponent<GenerateSpot>().id = IDs;
-        gcube.GetComponent<GenerateSpot>().isRealObject = true; // Mark this as a real object spot
-        gcube.transform.localScale = scale;
-        string urlid = IDGenerator.GenerateID();
-        gcube.GetComponent<GenerateSpot>().URLID = urlid;
-        Debug.Log("The new Cube's URLID is: " + urlid);
-        gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
- 
-        GenCubesDic.Add(urlid, gcube);
-        
-        selectedIDUrl = urlid;
-        IDs++;
-        // sceneSessionManager.SubmmiSession();
-        
-        return gcube;
-    }
+    // Add to dictionary for tracking
+    GenCubesDic.Add(urlid, gcube);
+
+    selectedIDUrl = urlid;
+    IDs++;
+
+    Debug.Log("The new Cube's URLID is: " + urlid);
+
+    return gcube;
+}
+
+
+    // public GameObject createRealobjectSpot(Vector3 pos,Vector3 scale)
+    // {
+    //     GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
+    //     gcube.GetComponent<GenerateSpot>().id = IDs;
+    //     gcube.GetComponent<GenerateSpot>().isRealObject = true; // Mark this as a real object spot
+    //     gcube.transform.localScale = scale;
+    //     string urlid = IDGenerator.GenerateID();
+    //     gcube.GetComponent<GenerateSpot>().URLID = urlid;
+    //     Debug.Log("The new Cube's URLID is: " + urlid);
+    //     gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
+
+    //     GenCubesDic.Add(urlid, gcube);
+
+    //     selectedIDUrl = urlid;
+    //     IDs++;
+    //     // sceneSessionManager.SubmmiSession();
+
+    //     return gcube;
+    // }
 
 
 

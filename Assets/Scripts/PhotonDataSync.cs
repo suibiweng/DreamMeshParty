@@ -25,81 +25,119 @@ public class PhotonDataSync : NetworkBehaviour
     
     [Networked, OnChangedRender(nameof(OnMenu3Changed))]
     public bool EnablePhysics { get; set; }
+
+    // --- NEW SYNCED VARIABLES ---
+    [Networked, OnChangedRender(nameof(OnIsRealObjectChanged))]
+    public bool NetIsRealObject { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnOutlineChanged))]
+    public bool NetOutlineEnabled { get; set; }
+
+    [Networked, OnChangedRender(nameof(OnMenuActiveChanged))]
+    public bool NetSelectMenuActive { get; set; }
     
-    
+
     private void Start()
     {
         _generateSpot = GetComponent<GenerateSpot>();
         _generateSpot.URLID = NetworkedUrlID; 
+        _generateSpot.isRealObject = NetIsRealObject;
 
+        if (_generateSpot.Outlinebox != null)
+            _generateSpot.Outlinebox.enabled = NetOutlineEnabled;
+
+        if (_generateSpot.selectMenu != null)
+            _generateSpot.selectMenu.SetActive(NetSelectMenuActive);
     }
-    // Method to detect changes to the networked string
+
+    // --- URLID / Prompt ---
     void OnUrlIDChanged()
     {
         _generateSpot = GetComponent<GenerateSpot>();
         Debug.Log("Networked urlid changed to: " + NetworkedUrlID);
         _generateSpot.URLID = NetworkedUrlID; 
     }
+
     void OnPromptChanged()
     {
         _generateSpot = GetComponent<GenerateSpot>();
         Debug.Log("Networked prompt changed to: " + NetworkedPrompt);
         _generateSpot.Prompt = NetworkedPrompt; 
     }
-    void OnMenu1Changed()
+
+    // --- Toggles ---
+    void OnMenu1Changed() => EditBehaviorToggle.isOn = EditBehavior;
+    void OnMenu2Changed() => ShowCode.isOn = ShowLua;
+    void OnMenu3Changed() => Physics.isOn = EnablePhysics;
+
+    // --- NEW HANDLERS ---
+    void OnIsRealObjectChanged()
     {
-        //grab the toggle and set it to the value
-        EditBehaviorToggle.isOn = EditBehavior;
+        _generateSpot = GetComponent<GenerateSpot>();
+        _generateSpot.isRealObject = NetIsRealObject;
     }
-    void OnMenu2Changed()
+
+    void OnOutlineChanged()
     {
-        //grab the toggle and set it to the value
-        ShowCode.isOn = ShowLua;
+        _generateSpot = GetComponent<GenerateSpot>();
+        if (_generateSpot.Outlinebox != null)
+            _generateSpot.Outlinebox.enabled = NetOutlineEnabled;
     }
-    void OnMenu3Changed()
+
+    void OnMenuActiveChanged()
     {
-        //grab the toggle and set it to the value
-        Physics.isOn = EnablePhysics;
+        _generateSpot = GetComponent<GenerateSpot>();
+        if (_generateSpot.selectMenu != null)
+            _generateSpot.selectMenu.SetActive(NetSelectMenuActive);
     }
-    
+
+    // --- UPDATE METHODS ---
     public void UpdateURLID(string newUrlID)
     {
         if (HasStateAuthority)
-        {
-            // Change the string value here, which will then be synchronized across all clients
             NetworkedUrlID = newUrlID;
-        }
     }
-    public void UpdatePrompt(string newUrlID)
+
+    public void UpdatePrompt(string newPrompt)
     {
         if (HasStateAuthority)
-        {
-            // Change the string value here, which will then be synchronized across all clients
-            NetworkedPrompt = newUrlID;
-        }
+            NetworkedPrompt = newPrompt;
     }
-    
+
     public void UpdateMenu1(bool val)
     {
         if (HasStateAuthority)
-        {
             EditBehavior = val;
-        }
     }
+
     public void UpdateMenu2(bool val)
     {
         if (HasStateAuthority)
-        {
             ShowLua = val;
-        }
     }
+
     public void UpdateMenu3(bool val)
     {
         if (HasStateAuthority)
-        {
             EnablePhysics = val;
-        }
     }
-    
-    
+
+    // --- NEW UPDATE METHODS ---
+    public void UpdateIsRealObject(bool val)
+    {
+        if (HasStateAuthority)
+            NetIsRealObject = val;
+    }
+
+    public void UpdateOutline(bool val)
+    {
+        if (HasStateAuthority)
+            NetOutlineEnabled = val;
+    }
+
+    public void UpdateSelectMenu(bool val)
+    {
+        if (HasStateAuthority)
+            NetSelectMenuActive = val;
+    }
 }
