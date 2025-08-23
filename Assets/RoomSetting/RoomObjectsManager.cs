@@ -116,14 +116,17 @@ public void SetuptheSpots()
 
             // --- NEW: Sync to all clients via PhotonDataSync ---
             var sync = gc.GetComponent<PhotonDataSync>();
-            if (sync != null && sync.HasStateAuthority)
-            {
-                sync.UpdatePrompt(anchor.gameObject.name);
-                sync.UpdateIsRealObject(true);
-                sync.UpdateOutline(false);
-                sync.UpdateSelectMenu(false);
-            }
+if (sync != null )
+{
+    sync.UpdateURLID(spot.URLID);
+    sync.UpdatePrompt(anchor.gameObject.name);
+    sync.UpdateIsRealObject(true);
+    sync.UpdateOutline(false);
+    sync.UpdateSelectMenu(false);
 
+    // Force push the anchor name as the networked name
+    sync.UpdateObjectName(anchor.gameObject.name);  
+}
             // Collider parenting stays local
             col.transform.parent = gc.transform;
 

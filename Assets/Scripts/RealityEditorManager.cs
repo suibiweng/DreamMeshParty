@@ -166,7 +166,7 @@ public class RealityEditorManager : MonoBehaviour
     
 
 
-    public GameObject createRealobjectSpot(Vector3 pos, Vector3 scale)
+public GameObject createRealobjectSpot(Vector3 pos, Vector3 scale)
 {
     // Spawn the networked prefab
     GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
@@ -174,25 +174,30 @@ public class RealityEditorManager : MonoBehaviour
     // Generate new URLID
     string urlid = IDGenerator.GenerateID();
 
-    // Local setup
     var spot = gcube.GetComponent<GenerateSpot>();
     spot.id = IDs;
-    spot.isRealObject = true;
+    spot.isRealObject = true; // mark as real
     spot.URLID = urlid;
     gcube.transform.localScale = scale;
 
-    // Sync via PhotonDataSync so all clients get the same values
-    var sync = gcube.GetComponent<PhotonDataSync>();
-    if (sync != null && sync.HasStateAuthority)
-    {
-        sync.UpdateURLID(urlid);
-        sync.UpdatePrompt(spot.Prompt);        // or assign anchor name in SetuptheSpots
-        sync.UpdateIsRealObject(true);
-        sync.UpdateOutline(false);
-        sync.UpdateSelectMenu(false);
-    }
+    // --- Apply "real object" rules locally ---
+    if (spot.selectMenu != null)
+        spot.selectMenu.SetActive(false);
 
-    // Add to dictionary for tracking
+    if (spot.boxCollider != null)
+        spot.boxCollider.enabled = false;
+
+    // --- Sync across the network ---
+    // var sync = gcube.GetComponent<PhotonDataSync>();
+    // if (sync != null && sync.HasStateAuthority)
+    // {
+    //     sync.UpdateURLID(urlid);
+    //     sync.UpdatePrompt(spot.Prompt);
+    //     sync.UpdateIsRealObject(true);
+    //     sync.UpdateSelectMenu(false); // menu closed
+    //     sync.UpdateOutline(false);    // outlines off by default
+    // }
+
     GenCubesDic.Add(urlid, gcube);
 
     selectedIDUrl = urlid;
@@ -204,51 +209,48 @@ public class RealityEditorManager : MonoBehaviour
 }
 
 
-    // public GameObject createRealobjectSpot(Vector3 pos,Vector3 scale)
-    // {
-    //     GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
-    //     gcube.GetComponent<GenerateSpot>().id = IDs;
-    //     gcube.GetComponent<GenerateSpot>().isRealObject = true; // Mark this as a real object spot
-    //     gcube.transform.localScale = scale;
-    //     string urlid = IDGenerator.GenerateID();
-    //     gcube.GetComponent<GenerateSpot>().URLID = urlid;
-    //     Debug.Log("The new Cube's URLID is: " + urlid);
-    //     gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid); //setting the network urlid once right after we make the spot. But this dont work
-
-    //     GenCubesDic.Add(urlid, gcube);
-
-    //     selectedIDUrl = urlid;
-    //     IDs++;
-    //     // sceneSessionManager.SubmmiSession();
-
-    //     return gcube;
-    // }
 
 
+public GameObject createSpot(Vector3 pos)
+{
+    GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
 
+    var spot = gcube.GetComponent<GenerateSpot>();
+    spot.id = IDs;
+    string urlid = IDGenerator.GenerateID();
+    spot.URLID = urlid;
+    spot.isRealObject = false; // virtual spot
 
+    Debug.Log("The new Cube's URLID is: " + urlid);
 
-    public GameObject createSpot(Vector3 pos)
-    {
-        // GameObject gcube = Instantiate(GenerateSpotPrefab, pos, Quaternion.identity ); 
-        GameObject gcube = SpawnNetworkObject(pos, Quaternion.identity, GenerateSpotPrefab);
-        gcube.GetComponent<GenerateSpot>().id = IDs;
-        string urlid = IDGenerator.GenerateID();
-        gcube.GetComponent<GenerateSpot>().URLID = urlid;
-        Debug.Log("The new Cube's URLID is: " + urlid);
-        gcube.GetComponent<PhotonDataSync>().UpdateURLID(urlid);  //setting the network urlid once right after we make the spot.
-        Debug.Log("Setting the network urlid to be: " + urlid);
-        GenCubesDic.Add(urlid, gcube); //think about this: Are we adding the cube to the other players dictionaries? 
-        selectedIDUrl = urlid;
-        IDs++;
+    // Leave menu/collider as prefab default
+    if (spot.selectMenu != null)
+        spot.selectMenu.SetActive(spot.selectMenu.activeSelf);
 
+    if (spot.boxCollider != null)
+        spot.boxCollider.enabled = spot.boxCollider.enabled;
 
-        gcube.name = "" + urlid;
-        sceneSessionManager.SubmmiSession();
+    // --- Sync across network ---
+var sync = gcube.GetComponent<PhotonDataSync>();
+if (sync != null )
+{
+    sync.UpdateURLID(urlid);
+    sync.UpdatePrompt(spot.Prompt);
+    sync.UpdateIsRealObject(false);
+    sync.UpdateSelectMenu(spot.selectMenu != null && spot.selectMenu.activeSelf);
+    sync.UpdateOutline(false);
+    sync.UpdateObjectName(urlid); // 👈 sync name here
+}
 
-        return gcube;
+    GenCubesDic.Add(urlid, gcube);
+    selectedIDUrl = urlid;
+    IDs++;
 
-    }
+    gcube.name = urlid;
+    sceneSessionManager.SubmmiSession();
+
+    return gcube;
+}
 
     public void updateSession()
     {

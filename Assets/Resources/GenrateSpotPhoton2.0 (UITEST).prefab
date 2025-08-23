@@ -35717,7 +35717,7 @@ MonoBehaviour:
   Britheness: {fileID: 0}
   TargetObject: {fileID: 3468140169159128835}
   RecordData: {fileID: 0}
-  GeneratedmeshCollider: {fileID: 0}
+  GeneratedCollider: {fileID: 0}
   objectRigidbody: {fileID: 0}
   erasingProjector: {fileID: 4181639309478204476}
   Outlinebox: {fileID: 6639973942926814588}
@@ -35741,6 +35741,10 @@ MonoBehaviour:
   luaMonoBehavior: {fileID: 7417036898871245724}
   grabInteractable: {fileID: 0}
   isGrabing: 0
+  convexParts: 6
+  hideOriginalRenderers: 1
+  generatedLayerName: GeneratedObject
+  convexBatchSize: 1
   debugPromt: Apple
   DremmeshPrompt: 
   Text_Scanning_Btn: {fileID: 0}
@@ -36007,6 +36011,9 @@ MonoBehaviour:
   _EditBehavior: 0
   _ShowLua: 0
   _EnablePhysics: 0
+  _NetIsRealObject: 0
+  _NetOutlineEnabled: 0
+  _NetSelectMenuActive: 0
 --- !u!114 &6304489181478054851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36101,6 +36108,8 @@ MonoBehaviour:
   debugJson: 
   debugSelect: 0
   urlToCheck: 
+  acceptGeneratedHullCollisions: 0
+  generatedLayerName: GeneratedObject
   btnLabel: {fileID: 0}
 --- !u!1 &5064020556461686479
 GameObject:

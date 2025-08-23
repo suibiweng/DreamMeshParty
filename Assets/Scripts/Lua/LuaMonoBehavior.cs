@@ -187,8 +187,8 @@ public class LuaMonoBehavior : MonoBehaviour
         fileCheckCoroutine = null;
 
         // Initialize name stickiness at boot (if it already has a name)
-        if (!string.IsNullOrEmpty(gameObject.name))
-            ApplyObjectName(gameObject.name, force: false);
+        // if (!string.IsNullOrEmpty(gameObject.name))
+        //     ApplyObjectName(gameObject.name, force: false);
     }
 
     // Debug JSON injection (Editor/Runtime)
@@ -1124,7 +1124,7 @@ private void OnCollisionEnter(Collision collision)
     }
 
     // --- Name stickiness helpers ---
-    private void ApplyObjectName(string rawName, bool force = false)
+    public void ApplyObjectName(string rawName, bool force = false)
     {
         string n = (rawName ?? "").Trim();
         if (string.IsNullOrEmpty(n)) return;
@@ -1133,6 +1133,10 @@ private void OnCollisionEnter(Collision collision)
             return;
 
         gameObject.name = n;
+
+        var sync = GetComponent<PhotonDataSync>();
+        sync.UpdateObjectName(n); // 👈
+
         if (object_name_text != null) object_name_text.text = n;
         _lastObjectNameFromJson = n;
 

@@ -36,11 +36,31 @@ public class PhotonDataSync : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnMenuActiveChanged))]
     public bool NetSelectMenuActive { get; set; }
     
+    [Networked, OnChangedRender(nameof(OnObjectNameChanged))]
+    public string NetObjectName { get; set; }
+
+    void OnObjectNameChanged()
+    {
+        Debug.Log($"[{Runner.LocalPlayer}] Object name synced: {NetObjectName}");
+        gameObject.name = NetObjectName;
+        var LuaBehavior = gameObject.GetComponent<LuaMonoBehavior>();
+        LuaBehavior.ApplyObjectName(NetObjectName);
+    }
+
+
+    public void UpdateObjectName(string newName)
+    {
+    Debug.Log($"[{Runner.LocalPlayer}] Setting NetObjectName = {newName}");
+    NetObjectName = newName;
+    }
+
+
+
 
     private void Start()
     {
         _generateSpot = GetComponent<GenerateSpot>();
-        _generateSpot.URLID = NetworkedUrlID; 
+        _generateSpot.URLID = NetworkedUrlID;
         _generateSpot.isRealObject = NetIsRealObject;
 
         if (_generateSpot.Outlinebox != null)

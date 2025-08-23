@@ -779,10 +779,13 @@ private static string GetTransformPath(Transform t)
     // Update is called once per frame
     void Update()
     {
+        
+
+        gameObject.name = _photonDataSync.NetObjectName;
 
         if (modifyCodeToggle != null)
-        { 
-            
+        {
+
             CodeEditPrompt.SetActive(modifyCodeToggle.isOn);
         }
 
