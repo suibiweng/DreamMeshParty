@@ -1612,7 +1612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 8d9ed255-5230-4025-867a-d7fde362bac3
+  instanceId: cb372018-c40c-4ddb-a78b-341fc970413d
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -10625,7 +10625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockId: 7358e191-33b7-43ca-b066-b2f00531ac66
-  instanceId: ba007981-cbfc-4d37-95a2-50f692048c0e
+  instanceId: 969a227d-a240-483d-a351-42b4a098952c
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: 
@@ -44682,6 +44682,7 @@ GameObject:
   - component: {fileID: 7749120679023416957}
   - component: {fileID: 6024903656151824077}
   - component: {fileID: 5051989234646676486}
+  - component: {fileID: 4958110335269579510}
   m_Layer: 12
   m_Name: GenrateSpotPhoton3.0
   m_TagString: GenerateSpot
@@ -45018,6 +45019,7 @@ MonoBehaviour:
   - {fileID: 781653700929342120}
   - {fileID: 6024903656151824077}
   - {fileID: 5051989234646676486}
+  - {fileID: 4958110335269579510}
 --- !u!114 &3653016333606425215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45054,6 +45056,10 @@ MonoBehaviour:
   _EditBehavior: 0
   _ShowLua: 0
   _EnablePhysics: 0
+  _NetIsRealObject: 0
+  _NetOutlineEnabled: 0
+  _NetSelectMenuActive: 0
+  _NetObjectName: 
 --- !u!114 &781653700929342120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45178,6 +45184,19 @@ MonoBehaviour:
   hapticsOnFire: 1
   hapticAmplitude: 0.5
   hapticDuration: 0.05
+--- !u!114 &4958110335269579510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5690107132890779116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae95ba14ac0c9a458b2f49229a39893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
 --- !u!1 &5701188818970034050
 GameObject:
   m_ObjectHideFlags: 0
