@@ -699,6 +699,13 @@ public class LuaMonoBehavior : MonoBehaviour
 
     void Update()
     {
+        object_name_text.text=gameObject.name;
+    
+
+        
+
+
+        
         if (Input.GetKeyDown(KeyCode.F3))
         {
             PlayorStopBtn();

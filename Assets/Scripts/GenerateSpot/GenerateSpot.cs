@@ -783,6 +783,8 @@ private static string GetTransformPath(Transform t)
 
         gameObject.name = _photonDataSync.NetObjectName;
 
+        
+
         if (modifyCodeToggle != null)
         {
 
