@@ -109,13 +109,14 @@ public class LuaParamUIBuilder : MonoBehaviour
         UpdateDescriptionHighlight();
     }
 
-    public void ShowBothPanels()
-    {
-        if (luaPanel) luaPanel.gameObject.SetActive(true);
-        if (particlePanel) particlePanel.gameObject.SetActive(true);
-        if (luaTabHeader) luaTabHeader.SetActive(false);
-        if (particleTabHeader) luaTabHeader.SetActive(false);
-    }
+public void ShowBothPanels()
+{
+    if (luaPanel) luaPanel.gameObject.SetActive(true);
+    if (particlePanel) particlePanel.gameObject.SetActive(true);
+    if (luaTabHeader) luaTabHeader.SetActive(false);
+    if (particleTabHeader) particleTabHeader.SetActive(false);
+}
+
 
     public void SetDescription(string text)
     {
@@ -296,6 +297,195 @@ public class LuaParamUIBuilder : MonoBehaviour
         if (showBothPanels) ShowBothPanels(); else SelectLuaTab();
     }
 
+    // --- NEW: apply booleans to particle modules via dot-keys ---
+private void ApplyParticleBool(string effectName, string propKey, bool value)
+{
+    if (string.IsNullOrEmpty(effectName) || string.IsNullOrEmpty(propKey)) return;
+    var norm = NormalizeEffectKey(effectName);
+    if (!particleSystems.TryGetValue(norm, out var ps) || ps == null) return;
+
+    var main   = ps.main;
+    var noise  = ps.noise;
+    var trails = ps.trails;
+
+    switch (propKey)
+    {
+        case "main.prewarm":
+            main.prewarm = value;
+            break;
+        case "main.playOnAwake":
+            main.playOnAwake = value;
+            break;
+        case "noise.enabled":
+            noise.enabled = value;
+            break;
+        case "trails.enabled":
+            trails.enabled = value;
+            break;
+        case "trails.dieWithParticles":
+            trails.dieWithParticles = value;
+            break;
+        default:
+            // no-op for unknown bool keys
+            break;
+    }
+}
+
+// --- NEW: apply floats to V2 scalar or "constant" curve dot-keys ---
+private void ApplyParticleFloatV2(string effectName, string propKey, float value)
+{
+    if (string.IsNullOrEmpty(effectName) || string.IsNullOrEmpty(propKey)) return;
+    var norm = NormalizeEffectKey(effectName);
+    if (!particleSystems.TryGetValue(norm, out var ps) || ps == null) return;
+
+    var main   = ps.main;
+    var emission = ps.emission;
+    var noise  = ps.noise;
+    var trails = ps.trails;
+    var rend   = ps.GetComponent<ParticleSystemRenderer>();
+    var vol    = ps.velocityOverLifetime;
+    var sol    = ps.sizeOverLifetime;
+    var rol    = ps.rotationOverLifetime;
+
+    // --- scalar/simple V2 paths ---
+    switch (propKey)
+    {
+        case "main.gravityModifier":
+            main.gravityModifier = value;
+            return;
+
+        case "emission.rateOverTime":
+            emission.enabled = true;
+            emission.rateOverTime = value;
+            return;
+
+        case "emission.rateOverDistance":
+            emission.enabled = true;
+            emission.rateOverDistance = value;
+            return;
+
+        case "noise.strength":
+            noise.enabled = true;
+            noise.strength = value;
+            return;
+
+        case "noise.frequency":
+            noise.enabled = true;
+            noise.frequency = value;
+            return;
+
+        case "noise.scrollSpeed":
+            noise.enabled = true;
+            noise.scrollSpeed = value;
+            return;
+
+        case "noise.octaveCount":
+            noise.enabled = true;
+            noise.octaveCount = Mathf.RoundToInt(Mathf.Clamp(value, 1, 3));
+            return;
+
+        case "trails.lifetime":
+            trails.enabled = true;
+            trails.lifetime = value;
+            return;
+
+        case "trails.ratio":
+            trails.enabled = true;
+            trails.ratio = Mathf.Clamp01(value);
+            return;
+
+        case "renderer.sortingFudge":
+            if (rend != null) rend.sortingFudge = value;
+            return;
+    }
+
+    // --- "constant" curve knobs (UI simplifies MinMaxCurve) ---
+    switch (propKey)
+    {
+        case "sizeOverLifetime.size.constant":
+            sol.enabled = true;
+            sol.separateAxes = false;
+            sol.size = new ParticleSystem.MinMaxCurve(value);
+            return;
+
+        case "rotationOverLifetime.z.constant":
+            rol.enabled = true;
+            rol.separateAxes = false;
+            // NOTE: Unity expects radians; if your UI is in degrees, multiply by Mathf.Deg2Rad
+            rol.z = new ParticleSystem.MinMaxCurve(value);
+            return;
+
+        case "velocityOverLifetime.x.constant":
+            vol.enabled = true;
+            vol.x = new ParticleSystem.MinMaxCurve(value);
+            return;
+
+        case "velocityOverLifetime.y.constant":
+            vol.enabled = true;
+            vol.y = new ParticleSystem.MinMaxCurve(value);
+            return;
+
+        case "velocityOverLifetime.z.constant":
+            vol.enabled = true;
+            vol.z = new ParticleSystem.MinMaxCurve(value);
+            return;
+
+        case "velocityOverLifetime.speedModifier.constant":
+            vol.enabled = true;
+            vol.speedModifier = new ParticleSystem.MinMaxCurve(value);
+            return;
+    }
+
+    // --- bursts[n].count (we only support first burst index for UI) ---
+    if (propKey == "emission.bursts[0].count")
+    {
+        emission.enabled = true;
+        int burstsCount = emission.burstCount;
+        if (burstsCount == 0)
+        {
+            var b = new ParticleSystem.Burst(0f, (short)Mathf.RoundToInt(value));
+            emission.SetBurst(0, b);
+        }
+        else
+        {
+            var b = emission.GetBurst(0);
+            // convert to MinMaxCurve with constant
+            b.count = new ParticleSystem.MinMaxCurve(value);
+            emission.SetBurst(0, b);
+        }
+        return;
+    }
+}
+
+// --- NEW: extend string handling beyond shape (e.g., renderer.renderMode) ---
+private void ApplyParticleStringV2(string effectName, string propKey, string s)
+{
+    if (string.IsNullOrEmpty(effectName) || string.IsNullOrEmpty(propKey)) return;
+    var norm = NormalizeEffectKey(effectName);
+    if (!particleSystems.TryGetValue(norm, out var ps) || ps == null) return;
+
+    if (propKey == "renderer.renderMode")
+    {
+        var r = ps.GetComponent<ParticleSystemRenderer>();
+        if (!r) return;
+        var t = (s ?? "").Trim().ToLowerInvariant();
+        switch (t)
+        {
+            case "billboard":             r.renderMode = ParticleSystemRenderMode.Billboard; break;
+            case "stretchedbillboard":
+            case "stretched":             r.renderMode = ParticleSystemRenderMode.Stretch;   break;
+            case "horizontalbillboard":
+            case "horizontal":            r.renderMode = ParticleSystemRenderMode.HorizontalBillboard; break;
+            case "verticalbillboard":
+            case "vertical":              r.renderMode = ParticleSystemRenderMode.VerticalBillboard;   break;
+            case "mesh":                  r.renderMode = ParticleSystemRenderMode.Mesh;       break;
+        }
+        return;
+    }
+
+}
+
+
     // -------- Helpers --------
     private void ClearPanel(Transform panel)
     {
@@ -350,7 +540,11 @@ public class LuaParamUIBuilder : MonoBehaviour
             case "maxParticles":
                 main.maxParticles = Mathf.Max(1, Mathf.RoundToInt(value));
                 break;
-            // startColor would require a color UI, not implemented here
+                // startColor would require a color UI, not implemented here
+            default:
+            // Fallback: handle V2 dot-paths and constant-curves
+                ApplyParticleFloatV2(effectName, propKey, value);
+            break;
         }
     }
 
@@ -368,7 +562,11 @@ public class LuaParamUIBuilder : MonoBehaviour
             if (t == "cone")        shape.shapeType = ParticleSystemShapeType.Cone;
             else if (t == "sphere") shape.shapeType = ParticleSystemShapeType.Sphere;
             else if (t == "box")    shape.shapeType = ParticleSystemShapeType.Box;
-        }
+        }else
+    {
+        // Fallback: handle V2 string props like renderer.renderMode
+        ApplyParticleStringV2(effectName, propKey, s);
+    }
     }
 
     private static string ParticleIndexKey(string effectName, string key)
@@ -576,10 +774,12 @@ public class LuaParamUIBuilder : MonoBehaviour
         }
         else
         {
-            MarkParticleToken(param.key);
-            MarkParticleToken(param.label);
-            if (!string.IsNullOrEmpty(param.effectName))
-                _changedParticleEffects.Add(param.effectName);
+        ApplyParticleBool(param.effectName, param.key, value);
+
+         MarkParticleToken(param.key);
+         MarkParticleToken(param.label);
+         if (!string.IsNullOrEmpty(param.effectName))
+          _changedParticleEffects.Add(param.effectName);
         }
         UpdateDescriptionHighlight();
     }

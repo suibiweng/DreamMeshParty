@@ -371,6 +371,143 @@ public class LuaMonoBehavior : MonoBehaviour
         }
     }
 
+
+    private void ProcessJsonDataV2(string json, bool force = false)
+    {
+        try
+        {
+            DynamicObjectDataV2 dataV2 = JsonUtility.FromJson<DynamicObjectDataV2>(json);
+            if (dataV2 == null)
+            {
+                Debug.LogError("ProcessJsonDataV2: Parsed data is null.");
+                return;
+            }
+
+            if (!force && dataV2.created_at == lastLoadedTimestamp)
+            {
+                Debug.Log("ProcessJsonDataV2: Timestamp unchanged. Skipping update.");
+                return;
+            }
+
+            lastLoadedTimestamp = dataV2.created_at ?? string.Empty;
+            luaScriptText = Regex.Unescape(dataV2.lua_code ?? "");
+
+            if (CodeInfo != null) CodeInfo.text = dataV2.lua_code ?? "";
+            if (ExplanationsInfo != null)
+                ExplanationsInfo.text = $" {dataV2.comment}\n Generated at: {dataV2.created_at}";
+
+            InitializeLuaScript(luaScriptText);
+
+            // Build/refresh particle effects
+            var alive = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var cfg in dataV2.particle_json)
+            {
+                if (cfg == null || string.IsNullOrEmpty(cfg.effectName)) continue;
+
+                string normKey = NormalizeEffectKey(cfg.effectName);
+                alive.Add(normKey);
+
+                ParticleSystem ps;
+                if (!effectSystems.TryGetValue(normKey, out ps) || ps == null)
+                {
+                    GameObject psObject = new GameObject(cfg.effectName + "_Effect");
+                    psObject.transform.parent = SpwanPoint != null ? SpwanPoint : transform;
+                    psObject.transform.localPosition = Vector3.zero;
+                    psObject.transform.localRotation = Quaternion.identity;
+                    psObject.transform.localScale = Vector3.one;
+
+                    ps = psObject.AddComponent<ParticleSystem>();
+                    var renderer = ps.GetComponent<ParticleSystemRenderer>();
+                    renderer.material = defaultParticleMaterial ?? new Material(Shader.Find("Particles/Standard Unlit"));
+
+                    effectSystems[normKey] = ps;
+                    Debug.Log($"[Particles/V2] Created '{cfg.effectName}' (key='{normKey}').");
+                }
+
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                ParticleDTOApplier_V2.Apply(ps, cfg, defaultParticleMaterial);
+                Debug.Log($"[Particles/V2] Applied '{cfg.effectName}'.");
+
+
+
+                
+                var colMod = ps.collision;
+
+    // If your DTO/applier guarantees these already, this block is still safe (idempotent).
+    if (cfg.collision != null && cfg.collision.enabled)
+    {
+        // prefer world space for hit-testing real objects
+        colMod.enabled = true;
+        colMod.type = ParticleSystemCollisionType.World;
+        colMod.sendCollisionMessages = true;
+        colMod.mode = ParticleSystemCollisionMode.Collision3D; //
+
+        // optional, but helps for bullets:
+                    // colMod.collidesWith = ~0; // everything
+                    // colMod.lifetimeLoss = 1f; // kill on impact
+                    // colMod.mode = ParticleSystemCollisionMode.Collision3D;
+
+                    AttachRelayTo(ps); // adds ParticleCollisionRelay and wires 'owner = this'
+    }
+
+
+
+                
+
+
+
+
+
+            }
+
+            // Remove deleted effects
+            var toRemove = new List<string>();
+            foreach (var kv in effectSystems)
+                if (!alive.Contains(kv.Key) || kv.Value == null) toRemove.Add(kv.Key);
+            foreach (var k in toRemove) { if (effectSystems[k]) Destroy(effectSystems[k].gameObject); effectSystems.Remove(k); }
+
+            RebindParticleProxyToFirstEffect();
+
+            if (!string.IsNullOrEmpty(dataV2.object_name))
+                ApplyObjectName(dataV2.object_name, force: true);
+
+            LogAvailableEffects("After ProcessJsonDataV2");
+            isDownloading = false;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("ProcessJsonDataV2: Exception while reading JSON: " + ex.Message);
+            Debug.LogError("Last JSON snapshot:\n" + json);
+            LuaErrorReporting(ex.Message);
+        }
+    }
+
+
+private void ProcessJsonAuto(string json, bool force = false)
+{
+    // Try V2 first
+    try
+    {
+        DynamicObjectDataV2 probe = JsonUtility.FromJson<DynamicObjectDataV2>(json);
+        if (probe != null && probe.particle_json != null && probe.particle_json.Length > 0)
+        {
+            ProcessJsonDataV2(json, force);
+            return;
+        }
+    }
+    catch { }
+
+    // Fallback to legacy
+    ProcessJsonData(json, force);
+}
+
+
+
+
+
+
+
+
     private ParticleEffectConfig ParseParticleConfig(ParticleEffectConfigRaw raw)
     {
         float F(string s, float fallback = 0f)
@@ -401,15 +538,15 @@ public class LuaMonoBehavior : MonoBehaviour
 
         return new ParticleEffectConfig
         {
-            effectName   = raw.effectName,
-            duration     = F(raw.duration, 1f),
-            startColor   = ParseColor(raw.startColor, Color.white),
-            startSize    = F(raw.startSize, 1f),
-            startSpeed   = F(raw.startSpeed, 5f),
+            effectName = raw.effectName,
+            duration = F(raw.duration, 1f),
+            startColor = ParseColor(raw.startColor, Color.white),
+            startSize = F(raw.startSize, 1f),
+            startSpeed = F(raw.startSpeed, 5f),
             emissionRate = F(raw.emissionRate, 10f),
-            lifetime     = F(raw.lifetime, 2f),
+            lifetime = F(raw.lifetime, 2f),
             maxParticles = Mathf.RoundToInt(F(raw.maxParticles, 100f)),
-            shape        = raw.shape
+            shape = raw.shape
         };
     }
 
@@ -861,6 +998,21 @@ private void OnCollisionEnter(Collision collision)
         foreach (var ps in effectSystems.Values)
             ps.Stop();
     }
+
+
+    public void AttachRelayTo(ParticleSystem ps)
+{
+    if (ps == null) return;
+
+    var relay = ps.GetComponent<ParticleCollisionRelay>();
+    if (relay == null) relay = ps.gameObject.AddComponent<ParticleCollisionRelay>();
+    relay.owner = this;
+
+    var col = ps.collision;
+    col.enabled = true;
+    col.sendCollisionMessages = true;
+}
+
 
     public Script Script => luaScript;
     public TMP_Text btnLabel;
