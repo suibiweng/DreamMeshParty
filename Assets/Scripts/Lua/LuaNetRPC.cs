@@ -1,8 +1,6 @@
 using Fusion;
 using UnityEngine;
 using MoonSharp.Interpreter;
-
-[RequireComponent(typeof(NetworkObject))]
 public class LuaNetRPC : NetworkBehaviour
 {
     [SerializeField] private LuaMonoBehavior target; // auto-binds if left empty

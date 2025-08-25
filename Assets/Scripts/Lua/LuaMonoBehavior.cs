@@ -210,7 +210,7 @@ public class LuaMonoBehavior : MonoBehaviour
             Debug.Log("DebugRunJson: Forcing execution of provided JSON...");
             _lastJsonSnapshot = jsonString; // store snapshot for debugging
             lastLoadedTimestamp = string.Empty; // reset gate
-            ProcessJsonData(jsonString, force: true);    // reuse pipeline with force
+            ProcessJsonAuto(jsonString, force: true);    // reuse pipeline with force
         }
         catch (Exception ex)
         {
@@ -258,7 +258,7 @@ public class LuaMonoBehavior : MonoBehaviour
                         {
                             isDownloading = true;
                             _lastJsonSnapshot = www.downloadHandler.text;
-                            ProcessJsonData(_lastJsonSnapshot); // has its own try/catch
+                            ProcessJsonAuto(_lastJsonSnapshot); // has its own try/catch
 
                             OnURLResponse(true);
                             break; // stop polling on new data
@@ -437,17 +437,8 @@ public class LuaMonoBehavior : MonoBehaviour
     if (cfg.collision != null && cfg.collision.enabled)
     {
         // prefer world space for hit-testing real objects
-        colMod.enabled = true;
-        colMod.type = ParticleSystemCollisionType.World;
-        colMod.sendCollisionMessages = true;
-        colMod.mode = ParticleSystemCollisionMode.Collision3D; //
 
-        // optional, but helps for bullets:
-                    // colMod.collidesWith = ~0; // everything
-                    // colMod.lifetimeLoss = 1f; // kill on impact
-                    // colMod.mode = ParticleSystemCollisionMode.Collision3D;
-
-                    AttachRelayTo(ps); // adds ParticleCollisionRelay and wires 'owner = this'
+        AttachRelayTo(ps); // adds ParticleCollisionRelay and wires 'owner = this'
     }
 
 
@@ -836,6 +827,7 @@ private void ProcessJsonAuto(string json, bool force = false)
 
     void Update()
     {
+           if (object_name_text != null)
         object_name_text.text=gameObject.name;
     
 
@@ -1007,10 +999,6 @@ private void OnCollisionEnter(Collision collision)
     var relay = ps.GetComponent<ParticleCollisionRelay>();
     if (relay == null) relay = ps.gameObject.AddComponent<ParticleCollisionRelay>();
     relay.owner = this;
-
-    var col = ps.collision;
-    col.enabled = true;
-    col.sendCollisionMessages = true;
 }
 
 
