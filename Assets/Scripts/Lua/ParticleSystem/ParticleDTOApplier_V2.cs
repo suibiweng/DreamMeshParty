@@ -60,11 +60,11 @@ public static class ParticleDTOApplier_V2
         // -------- Back‑compat (optional) --------
         if (cfg.startColor.a != 0f || cfg.startColor.r != 0f || cfg.startColor.g != 0f || cfg.startColor.b != 0f)
             main.startColor = new ParticleSystem.MinMaxGradient(new Color(cfg.startColor.r, cfg.startColor.g, cfg.startColor.b, cfg.startColor.a));
-        if (cfg.startSize    != 0f) main.startSize     = cfg.startSize;
-        if (cfg.startSpeed   != 0f) main.startSpeed    = cfg.startSpeed;
-        if (cfg.lifetime     != 0f) main.startLifetime = cfg.lifetime;
-        if (cfg.maxParticles  > 0 ) main.maxParticles  = cfg.maxParticles;
-        if (cfg.duration     > 0f)  main.duration      = cfg.duration;
+        if (cfg.startSize != 0f) main.startSize = cfg.startSize;
+        if (cfg.startSpeed != 0f) main.startSpeed = cfg.startSpeed;
+        if (cfg.lifetime != 0f) main.startLifetime = cfg.lifetime;
+        if (cfg.maxParticles > 0) main.maxParticles = cfg.maxParticles;
+        if (cfg.duration > 0f) main.duration = cfg.duration;
 
         // -------- Main --------
         if (cfg.main != null)
@@ -80,14 +80,14 @@ public static class ParticleDTOApplier_V2
                 ? ParticleSystemScalingMode.Hierarchy
                 : (cfg.main.scalingMode == "Shape" ? ParticleSystemScalingMode.Shape : ParticleSystemScalingMode.Local);
 
-            main.prewarm     = cfg.main.prewarm;
+            main.prewarm = cfg.main.prewarm;
             main.playOnAwake = cfg.main.playOnAwake;
 
-            if (cfg.main.duration      > 0f) main.duration      = cfg.main.duration;
+            if (cfg.main.duration > 0f) main.duration = cfg.main.duration;
             if (cfg.main.startLifetime > 0f) main.startLifetime = cfg.main.startLifetime;
-            if (cfg.main.startSpeed    > 0f) main.startSpeed    = cfg.main.startSpeed;
-            if (cfg.main.startSize     > 0f) main.startSize     = cfg.main.startSize;
-            if (cfg.main.maxParticles   > 0 ) main.maxParticles  = cfg.main.maxParticles;
+            if (cfg.main.startSpeed > 0f) main.startSpeed = cfg.main.startSpeed;
+            if (cfg.main.startSize > 0f) main.startSize = cfg.main.startSize;
+            if (cfg.main.maxParticles > 0) main.maxParticles = cfg.main.maxParticles;
             main.loop = cfg.main.loop;
             if (cfg.main.startColor.a != 0f || cfg.main.startColor.r != 0f ||
                 cfg.main.startColor.g != 0f || cfg.main.startColor.b != 0f)
@@ -103,17 +103,17 @@ public static class ParticleDTOApplier_V2
         {
             shape.enabled = true;
             shape.position = new Vector3(cfg.shapeModule.position.x, cfg.shapeModule.position.y, cfg.shapeModule.position.z);
-            shape.arc      = cfg.shapeModule.arc;
-            shape.radius   = cfg.shapeModule.radius;
-            shape.angle    = cfg.shapeModule.angle;
+            shape.arc = cfg.shapeModule.arc;
+            shape.radius = cfg.shapeModule.radius;
+            shape.angle = cfg.shapeModule.angle;
 
             switch (cfg.shapeModule.type)
             {
-                case "Cone":       shape.shapeType = ParticleSystemShapeType.Cone;       break;
-                case "Sphere":     shape.shapeType = ParticleSystemShapeType.Sphere;     break;
+                case "Cone": shape.shapeType = ParticleSystemShapeType.Cone; break;
+                case "Sphere": shape.shapeType = ParticleSystemShapeType.Sphere; break;
                 case "Hemisphere": shape.shapeType = ParticleSystemShapeType.Hemisphere; break;
-                case "Box":        shape.shapeType = ParticleSystemShapeType.Box;        break;
-                case "Circle":     shape.shapeType = ParticleSystemShapeType.Circle;     break;
+                case "Box": shape.shapeType = ParticleSystemShapeType.Box; break;
+                case "Circle": shape.shapeType = ParticleSystemShapeType.Circle; break;
             }
         }
         else if (!string.IsNullOrEmpty(cfg.shape))
@@ -121,9 +121,9 @@ public static class ParticleDTOApplier_V2
             shape.enabled = true;
             switch (cfg.shape)
             {
-                case "Cone":   shape.shapeType = ParticleSystemShapeType.Cone;   break;
+                case "Cone": shape.shapeType = ParticleSystemShapeType.Cone; break;
                 case "Sphere": shape.shapeType = ParticleSystemShapeType.Sphere; break;
-                case "Box":    shape.shapeType = ParticleSystemShapeType.Box;    break;
+                case "Box": shape.shapeType = ParticleSystemShapeType.Box; break;
             }
         }
 
@@ -133,7 +133,7 @@ public static class ParticleDTOApplier_V2
 
         if (cfg.emission != null)
         {
-            emission.rateOverTime     = cfg.emission.rateOverTime;
+            emission.rateOverTime = cfg.emission.rateOverTime;
             emission.rateOverDistance = cfg.emission.rateOverDistance;
 
             if (cfg.emission.bursts != null)
@@ -147,7 +147,7 @@ public static class ParticleDTOApplier_V2
 
                     var burst = new ParticleSystem.Burst(b.time, b.count)
                     {
-                        cycleCount     = Mathf.Max(1, b.cycleCount),
+                        cycleCount = Mathf.Max(1, b.cycleCount),
                         // FIX: must be strictly > 0
                         repeatInterval = (b.repeatInterval <= 0f) ? 0.01f : b.repeatInterval
                     };
@@ -167,14 +167,14 @@ public static class ParticleDTOApplier_V2
         {
             var vol = ps.velocityOverLifetime;
             vol.enabled = cfg.velocityOverLifetime.enabled;
-            vol.space   = cfg.velocityOverLifetime.space == "World"
+            vol.space = cfg.velocityOverLifetime.space == "World"
                 ? ParticleSystemSimulationSpace.World
                 : ParticleSystemSimulationSpace.Local;
 
             vol.x = ToMinMax(cfg.velocityOverLifetime.x);
             vol.y = ToMinMax(cfg.velocityOverLifetime.y);
             vol.z = ToMinMax(cfg.velocityOverLifetime.z);
-            vol.orbitalY      = cfg.velocityOverLifetime.orbitalY;
+            vol.orbitalY = cfg.velocityOverLifetime.orbitalY;
             vol.speedModifier = ToMinMax(cfg.velocityOverLifetime.speedModifier);
         }
 
@@ -195,7 +195,7 @@ public static class ParticleDTOApplier_V2
             if (cfg.sizeOverLifetime.enabled)
             {
                 sol.separateAxes = cfg.sizeOverLifetime.separateAxes;
-                sol.size         = ToMinMax(cfg.sizeOverLifetime.size);
+                sol.size = ToMinMax(cfg.sizeOverLifetime.size);
             }
         }
 
@@ -224,7 +224,7 @@ public static class ParticleDTOApplier_V2
         }
         else
         {
-            var c   = cfg.collision;
+            var c = cfg.collision;
             var col = ps.collision;
 
             col.enabled = true;
@@ -243,9 +243,9 @@ public static class ParticleDTOApplier_V2
             // Quality: "Low" | "Medium" | "High"
             switch (c.quality ?? "High")
             {
-                case "Low":    col.quality = ParticleSystemCollisionQuality.Low;    break;
+                case "Low": col.quality = ParticleSystemCollisionQuality.Low; break;
                 case "Medium": col.quality = ParticleSystemCollisionQuality.Medium; break;
-                default:       col.quality = ParticleSystemCollisionQuality.High;   break;
+                default: col.quality = ParticleSystemCollisionQuality.High; break;
             }
 
             // Layer mask: prefer mask, else build from names, else everything.
@@ -270,14 +270,14 @@ public static class ParticleDTOApplier_V2
             }
 
             // Response/perf knobs
-            col.dampen                        = Mathf.Clamp01(c.dampen);
-            col.bounce                        = Mathf.Clamp01(c.bounce);
-            col.lifetimeLoss                  = Mathf.Clamp01(c.lifetimeLoss);
-            col.minKillSpeed                  = Mathf.Max(0f, c.minKillSpeed);
-            col.radiusScale                   = Mathf.Max(0f, c.radiusScale);
-            col.voxelSize                     = Mathf.Max(0.001f, c.voxelSize);
-            col.maxCollisionShapes            = Mathf.Max(0, c.maxCollisionShapes);
-            col.enableDynamicColliders        = c.enableDynamicColliders;
+            col.dampen = Mathf.Clamp01(c.dampen);
+            col.bounce = Mathf.Clamp01(c.bounce);
+            col.lifetimeLoss = Mathf.Clamp01(c.lifetimeLoss);
+            col.minKillSpeed = Mathf.Max(0f, c.minKillSpeed);
+            col.radiusScale = Mathf.Max(0f, c.radiusScale);
+            col.voxelSize = Mathf.Max(0.001f, c.voxelSize);
+            col.maxCollisionShapes = Mathf.Max(0, c.maxCollisionShapes);
+            col.enableDynamicColliders = c.enableDynamicColliders;
             col.multiplyColliderForceByParticleSize = c.multiplyColliderForceByParticleSize;
 
             // Relay component: managed here to avoid duplicate setup elsewhere.
@@ -302,11 +302,11 @@ public static class ParticleDTOApplier_V2
             noise.enabled = cfg.noise.enabled;
             if (cfg.noise.enabled)
             {
-                noise.strength   = cfg.noise.strength;
-                noise.frequency  = Mathf.Max(0.001f, cfg.noise.frequency);
-                noise.scrollSpeed= cfg.noise.scrollSpeed;
-                noise.octaveCount= Mathf.Clamp(cfg.noise.octaveCount, 1, 3);
-                noise.quality    = cfg.noise.quality == "Low"
+                noise.strength = cfg.noise.strength;
+                noise.frequency = Mathf.Max(0.001f, cfg.noise.frequency);
+                noise.scrollSpeed = cfg.noise.scrollSpeed;
+                noise.octaveCount = Mathf.Clamp(cfg.noise.octaveCount, 1, 3);
+                noise.quality = cfg.noise.quality == "Low"
                     ? ParticleSystemNoiseQuality.Low
                     : (cfg.noise.quality == "Medium"
                         ? ParticleSystemNoiseQuality.Medium
@@ -321,9 +321,9 @@ public static class ParticleDTOApplier_V2
             trails.enabled = cfg.trails.enabled;
             if (cfg.trails.enabled)
             {
-                trails.lifetime        = cfg.trails.lifetime;
-                trails.ratio           = cfg.trails.ratio;
-                trails.dieWithParticles= cfg.trails.dieWithParticles;
+                trails.lifetime = cfg.trails.lifetime;
+                trails.ratio = cfg.trails.ratio;
+                trails.dieWithParticles = cfg.trails.dieWithParticles;
             }
         }
 
@@ -335,11 +335,11 @@ public static class ParticleDTOApplier_V2
 
             switch (cfg.renderer.renderMode)
             {
-                case "StretchedBillboard":  rdr.renderMode = ParticleSystemRenderMode.Stretch;              break;
+                case "StretchedBillboard": rdr.renderMode = ParticleSystemRenderMode.Stretch; break;
                 case "HorizontalBillboard": rdr.renderMode = ParticleSystemRenderMode.HorizontalBillboard; break;
-                case "VerticalBillboard":   rdr.renderMode = ParticleSystemRenderMode.VerticalBillboard;   break;
-                case "Mesh":                rdr.renderMode = ParticleSystemRenderMode.Mesh;                 break;
-                default:                    rdr.renderMode = ParticleSystemRenderMode.Billboard;            break;
+                case "VerticalBillboard": rdr.renderMode = ParticleSystemRenderMode.VerticalBillboard; break;
+                case "Mesh": rdr.renderMode = ParticleSystemRenderMode.Mesh; break;
+                default: rdr.renderMode = ParticleSystemRenderMode.Billboard; break;
             }
 
             rdr.sortingFudge = cfg.renderer.sortingFudge;
@@ -355,5 +355,25 @@ public static class ParticleDTOApplier_V2
                 rdr.material = fallbackMat;
             }
         }
+
+        // --- Projectile alignment hint (only for shoot-out/collision systems) ---
+        if (cfg.collision != null && cfg.collision.enabled)
+        {
+        
+                main.simulationSpace = ParticleSystemSimulationSpace.World;  // ensure world for bullets
+
+                var shapeFix = ps.shape;
+                shapeFix.alignToDirection = true;
+
+    // Ensure an orienter exists; SpawnPoint will be assigned by LuaTriggerInteraction
+    var orienter = ps.GetComponent<ProjectilePSOrienter>();
+    if (!orienter) orienter = ps.gameObject.AddComponent<ProjectilePSOrienter>();
+    orienter.ps = ps; // safe even if already set
+            }
+
+        
+
+
+
     }
 }
