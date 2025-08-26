@@ -102,6 +102,8 @@ public class LuaMonoBehavior : MonoBehaviour
     public Material defaultParticleMaterial;
     public event Action<bool> OnURLResponse = delegate { };
 
+    public GenerateSpot generateSpot;
+
     public RealityEditorManager manager;
     public bool hasluaScript = false;
 
@@ -185,6 +187,8 @@ public class LuaMonoBehavior : MonoBehaviour
         manager = FindAnyObjectByType<RealityEditorManager>();
         generateSpotRPC = GetComponent<GenerateSpotRPC>();
         fileCheckCoroutine = null;
+
+        generateSpot = GetComponent<GenerateSpot>();
 
         // Initialize name stickiness at boot (if it already has a name)
         // if (!string.IsNullOrEmpty(gameObject.name))
@@ -354,7 +358,7 @@ public class LuaMonoBehavior : MonoBehaviour
                     LuaParamUIBuilder.ShowBothPanels();
             }
 
-            if (!string.IsNullOrEmpty(data.object_name))
+            if (!string.IsNullOrEmpty(data.object_name) && !generateSpot.isRealObject)
             {
                 ApplyObjectName(data.object_name, force: true);
             }
@@ -459,7 +463,7 @@ public class LuaMonoBehavior : MonoBehaviour
 
             RebindParticleProxyToFirstEffect();
 
-            if (!string.IsNullOrEmpty(dataV2.object_name))
+            if (!string.IsNullOrEmpty(dataV2.object_name) && !generateSpot.isRealObject )
                 ApplyObjectName(dataV2.object_name, force: true);
 
             LogAvailableEffects("After ProcessJsonDataV2");

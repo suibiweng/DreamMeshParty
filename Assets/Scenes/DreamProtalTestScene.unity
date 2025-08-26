@@ -3551,6 +3551,8 @@ MonoBehaviour:
   activeTabColor: {r: 0.18, g: 0.5, b: 0.95, a: 1}
   inactiveTabColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   boldActiveTabLabel: 1
+  listRefreshInterval: 0.5
+  statusRefreshInterval: 0.25
   SceneObjectsList: []
   isPlaying: 0
 --- !u!114 &132688418

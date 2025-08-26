@@ -36,11 +36,11 @@ public class PromptRestructure : MonoBehaviour
 
 
 
-        // if (Input.GetKeyDown(KeyCode.F7) && debugSelect)
-        // {
-        //     OnDebugEdit();
-        // }
-        // // Optional: live updating
+        if (Input.GetKeyDown(KeyCode.F7) && debugSelect)
+        {
+            OnDebugEdit();
+        }
+        // Optional: live updating
         combinedPrompt = FormatPrompt();
     }
 

@@ -178,7 +178,7 @@ public GameObject createRealobjectSpot(Vector3 pos, Vector3 scale)
     spot.id = IDs;
     spot.isRealObject = true; // mark as real
     spot.URLID = urlid;
-    gcube.transform.localScale = scale;
+    //gcube.transform.localScale = scale;
 
     // --- Apply "real object" rules locally ---
     if (spot.selectMenu != null)

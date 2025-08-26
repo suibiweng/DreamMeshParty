@@ -1,21 +1,20 @@
 using Fusion;
 using UnityEngine;
 using MoonSharp.Interpreter;
+
 public class LuaNetRPC : NetworkBehaviour
 {
     [SerializeField] private LuaMonoBehavior target; // auto-binds if left empty
+
+    // Exposed read-only status for UI polling (kept in sync on all clients)
+    public bool IsRunning { get; private set; }
 
     public override void Spawned()
     {
         if (!target) target = GetComponent<LuaMonoBehavior>();
     }
 
-    // -------------------------
-    // UNITY-FACING CALLS (C#)
-    // These are what your other Unity scripts / UI buttons should call.
-    // They handle authority automatically: if you're StateAuthority -> fan-out;
-    // otherwise -> send a request to StateAuthority.
-    // -------------------------
+    // UNITY-FACING CALLS (C#) -----------------------------------------------
 
     public void PlaySynced(bool run)
     {
@@ -66,9 +65,8 @@ public class LuaNetRPC : NetworkBehaviour
         else if (Object.HasInputAuthority) RPC_RequestActivateEffect(effectName);
     }
 
-    // -------------------------
-    // CLIENT -> SERVER REQUESTS
-    // -------------------------
+    // CLIENT -> SERVER REQUESTS ---------------------------------------------
+
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     private void RPC_RequestPlay(bool run, RpcInfo info = default)
     {
@@ -118,16 +116,17 @@ public class LuaNetRPC : NetworkBehaviour
         RPC_ActivateEffect(effectName ?? "");
     }
 
-    // -------------------------
-    // SERVER -> ALL (fan-out)
-    // Only touches LuaMonoBehavior state; does not move transforms/rigidbodies.
-    // -------------------------
+    // SERVER -> ALL (fan-out) -----------------------------------------------
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPC_SetRunning(bool run, RpcInfo info = default)
     {
-        if (!target) return;
-        if (run) target.Play();
-        else     target.Stop();
+        if (target)
+        {
+            if (run) target.Play();
+            else     target.Stop();
+        }
+        IsRunning = run; // cache for UI on all peers
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -164,7 +163,6 @@ public class LuaNetRPC : NetworkBehaviour
     private void RPC_ActivateEffect(string effectName, RpcInfo info = default)
     {
         if (!target) return;
-        // Direct call keeps it scoped to Lua/particles; no physics/transform sync.
         target.SendMessage("ActivateEffect", effectName, SendMessageOptions.DontRequireReceiver);
     }
 }

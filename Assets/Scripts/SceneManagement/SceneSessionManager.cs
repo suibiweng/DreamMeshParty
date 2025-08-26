@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using RealityEditor;
@@ -34,10 +35,13 @@ public class SceneSessionManager : MonoBehaviour
     public Color inactiveTabColor = new Color(0.2f, 0.2f, 0.2f, 1f);
     public bool boldActiveTabLabel = true;
 
+    [Header("Realtime Refresh")]
+    public float listRefreshInterval = 0.5f;      // seconds
+    public float statusRefreshInterval = 0.25f;   // seconds
+
     private enum Tab { All, Generated, RealObject }
     private Tab currentTab = Tab.All;
 
-    // --- Serializable Data Classes ---
     [Serializable]
     public class SceneObjectData
     {
@@ -47,29 +51,9 @@ public class SceneSessionManager : MonoBehaviour
         public Vector3 rotation;
     }
 
-    [Serializable]
-    public class PhysicsData
-    {
-        public float timeScale;
-        public Vector3 gravity;
-    }
-
-    [Serializable]
-    public class GenerateSpotData
-    {
-        public string id;
-        public string prompt;
-        public string gameObjectName;
-    }
-
-    [Serializable]
-    public class UserData
-    {
-        public string userId;
-        public string role;
-        public string deviceId;
-        public string joinedTime;
-    }
+    [Serializable] public class PhysicsData { public float timeScale; public Vector3 gravity; }
+    [Serializable] public class GenerateSpotData { public string id; public string prompt; public string gameObjectName; }
+    [Serializable] public class UserData { public string userId; public string role; public string deviceId; public string joinedTime; }
 
     [Serializable]
     public class SessionData
@@ -88,6 +72,10 @@ public class SceneSessionManager : MonoBehaviour
     public List<SceneObjectData> SceneObjectsList;
     private string serverUrl = "http://localhost:5000/submit_session";
 
+    // UI row registry
+    private readonly Dictionary<string, UIControlRow> _rows = new Dictionary<string, UIControlRow>(128);
+    private Coroutine _listWatcher;
+
     void Start()
     {
         manager = FindObjectOfType<RealityEditorManager>();
@@ -96,9 +84,12 @@ public class SceneSessionManager : MonoBehaviour
         SceneDataSync = GetComponent<SceneDataSync>();
 
         EnsureRaycastSystems();
-        InitTabs();             // robust toggle wiring
+        InitTabs();
 
         BuildUIControlMenu();
+
+        if (_listWatcher != null) StopCoroutine(_listWatcher);
+        _listWatcher = StartCoroutine(LiveListWatcher());
     }
 
     private void SwitchTab(Tab tab)
@@ -127,19 +118,14 @@ public class SceneSessionManager : MonoBehaviour
         StyleToggle(tabRealObjectToggle, currentTab == Tab.RealObject);
     }
 
-    public void addSceneObject(SceneObjectData objData)
-    {
-        SceneObjectsList.Add(objData);
-    }
+    public void addSceneObject(SceneObjectData objData) => SceneObjectsList.Add(objData);
 
     public void SubmmiSession()
     {
         TheSessionPremise = TheSessionPremiseText.text;
         MorePrompt = MorePromptText.text;
 
-        if (sessionURLID == "")
-            sessionURLID = TimestampGenerator.GetTimestamp();
-
+        if (sessionURLID == "") sessionURLID = TimestampGenerator.GetTimestamp();
         SceneDataSync.UpdateURLID(sessionURLID);
 
         SessionData data = new SessionData
@@ -161,52 +147,34 @@ public class SceneSessionManager : MonoBehaviour
 
     private List<SceneObjectData> GatherRealObjectData()
     {
-        List<SceneObjectData> list = new List<SceneObjectData>();
-        GameObject[] all = GameObject.FindGameObjectsWithTag("RealObject");
-
-        foreach (GameObject obj in all)
+        var list = new List<SceneObjectData>();
+        var all = GameObject.FindGameObjectsWithTag("RealObject");
+        foreach (var obj in all)
         {
+            var gs = obj.GetComponent<GenerateSpot>();
             list.Add(new SceneObjectData
             {
-                id = obj.GetComponent<GenerateSpot>().URLID,
+                id = gs != null ? gs.URLID : obj.GetInstanceID().ToString(),
                 name = obj.name,
                 position = obj.transform.position,
                 rotation = obj.transform.eulerAngles
             });
         }
-
-        // Keep list synced for RealObject tab
         SceneObjectsList = list;
         return list;
     }
 
-    private PhysicsData CapturePhysicsData()
-    {
-        return new PhysicsData
-        {
-            timeScale = Time.timeScale,
-            gravity = Physics.gravity
-        };
-    }
+    private PhysicsData CapturePhysicsData() => new PhysicsData { timeScale = Time.timeScale, gravity = Physics.gravity };
 
     public List<GenerateSpotData> GatherGenerateSpots()
     {
-        List<GenerateSpotData> spots = new List<GenerateSpotData>();
-        GenerateSpot[] allSpots = GameObject.FindObjectsOfType<GenerateSpot>();
-
-        foreach (GenerateSpot spot in allSpots)
+        var spots = new List<GenerateSpotData>();
+        var allSpots = GameObject.FindObjectsOfType<GenerateSpot>();
+        foreach (var spot in allSpots)
         {
-            if (spot.gameObject.tag != "RealObject")
-            {
-                spots.Add(new GenerateSpotData
-                {
-                    id = spot.URLID,
-                    prompt = spot.Prompt,
-                    gameObjectName = spot.gameObject.name
-                });
-            }
+            if (spot.gameObject.tag == "RealObject") continue;
+            spots.Add(new GenerateSpotData { id = spot.URLID, prompt = spot.Prompt, gameObjectName = spot.gameObject.name });
         }
-
         return spots;
     }
 
@@ -214,58 +182,41 @@ public class SceneSessionManager : MonoBehaviour
     {
         return new List<UserData>
         {
-            new UserData
-            {
-                userId = "suibi",
-                role = "host",
-                deviceId = SystemInfo.deviceUniqueIdentifier,
-                joinedTime = DateTime.UtcNow.ToString("s")
-            },
-            new UserData
-            {
-                userId = "anika",
-                role = "guest",
-                deviceId = "meta-quest-123",
-                joinedTime = DateTime.UtcNow.ToString("s")
-            }
+            new UserData{ userId = "suibi", role = "host", deviceId = SystemInfo.deviceUniqueIdentifier, joinedTime = DateTime.UtcNow.ToString("s") },
+            new UserData{ userId = "anika", role = "guest", deviceId = "meta-quest-123", joinedTime = DateTime.UtcNow.ToString("s") }
         };
     }
 
     IEnumerator PostSessionData(string json)
     {
-        UnityWebRequest request = new UnityWebRequest(serverUrl, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        var request = new UnityWebRequest(serverUrl, "POST");
+        var bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-
         yield return request.SendWebRequest();
 
-        if (request.result == UnityWebRequest.Result.Success)
-            Debug.Log("Session submitted successfully.");
-        else
-            Debug.LogError("Submission failed: " + request.error);
+        if (request.result == UnityWebRequest.Result.Success) Debug.Log("Session submitted successfully.");
+        else Debug.LogError("Submission failed: " + request.error);
     }
 
     public void FetchSession(string sessionURLID)
     {
-        string url = $"http://localhost:5000/get_session/{sessionURLID}";
+        var url = $"http://localhost:5000/get_session/{sessionURLID}";
         StartCoroutine(FetchSessionCoroutine(url));
     }
 
     IEnumerator FetchSessionCoroutine(string url)
     {
-        UnityWebRequest request = UnityWebRequest.Get(url);
+        var request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            string json = request.downloadHandler.text;
+            var json = request.downloadHandler.text;
             Debug.Log("Session fetched:\n" + json);
-
-            SessionData session = JsonUtility.FromJson<SessionData>(json);
+            var session = JsonUtility.FromJson<SessionData>(json);
             Debug.Log($"Session: {session.premise} / {session.prompt}");
-
             BuildUIControlMenu();
         }
         else
@@ -274,131 +225,118 @@ public class SceneSessionManager : MonoBehaviour
         }
     }
 
+
+    public bool isPlaying = false;
+    public void PlayALL() => SetAllRunning(true);
+    public void StopALL() => SetAllRunning(false);
+
+private void SetAllRunning(bool run)
+{
+        isPlaying = run;
+    // Iterate every Lua-driven object in the scene
+        var allLua = FindObjectsOfType<LuaMonoBehavior>();
+
+    foreach (var lua in allLua)
+    {
+        if (lua == null) continue;
+
+        var rpc = lua.GetComponent<LuaNetRPC>();
+
+        if (rpc != null)
+        {
+            // Optimistic local action for instant feedback (avoids double-run using IsRunning)
+            if (run && !rpc.IsRunning)        lua.Play();
+            else if (!run && rpc.IsRunning)   lua.Stop();
+
+            // Network fan-out (will also execute on this client)
+            rpc.PlaySynced(run);
+        }
+        else
+        {
+            // No RPC on this object -> local only
+            if (run) lua.Play();
+            else     lua.Stop();
+        }
+    }
+}
+
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            SubmmiSession();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            BuildUIControlMenu();
-        }
-    }
-
-    public bool isPlaying;
-
-    public void PlayAll()
-    {
-        if (isPlaying) return;
-        isPlaying = true;
-
-        foreach (GameObject child in manager.GenCubesDic.Values)
-        {
-            LuaMonoBehavior lua = child.GetComponent<LuaMonoBehavior>();
-            if (lua != null)
-            {
-                lua.Play();
-            }
-        }
-    }
-
-    public void StopAll()
-    {
-        if (!isPlaying) return;
-        isPlaying = false;
-
-        foreach (GameObject child in manager.GenCubesDic.Values)
-        {
-            LuaMonoBehavior lua = child.GetComponent<LuaMonoBehavior>();
-            if (lua != null)
-            {
-                lua.Stop();
-            }
-        }
+        if (Input.GetKeyDown(KeyCode.F5)) SubmmiSession();
+        if (Input.GetKeyDown(KeyCode.F6)) BuildUIControlMenu();
     }
 
     // === UI CONTROL PANEL WITH TABS ===
 
     public void BuildUIControlMenu()
     {
-        // Refresh sources before building
+        foreach (Transform child in uiPanelRoot) Destroy(child.gameObject);
+        _rows.Clear();
+
+        foreach (var name in EnumerateDisplayNamesForCurrentTab())
+        {
+            var row = CreateUIItem(name);
+            _rows[name] = row;
+        }
+    }
+
+    private IEnumerable<string> EnumerateDisplayNamesForCurrentTab()
+    {
         GatherRealObjectData();
         var generated = GatherGenerateSpots();
 
-        foreach (Transform child in uiPanelRoot)
-        {
-            Destroy(child.gameObject);
-        }
-
         if (currentTab == Tab.All || currentTab == Tab.RealObject)
-        {
-            foreach (var objData in SceneObjectsList)
-            {
-                CreateUIItem(objData.name);
-            }
-        }
+            foreach (var obj in SceneObjectsList) yield return obj.name;
 
         if (currentTab == Tab.All || currentTab == Tab.Generated)
+            foreach (var gs in generated) yield return gs.gameObjectName;
+    }
+
+    private IEnumerator LiveListWatcher()
+    {
+        var statusTick = 0f;
+        while (true)
         {
-            foreach (var spot in generated)
+            yield return new WaitForSeconds(listRefreshInterval);
+
+            var currentNames = new HashSet<string>(EnumerateDisplayNamesForCurrentTab());
+
+            var stale = _rows.Keys.Where(n => !currentNames.Contains(n)).ToList();
+            foreach (var n in stale)
             {
-                CreateUIItem(spot.gameObjectName);
+                if (_rows.TryGetValue(n, out var row) && row != null) Destroy(row.gameObject);
+                _rows.Remove(n);
+            }
+
+            foreach (var n in currentNames)
+            {
+                if (!_rows.ContainsKey(n))
+                {
+                    var row = CreateUIItem(n);
+                    _rows[n] = row;
+                }
+            }
+
+            statusTick += listRefreshInterval;
+            if (statusTick >= statusRefreshInterval)
+            {
+                foreach (var kv in _rows) kv.Value.RefreshStatus();
+                statusTick = 0f;
             }
         }
     }
 
-    private void CreateUIItem(string objectName)
+    private UIControlRow CreateUIItem(string objectName)
     {
-        GameObject uiItem = Instantiate(controlItemPrefab, uiPanelRoot);
-
-        TMP_Text label = uiItem.transform.Find("NameText").GetComponent<TMP_Text>();
-        TMP_Text statusText = uiItem.transform.Find("StatusText").GetComponent<TMP_Text>();
-
-        Button playBtn = uiItem.transform.Find("PlayButton").GetComponent<Button>();
-        Button stopBtn = uiItem.transform.Find("StopButton").GetComponent<Button>();
-        Button paramBtn = uiItem.transform.Find("ParamUIButton").GetComponent<Button>();
-
-        label.text = objectName;
-        statusText.text = "Idle";
-
-        GameObject target = GameObject.Find(objectName);
-        if (target == null)
-        {
-            playBtn.interactable = false;
-            stopBtn.interactable = false;
-            paramBtn.interactable = false;
-            statusText.text = "Not Found";
-            return;
-        }
-
-        LuaMonoBehavior lua = target.GetComponent<LuaMonoBehavior>();
-        if (lua == null)
-        {
-            playBtn.interactable = false;
-            stopBtn.interactable = false;
-            paramBtn.interactable = false;
-            statusText.text = "No Lua";
-            return;
-        }
-
-        playBtn.onClick.AddListener(() =>
-        {
-            lua.Play();
-            statusText.text = "Playing";
-        });
-
-        stopBtn.onClick.AddListener(() =>
-        {
-            lua.Stop();
-            statusText.text = "Stopped";
-        });
-
-        // paramBtn.onClick.AddListener(() => lua.ShowParameterUI());
+        var uiItem = Instantiate(controlItemPrefab, uiPanelRoot);
+        var row = uiItem.GetComponent<UIControlRow>();
+        if (row == null) row = uiItem.AddComponent<UIControlRow>();
+        row.Bind(objectName);
+        return row;
     }
 
-    // === Robust tab setup helpers ===
+    // Tabs setup/raycast -----------------------------------------------------
 
     private void EnsureRaycastSystems()
     {
@@ -411,14 +349,11 @@ public class SceneSessionManager : MonoBehaviour
 
         var canvas = GetComponentInParent<Canvas>();
         if (canvas != null && canvas.GetComponent<GraphicRaycaster>() == null)
-        {
             canvas.gameObject.AddComponent<GraphicRaycaster>();
-        }
     }
 
     private void InitTabs()
     {
-        // Ensure a ToggleGroup exists
         if (tabGroup == null)
         {
             Transform parent = null;
@@ -430,16 +365,15 @@ public class SceneSessionManager : MonoBehaviour
                 tabGroup = parent.GetComponent<ToggleGroup>() ?? parent.gameObject.AddComponent<ToggleGroup>();
         }
 
-        // Force all toggles into the same group
         AssignToGroup(tabAllToggle);
         AssignToGroup(tabGeneratedToggle);
         AssignToGroup(tabRealObjectToggle);
 
-        // Rewire listeners
         if (tabAllToggle != null)
         {
             tabAllToggle.onValueChanged.RemoveAllListeners();
             tabAllToggle.onValueChanged.AddListener(on => { if (on) SwitchTab(Tab.All); });
+            if (!tabGeneratedToggle && !tabRealObjectToggle) tabAllToggle.isOn = true;
         }
         if (tabGeneratedToggle != null)
         {
@@ -452,7 +386,6 @@ public class SceneSessionManager : MonoBehaviour
             tabRealObjectToggle.onValueChanged.AddListener(on => { if (on) SwitchTab(Tab.RealObject); });
         }
 
-        // Initial selection: respect existing On state; else default to All
         if (tabAllToggle != null && tabAllToggle.isOn) currentTab = Tab.All;
         else if (tabGeneratedToggle != null && tabGeneratedToggle.isOn) currentTab = Tab.Generated;
         else if (tabRealObjectToggle != null && tabRealObjectToggle.isOn) currentTab = Tab.RealObject;
@@ -465,5 +398,106 @@ public class SceneSessionManager : MonoBehaviour
     {
         if (t == null) return;
         t.group = tabGroup;
+    }
+}
+
+/// <summary>
+/// UI logic per row. Finds child widgets by name:
+/// NameText, StatusText, PlayButton, StopButton, ParamUIButton.
+/// Uses LuaNetRPC if present, else falls back to LuaMonoBehavior.
+/// </summary>
+public class UIControlRow : MonoBehaviour
+{
+    private TMP_Text _name;
+    private TMP_Text _status;
+    private Button _playBtn;
+    private Button _stopBtn;
+    private Button _paramBtn;
+
+    private string _targetName;
+    private GameObject _go;
+    private LuaMonoBehavior _lua;
+    private LuaNetRPC _rpc;
+
+    public void Bind(string objectName)
+    {
+        _name    = transform.Find("NameText")?.GetComponent<TMP_Text>();
+        _status  = transform.Find("StatusText")?.GetComponent<TMP_Text>();
+        _playBtn = transform.Find("PlayButton")?.GetComponent<Button>();
+        _stopBtn = transform.Find("StopButton")?.GetComponent<Button>();
+        _paramBtn= transform.Find("ParamUIButton")?.GetComponent<Button>();
+
+        _targetName = objectName;
+        if (_name != null) _name.text = objectName;
+        if (_status != null) _status.text = "Idle";
+
+        ResolveTarget();
+
+        if (_playBtn != null) _playBtn.onClick.AddListener(OnPlay);
+        if (_stopBtn != null) _stopBtn.onClick.AddListener(OnStop);
+        // if (_paramBtn != null) _paramBtn.onClick.AddListener(() => _lua?.ShowParameterUI());
+
+        UpdateInteractable();
+    }
+
+    public void RefreshStatus()
+    {
+        if (_go == null) ResolveTarget();
+        if (_status == null) return;
+
+        if (_go == null)
+        {
+            _status.text = "Not Found";
+            UpdateInteractable();
+            return;
+        }
+
+        if (_rpc != null)
+        {
+            _status.text = _rpc.IsRunning ? "Playing" : "Stopped";
+        }
+        else if (_lua != null)
+        {
+            try { _status.text = _lua.isRunning ? "Playing" : "Stopped"; }
+            catch { /* if not exposed, keep last text */ }
+        }
+        else
+        {
+            _status.text = "No Lua";
+        }
+
+        UpdateInteractable();
+    }
+
+    private void OnPlay()
+    {
+        ResolveTarget();
+        if (_rpc != null) _rpc.PlaySynced(true);
+        else if (_lua != null) _lua.Play();
+        if (_status != null) _status.text = "Playing";
+    }
+
+    private void OnStop()
+    {
+        ResolveTarget();
+        if (_rpc != null) _rpc.PlaySynced(false);
+        else if (_lua != null) _lua.Stop();
+        if (_status != null) _status.text = "Stopped";
+    }
+
+    private void ResolveTarget()
+    {
+        if (_go != null) return;
+        _go  = GameObject.Find(_targetName);
+        _lua = _go ? _go.GetComponent<LuaMonoBehavior>() : null;
+        _rpc = _go ? _go.GetComponent<LuaNetRPC>() : null;
+    }
+
+    private void UpdateInteractable()
+    {
+        bool ok = _go != null && (_rpc != null || _lua != null);
+        if (_playBtn != null) _playBtn.interactable = ok;
+        if (_stopBtn != null) _stopBtn.interactable = ok;
+        if (_paramBtn != null) _paramBtn.interactable = ok;
     }
 }
